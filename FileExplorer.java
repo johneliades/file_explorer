@@ -1,5 +1,3 @@
-package hw4;
-
 import java.io.File;
 
 import javax.swing.*;
@@ -15,7 +13,7 @@ public class FileExplorer extends JPanel
                         implements TreeSelectionListener {
     private static JPanel folder;
     private static JTree tree;
-    private static final String ICONPATH="hw4/icons/"; // path-until-src/src/hw4/icons/
+    private static final String ICONPATH="./icons/"; // path-until-src/src/hw4/icons/
     private static JTextField searchField;
     
     //Optionally set the look and feel.
