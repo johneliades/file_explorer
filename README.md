@@ -1,6 +1,7 @@
 # file_explorer
-A simple file explorer written in java using Swing and DefaultMutableTreeNode.
 
+A simple file explorer written in java using Swing and DefaultMutableTreeNode aiming to achieve cross-platform functionality in a visually appealing way.
+					
 ![Image of website](https://github.com/johneliades/file_explorer/blob/master/preview.png)
 
 ## Clone
