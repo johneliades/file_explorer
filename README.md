@@ -19,3 +19,7 @@ javac *.java -d classes
 ```
 java -cp classes FileExplorer
 ```
+
+## Notes
+
+Currently works better on linux but windows is supported.
