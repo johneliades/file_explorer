@@ -26,3 +26,7 @@ java -cp classes FileExplorer
 ## Notes
 
 Currently works better on linux but windows is supported.
+
+## Author
+
+**Eliades John** - *Developer* - [johneliades](https://github.com/johneliades)
