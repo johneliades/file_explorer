@@ -251,6 +251,7 @@ public class FileExplorer extends JPanel
                 
         set.add("audio"); 
         set.add("bmp"); 
+        set.add("css"); 
         set.add("doc"); 
         set.add("docx"); 
         set.add("giff"); 
@@ -258,14 +259,17 @@ public class FileExplorer extends JPanel
         set.add("htm"); 
         set.add("html"); 
         set.add("image"); 
+        set.add("iso"); 
         set.add("jpeg"); 
         set.add("jpg"); 
+        set.add("json"); 
         set.add("mp3"); 
         set.add("ods"); 
         set.add("odt"); 
         set.add("ogg"); 
         set.add("pdf"); 
         set.add("png"); 
+        set.add("ppt"); 
         set.add("tar"); 
         set.add("tgz"); 
         set.add("txt"); 
