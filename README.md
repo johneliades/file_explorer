@@ -1,7 +1,7 @@
 # file_explorer
 A simple file explorer written in java using Swing and DefaultMutableTreeNode.
 
-![Image of website](https://github.com/johneliades/file_explorer/preview.png)
+![Image of website](https://github.com/johneliades/file_explorer/blob/master/preview.png)
 
 ## Clone
 
