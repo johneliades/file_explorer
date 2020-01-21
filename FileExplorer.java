@@ -316,7 +316,7 @@ public class FileExplorer extends JPanel
 
                 if(lastPanelSelected!=null)
                     lastPanelSelected.setBackground(UIManager.getColor("Panel.background"));
-                panel.setBackground(new Color(135,206,250,155));
+                panel.setBackground(new Color(135,206,255,155));
                 lastPanelSelected=panel;
 
                 if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
@@ -345,9 +345,13 @@ public class FileExplorer extends JPanel
             }
 
             @Override
-            public void mouseEntered(MouseEvent event) {}
+            public void mouseEntered(MouseEvent event) {
+            	panel.setBackground(new Color(135,206,245,155));
+            }
             @Override
-            public void mouseExited(MouseEvent event) {}
+            public void mouseExited(MouseEvent event) {
+            	panel.setBackground(UIManager.getColor("Panel.background"));
+            }
             @Override
             public void mousePressed(MouseEvent event) {}
             @Override
@@ -452,7 +456,7 @@ public class FileExplorer extends JPanel
         tRenderer.setLeafIcon(folderIcon);
         tRenderer.setClosedIcon(folderIcon);
         tRenderer.setOpenIcon(folderIcon);
-        tRenderer.setTextSelectionColor(Color.BLUE.darker());
+        tRenderer.setTextSelectionColor(Color.RED);
 
         return tRenderer;
     }
