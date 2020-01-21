@@ -784,8 +784,6 @@ public class FileExplorer extends JPanel
             current=(DefaultMutableTreeNode) tree.getModel().getChild(top, i);
             File element = (File) current.getUserObject();
 
-            System.out.println(element.getPath());
-
             if(element.getName().contains(searchQuery)) {
                 gridPanel.add(getSmallIcon("folder.png", element, current));
             }
