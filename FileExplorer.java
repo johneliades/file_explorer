@@ -202,6 +202,7 @@ public class FileExplorer extends JPanel
                     folder.add(getIcon("question.png", currentFile, currentNode));
             }
         }
+        
         folder.repaint();
         folder.revalidate();
 
@@ -230,8 +231,8 @@ public class FileExplorer extends JPanel
             }
         }
 
-        folder.repaint();
-        folder.revalidate();
+		folder.repaint();
+		folder.revalidate();
     }
 
     static String getExtension(String fileName) {
@@ -316,7 +317,7 @@ public class FileExplorer extends JPanel
 
                 if(lastPanelSelected!=null)
                     lastPanelSelected.setBackground(UIManager.getColor("Panel.background"));
-                panel.setBackground(new Color(135,206,255,155));
+                panel.setBackground(new Color(135, 206, 255, 200));
                 lastPanelSelected=panel;
 
                 if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
@@ -346,11 +347,12 @@ public class FileExplorer extends JPanel
 
             @Override
             public void mouseEntered(MouseEvent event) {
-            	panel.setBackground(new Color(135,206,245,155));
+            	panel.setBackground(new Color(135, 206, 255, 120));
             }
             @Override
             public void mouseExited(MouseEvent event) {
-            	panel.setBackground(UIManager.getColor("Panel.background"));
+            	if(lastPanelSelected!=panel)
+            		panel.setBackground(UIManager.getColor("Panel.background"));
             }
             @Override
             public void mousePressed(MouseEvent event) {}
