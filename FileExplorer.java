@@ -1,4 +1,5 @@
 import java.io.File;
+import java.nio.file.Files;
 
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -764,15 +765,22 @@ public class FileExplorer extends JPanel
     static void search(DefaultMutableTreeNode top, String searchQuery, JPanel gridPanel) {
         int numChild=tree.getModel().getChildCount(top);
         DefaultMutableTreeNode current;
-        
+        File top_file = (File) top.getUserObject();
+
         if(numChild==0)
             return; 
+
+        boolean isSymbolicLink = Files.isSymbolicLink(top_file.toPath());
+		if(isSymbolicLink)
+			return;
 
         createNodes(top, 0);
 
         for(int i=0; i<numChild; i++) {      
             current=(DefaultMutableTreeNode) tree.getModel().getChild(top, i);
             File element = (File) current.getUserObject();
+
+            System.out.println(element.getPath());
 
             if(element.getName().contains(searchQuery)) {
                 gridPanel.add(getSmallIcon("folder.png", element, current));
