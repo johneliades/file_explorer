@@ -34,7 +34,7 @@ public class FileExplorer extends JPanel
         if(roots.length==1)
             top = new DefaultMutableTreeNode(roots[0]);
         else {
-            top = new DefaultMutableTreeNode(new MyFile(""));
+            top = new DefaultMutableTreeNode(new MyFile("This PC"));
             for (File root : roots) {
                 top.add(new DefaultMutableTreeNode(root));
             }
@@ -288,6 +288,8 @@ public class FileExplorer extends JPanel
         JLabel label;
         ImageIcon img;
         String name = file.getName();
+        if(name.trim().length() == 0)
+        	name = "Local Disk(" + file.getPath().replace("\\", "") + ")";
 
         img = new ImageIcon(ICONPATH + iconName);
         Image folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
@@ -801,8 +803,7 @@ public class FileExplorer extends JPanel
             }
 
             search(current, searchQuery, gridPanel);
-        }
-            
+        }          
     }
 
     public static JLabel getSmallIcon(String name, File file, DefaultMutableTreeNode node) {
