@@ -15,7 +15,7 @@ public class FileExplorer extends JPanel
     private static JPanel folder;
     private static JTree tree;
     private static final String ICONPATH="./icons/"; // path-until-src/src/hw4/icons/
-    private static JTextField searchField;
+    private static JTextField search_field, navigation_field;
     
     //Optionally set the look and feel.
     private static final boolean useSystemLookAndFeel = false;
@@ -134,7 +134,6 @@ public class FileExplorer extends JPanel
         folderView.setMinimumSize(minimumSize);
         treeView.setMinimumSize(minimumSize);
         splitPane.setDividerLocation(250); 
-        splitPane.setPreferredSize(new Dimension(500, 300));
 
         //Add the split pane to this panel.
         add(splitPane);
@@ -154,7 +153,8 @@ public class FileExplorer extends JPanel
         if(FileName.isEmpty())
             FileName = ((File) node.getUserObject()).getPath();
         
-        searchField.setText("Search" + " \"" + FileName + "\"");
+        navigation_field.setText(" " + ((File) node.getUserObject()).getPath());
+        search_field.setText(" Search" + " \"" + FileName + "\"");
 
         folder.removeAll();
 
@@ -621,16 +621,35 @@ public class FileExplorer extends JPanel
         return bar;
     }
     
-    public static JPanel CreateSearchPanel() {
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        
-        JButton searchButton=new JButton("Start search");
-        searchButton.setPreferredSize(new Dimension(120, 22));
-        searchPanel.add(searchButton);
+    public static JPanel Createtop_panel() {
+        JPanel top_panel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+		JButton button;
 
-        searchField = new JTextField("");
-        searchField.setPreferredSize(new Dimension(170, 22));
-        searchField.addKeyListener(new KeyListener() {
+        c.fill = GridBagConstraints.HORIZONTAL;
+
+		c.weightx = 0.05;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 0;
+
+        button = new JButton("filler");
+        button.setPreferredSize(new Dimension(button.getPreferredSize().width, 25));
+        top_panel.add(button, c);
+
+		c.weightx = 0.8;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 0;
+
+        navigation_field = new JTextField("");
+        navigation_field.setPreferredSize(new Dimension(navigation_field.getPreferredSize().width, 25));
+
+        top_panel.add(navigation_field, c);
+
+        search_field = new JTextField("");
+        search_field.setPreferredSize(new Dimension(search_field.getPreferredSize().width, 25));
+        search_field.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
                 searchQuery += e.getKeyChar();                    
@@ -645,7 +664,7 @@ public class FileExplorer extends JPanel
                     folder.repaint();
                     folder.revalidate();
 
-                    searchField.setText("");
+                    search_field.setText("");
                     JPanel gridPanel = new JPanel(new GridLayout(0, 1, 8, 8));
                     folder.add(gridPanel);
                     search(node, searchQuery, gridPanel);
@@ -657,16 +676,14 @@ public class FileExplorer extends JPanel
             @Override
             public void keyReleased(KeyEvent e) {}
         });
-
-        searchField.addMouseListener(new MouseListener() {
+   
+   		search_field.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent event) {
 
                 if(event.getButton() == MouseEvent.BUTTON1) {
-                    if(searchField.getText().lastIndexOf("\"") == searchField.getText().length()-1) {
-                        searchField.setText("");
-                        searchQuery="";
-                    }
+                    search_field.setText("");
+                    searchQuery="";
                 }
             }
 
@@ -680,9 +697,28 @@ public class FileExplorer extends JPanel
             public void mouseReleased(MouseEvent event) {}
         });
 
-        searchPanel.add(searchField);
-      
-        return searchPanel;
+        search_field.addFocusListener(new FocusListener() {
+		    String last_text="";
+
+			@Override
+		    public void focusGained(FocusEvent e) {
+                last_text = search_field.getText();
+                search_field.setText("");
+                searchQuery = "";
+            }
+		    public void focusLost(FocusEvent e) {
+        		search_field.setText(last_text);
+		    }
+		});
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.15;
+		c.gridx = 2;
+		c.gridy = 0;
+
+        top_panel.add(search_field, c);
+
+        return top_panel;
     }
 
     static public JPopupMenu getFilePopupMenu() {
@@ -1026,7 +1062,7 @@ public class FileExplorer extends JPanel
         frame.setJMenuBar(CreateMenuBar());
 
         //Add content to the window.
-        frame.add(CreateSearchPanel(), BorderLayout.NORTH);
+        frame.add(Createtop_panel(), BorderLayout.NORTH);
         frame.add(new FileExplorer(), BorderLayout.CENTER);
     
         //Display the window.
