@@ -78,12 +78,15 @@ public class FileExplorer extends JPanel
 
         //Create the folder viewing pane.
         folder = new JPanel(new WrapLayout(FlowLayout.LEFT, 10, 10));
+		folder.setBackground(Color.white);
+
         folder.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent event) {
                 if(event.getButton() == MouseEvent.BUTTON1) {
                     if(lastPanelSelected!=null) {
-                        lastPanelSelected.setBackground(UIManager.getColor("Panel.background"));
+                        lastPanelSelected.setBackground(Color.white);
+                        lastPanelSelected.setBorder(BorderFactory.createLineBorder(Color.white));
                         lastPanelSelected=null;
                     }
                 }
@@ -94,7 +97,8 @@ public class FileExplorer extends JPanel
                         menu.show(event.getComponent(), event.getX(), event.getY());
 
                     if(lastPanelSelected!=null) {
-                        lastPanelSelected.setBackground(UIManager.getColor("Panel.background"));
+                        lastPanelSelected.setBackground(Color.white);
+                        lastPanelSelected.setBorder(BorderFactory.createLineBorder(Color.white));
                         lastPanelSelected=null;
                     }
                 }
@@ -128,15 +132,11 @@ public class FileExplorer extends JPanel
         tree.scrollPathToVisible(path);
         showCurrentDirectory(top);
         
-        //Add the scroll panes to a split pane.
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        splitPane.setLeftComponent(treeView);
-        splitPane.setRightComponent(folderView);
+        folderView.setMinimumSize(new Dimension(400, 50));
+        treeView.setMinimumSize(new Dimension(200, 50));
 
-        Dimension minimumSize = new Dimension(250, 50);
-        folderView.setMinimumSize(minimumSize);
-        treeView.setMinimumSize(minimumSize);
-        splitPane.setDividerLocation(250); 
+        //Add the scroll panes to a split pane.
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treeView, folderView);
 
         //Add the split pane to this panel.
         add(splitPane);
@@ -291,11 +291,23 @@ public class FileExplorer extends JPanel
     static JPanel getIcon(String iconName, File file, DefaultMutableTreeNode node) {
         JLabel label;
         ImageIcon img;
+        Set<String> set = new HashSet<>(); 
         String name = file.getName();
+        
         if(name.trim().length() == 0)
         	name = "Local Disk(" + file.getPath().replace("\\", "") + ")";
 
         img = new ImageIcon(ICONPATH + iconName);
+
+        // Bad check for images
+        set.add("jpeg");
+        set.add("jpg");
+        set.add("png");
+        set.add("bmp");
+        if(set.contains(getExtension(file.getName()))) {
+        	img = new ImageIcon(file.getPath());
+        }
+
         Image folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
         img = new ImageIcon(folderImg);
         
@@ -313,14 +325,19 @@ public class FileExplorer extends JPanel
         panel.add(label, BorderLayout.SOUTH);
         label.setName(name);
         panel.setName(name);
+        panel.setBorder(BorderFactory.createLineBorder(Color.white));
+        panel.setBackground(Color.white);
 
         panel.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent event) {
 
-                if(lastPanelSelected!=null)
-                    lastPanelSelected.setBackground(UIManager.getColor("Panel.background"));
+                if(lastPanelSelected!=null) {
+                    lastPanelSelected.setBackground(Color.white);
+                    lastPanelSelected.setBorder(BorderFactory.createLineBorder(Color.white));
+                }
                 panel.setBackground(new Color(135, 206, 255, 200));
+                panel.setBorder(BorderFactory.createLineBorder(Color.black));
                 lastPanelSelected=panel;
 
                 if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
@@ -355,14 +372,13 @@ public class FileExplorer extends JPanel
             @Override
             public void mouseExited(MouseEvent event) {
             	if(lastPanelSelected!=panel)
-            		panel.setBackground(UIManager.getColor("Panel.background"));
+            		panel.setBackground(Color.white);
             }
             @Override
             public void mousePressed(MouseEvent event) {}
             @Override
             public void mouseReleased(MouseEvent event) {}
         });
-
 
         return panel;
     }
@@ -488,8 +504,6 @@ public class FileExplorer extends JPanel
         JPanel top_panel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 		JButton button;
-
-        c.fill = GridBagConstraints.HORIZONTAL;
 
 		c.weightx = 0.05;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -909,8 +923,8 @@ public class FileExplorer extends JPanel
         //Gets screen's Dimensions
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        int windowHeight=(int) screenSize.getHeight()*3/4;
-        int windowWidth=(int) screenSize.getWidth()*3/4;
+        int windowHeight=(int) screenSize.getHeight()*13/16;
+        int windowWidth=(int) screenSize.getWidth()*13/16;
 
         //Set Window's dimensions
         frame.setSize(windowWidth, windowHeight);
