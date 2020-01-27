@@ -137,6 +137,7 @@ public class FileExplorer extends JPanel
 
         //Add the scroll panes to a split pane.
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treeView, folderView);
+        splitPane.setDividerSize(1);
 
         //Add the split pane to this panel.
         add(splitPane);
@@ -923,8 +924,8 @@ public class FileExplorer extends JPanel
         //Gets screen's Dimensions
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        int windowHeight=(int) screenSize.getHeight()*13/16;
-        int windowWidth=(int) screenSize.getWidth()*13/16;
+        int windowHeight=(int) screenSize.getHeight()*7/8;
+        int windowWidth=(int) screenSize.getWidth()*7/8;
 
         //Set Window's dimensions
         frame.setSize(windowWidth, windowHeight);
