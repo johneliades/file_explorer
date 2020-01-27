@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
+import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -42,6 +43,8 @@ public class FileExplorer extends JPanel
 
         //Create a tree that allows one selection at a time.
         tree = new JTree(top);
+        tree.setBorder(new EmptyBorder(5, 10, 5, 0)); //top,left,bottom,right
+
         tree.setEditable(true);
         tree.setCellRenderer(getRenderer());
         tree.getSelectionModel().setSelectionMode
@@ -465,165 +468,23 @@ public class FileExplorer extends JPanel
 
     public static JMenuBar CreateMenuBar() {
         JMenuBar bar=new JMenuBar();
-        JMenu submenu, menu=new JMenu("File"); 
-        JMenuItem item1, item2, item3, item4;
-        
-        submenu = new JMenu("Create New");
+        JLabel label = new JLabel();
+        ImageIcon img;
+        Image pict;
+   
+		label.setBorder(new EmptyBorder(5,10,0,0)); //top,left,bottom,right
 
-        item1 = new JMenuItem("Txt File");
-        submenu.add(item1);
-        item1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-                String FilePath = ((File) node.getUserObject()).getPath();
-                String name;
-
-                name=JOptionPane.showInputDialog(null, "Enter file name");
-
-                File f = new File(FilePath + "/" + name);
-                if(!f.exists()){
-                    try {
-                        f.createNewFile();
-                    }
-                    catch(IOException e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
-                else {
-                    JOptionPane.showMessageDialog(null, "File with that name already exists!");
-                    return;
-                }
-
-                showCurrentDirectory(node);            
-            }
-        });
-
-        item2 = new JMenuItem("Directory");
-        submenu.add(item2);
-        item2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-                String FilePath = ((File) node.getUserObject()).getPath();
-                String name;
-                
-                name=JOptionPane.showInputDialog(null, "Enter directory name");
-
-                File f = new File(FilePath + "/" + name);
-                if(!f.exists()){
-                    try {
-                        f.mkdir();
-                    }
-                    catch(Exception e) {
-                        System.out.println(e.getMessage());
-                    }
-                }
-                else {
-                    JOptionPane.showMessageDialog(null, "Directory with that name already exists!");
-                    return;
-                }
-
-                /* add node to tree and reload tree here */
-                DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();    
-                defMod1.reload();
-                TreePath path = new TreePath(node.getPath());
-                tree.expandPath(path);
-                tree.setSelectionPath(path);
-                tree.scrollPathToVisible(path);
-    
-                showCurrentDirectory(node);
-            }
-        });
-
-        item3=new JMenuItem("Delete");
-        item3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-
-                delete(node);
-
-                showCurrentDirectory(node);
-            }
-        });
-
-        item4=new JMenuItem("Rename");
-        item4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                Component curComponents[] = lastPanelSelected.getComponents();
-                String FilePath = ((File) ((DefaultMutableTreeNode) tree.getLastSelectedPathComponent()).getUserObject()).getPath();
-                DefaultMutableTreeNode current=null, parent = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-                String nameOld = curComponents[2].getName(), nameNew;
-                int i;
-        
-                File f = new File(FilePath + "/" + nameOld);
-
-                if(f.exists() && f.isFile()) {
-                    nameNew=JOptionPane.showInputDialog(null, "Enter new name");
-                    File file2 = new File(FilePath + "/" + nameNew);
-
-                    if (file2.exists()) {
-                        JOptionPane.showMessageDialog(null, "Rename Failed! File exists");
-                    }
-
-                    boolean success = f.renameTo(file2);
-
-                    if (!success) {
-                        JOptionPane.showMessageDialog(null, "Rename Failed!");
-                    }
-                }
-                else if(f.exists() && f.isDirectory()){
-                    nameNew=JOptionPane.showInputDialog(null, "Enter new name");
-                    File file2 = new File(FilePath + "/" + nameNew);
-
-                    if (file2.exists()) {
-                        JOptionPane.showMessageDialog(null, "Rename Failed! File exists");
-                    }
-
-                    int numChild=tree.getModel().getChildCount(parent);
-
-                    for(i=0; i<numChild; i++) { 
-                        current=(DefaultMutableTreeNode) tree.getModel().getChild(parent, i);
-                        File curFile=(File) (current).getUserObject();
-                        if(curFile.getName().compareTo(nameOld)==0)
-                            break;
-                    }
-
-                    boolean success = f.renameTo(file2);
-
-                    if (!success) {
-                        JOptionPane.showMessageDialog(null, "Rename Failed!");
-                    }
-
-                    current.removeFromParent();
-                    DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();    
-                    defMod1.reload();
-                    TreePath path = new TreePath(parent.getPath());
-                    tree.expandPath(path);
-                    tree.setSelectionPath(path);
-                    tree.scrollPathToVisible(path);     
-                }
-                else {
-                    JOptionPane.showMessageDialog(null, "Rename Failed!");
-                    return;
-                }
-    
-                showCurrentDirectory((DefaultMutableTreeNode) tree.getLastSelectedPathComponent());
-            }
-        });
-
-        menu.add(submenu);
-        menu.addSeparator();
-        menu.add(item3);
-        menu.add(item4);
-        bar.add(menu);
+        img = new ImageIcon(ICONPATH + "folder.png");
+        pict = img.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT);
+        img = new ImageIcon(pict);
+ 
+        label.setIcon(img);
+        bar.add(label);
 
         return bar;
     }
     
-    public static JPanel Createtop_panel() {
+    public static JPanel create_top_panel() {
         JPanel top_panel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 		JButton button;
@@ -856,7 +717,7 @@ public class FileExplorer extends JPanel
         img = new ImageIcon(ICONPATH + name);
         pict = img.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT);
         img = new ImageIcon(pict);
- 
+ 		
         label.setIcon(img);
         label.setText(file.getPath());
         label.addMouseListener(new MouseListener(){
@@ -1064,7 +925,7 @@ public class FileExplorer extends JPanel
         frame.setJMenuBar(CreateMenuBar());
 
         //Add content to the window.
-        frame.add(Createtop_panel(), BorderLayout.NORTH);
+        frame.add(create_top_panel(), BorderLayout.NORTH);
         frame.add(new FileExplorer(), BorderLayout.CENTER);
     
         //Display the window.
