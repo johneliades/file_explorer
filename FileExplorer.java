@@ -136,8 +136,9 @@ public class FileExplorer extends JPanel
         treeView.setMinimumSize(new Dimension(200, 50));
 
         //Add the scroll panes to a split pane.
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, treeView, folderView);
-        splitPane.setDividerSize(1);
+        JSplitPaneWithZeroSizeDivider splitPane = new JSplitPaneWithZeroSizeDivider(JSplitPaneWithZeroSizeDivider.HORIZONTAL_SPLIT);
+        splitPane.setLeftComponent(treeView);
+        splitPane.setRightComponent(folderView);
 
         //Add the split pane to this panel.
         add(splitPane);
@@ -544,6 +545,7 @@ public class FileExplorer extends JPanel
 
                     search_field.setText("");
                     JPanel gridPanel = new JPanel(new GridLayout(0, 1, 8, 8));
+                    gridPanel.setBackground(Color.white);
                     folder.add(gridPanel);
                     search(node, searchQuery, gridPanel);
                     searchQuery="";
@@ -728,8 +730,19 @@ public class FileExplorer extends JPanel
         JLabel label = new JLabel();
         ImageIcon img;
         Image pict;
+        Set<String> set = new HashSet<>(); 
 
         img = new ImageIcon(ICONPATH + name);
+     
+ 		// Bad check for images
+        set.add("jpeg");
+        set.add("jpg");
+        set.add("png");
+        set.add("bmp");
+        if(set.contains(getExtension(file.getName()))) {
+        	img = new ImageIcon(file.getPath());
+        }
+
         pict = img.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT);
         img = new ImageIcon(pict);
  		
