@@ -4,7 +4,7 @@ import java.nio.file.Files;
 import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -133,7 +133,7 @@ public class FileExplorer extends JPanel
         showCurrentDirectory(top);
         
         folderView.setMinimumSize(new Dimension(400, 50));
-        treeView.setMinimumSize(new Dimension(200, 50));
+        treeView.setMinimumSize(new Dimension(250, 50));
 
         //Add the scroll panes to a split pane.
         JSplitPaneWithZeroSizeDivider splitPane = new JSplitPaneWithZeroSizeDivider(JSplitPaneWithZeroSizeDivider.HORIZONTAL_SPLIT);
@@ -299,8 +299,6 @@ public class FileExplorer extends JPanel
         if(name.trim().length() == 0)
         	name = "Local Disk(" + file.getPath().replace("\\", "") + ")";
 
-        img = new ImageIcon(ICONPATH + iconName);
-
         // Bad check for images
         set.add("jpeg");
         set.add("jpg");
@@ -309,22 +307,37 @@ public class FileExplorer extends JPanel
         if(set.contains(getExtension(file.getName()))) {
         	img = new ImageIcon(file.getPath());
         }
+        else {
+			img = new ImageIcon(ICONPATH + iconName);
+        }
 
+        //Image folderImg = img.getImage().getScaledInstance(150, 60, Image.SCALE_DEFAULT);
         Image folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
         img = new ImageIcon(folderImg);
         
         JPanel panel = new JPanel(new BorderLayout());
         
         label = new JLabel("", JLabel.CENTER);
-        panel.add(label,  BorderLayout.NORTH);
         label.setPreferredSize(new Dimension(150, 10));
+        panel.add(label,  BorderLayout.NORTH);
+
+        label = new JLabel("", JLabel.CENTER);
+        label.setPreferredSize(new Dimension(10, 40));
+        panel.add(label,  BorderLayout.EAST);
+
+        label = new JLabel("", JLabel.CENTER);
+        label.setPreferredSize(new Dimension(10, 40));
+        panel.add(label,  BorderLayout.WEST);
 
         label = new JLabel(img, JLabel.CENTER);
-        panel.add(label,  BorderLayout.CENTER);
+		//Border b = new BevelBorder(BevelBorder.RAISED, Color.LIGHT_GRAY, Color.DARK_GRAY);
+        //label.setBorder(b);
+		panel.add(label,  BorderLayout.CENTER);
 
         label = new JLabel(name, JLabel.CENTER);
-        label.setPreferredSize(new Dimension(130, 30));
+        label.setPreferredSize(new Dimension(150, 30));
         panel.add(label, BorderLayout.SOUTH);
+
         label.setName(name);
         panel.setName(name);
         panel.setBorder(BorderFactory.createLineBorder(Color.white));
