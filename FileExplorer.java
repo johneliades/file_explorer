@@ -7,6 +7,7 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.filechooser.FileSystemView;
 
+import java.awt.image.BufferedImage;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -291,9 +292,29 @@ public class FileExplorer extends JPanel
         return set;
     }
 
+	static Image iconToImage(Icon icon) {
+	   if (icon instanceof ImageIcon) {
+	      return ((ImageIcon)icon).getImage();
+	   } 
+	   else {
+	      int w = icon.getIconWidth();
+	      int h = icon.getIconHeight();
+	      GraphicsEnvironment ge = 
+	        GraphicsEnvironment.getLocalGraphicsEnvironment();
+	      GraphicsDevice gd = ge.getDefaultScreenDevice();
+	      GraphicsConfiguration gc = gd.getDefaultConfiguration();
+	      BufferedImage image = gc.createCompatibleImage(w, h);
+	      Graphics2D g = image.createGraphics();
+	      icon.paintIcon(null, g, 0, 0);
+	      g.dispose();
+	      return image;
+	   }
+	 }
+
     static JPanel getIcon(String iconName, File file, DefaultMutableTreeNode node) {
         JLabel label;
         ImageIcon img;
+        Image folderImg;
         Set<String> set = new HashSet<>(); 
         String name = file.getName();
         String extension = getExtension(file.getName());
@@ -305,7 +326,7 @@ public class FileExplorer extends JPanel
         set.add("jpeg");
         set.add("jpg");
         set.add("png");
-        set.add("bmp");
+        set.add("gif");
         if(set.contains(extension)) {
         	img = new ImageIcon(file.getPath());
         }
@@ -313,8 +334,16 @@ public class FileExplorer extends JPanel
 			img = new ImageIcon(ICONPATH + iconName);
         }
 
-        //Image folderImg = img.getImage().getScaledInstance(150, 60, Image.SCALE_DEFAULT);
-        Image folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
+        Icon icon;
+    	if(!iconSet.contains(extension) && iconName!="folder.png") {
+			javax.swing.JFileChooser fc = new javax.swing.JFileChooser();
+			icon = fc.getUI().getFileView(fc).getIcon(file);
+			folderImg = iconToImage(icon).getScaledInstance(60, 60, Image.SCALE_DEFAULT);
+    	}
+    	else {
+	        //Image folderImg = img.getImage().getScaledInstance(150, 60, Image.SCALE_DEFAULT);
+	        folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
+	    }
         img = new ImageIcon(folderImg);
 
         JPanel panel = new JPanel(new BorderLayout());
@@ -332,12 +361,7 @@ public class FileExplorer extends JPanel
         panel.add(label,  BorderLayout.WEST);
 
         label = new JLabel(img, JLabel.CENTER);
-
-        Icon icon;
-    	if(!iconSet.contains(extension) && iconName!="folder.png") {
-    		icon = FileSystemView.getFileSystemView().getSystemIcon(file);
-			label = new JLabel(icon, JLabel.CENTER);
-    	}
+        label.setPreferredSize(new Dimension(60, 60));
 
 		//Border b = new BevelBorder(BevelBorder.RAISED, Color.LIGHT_GRAY, Color.DARK_GRAY);
         //label.setBorder(b);
@@ -760,7 +784,7 @@ public class FileExplorer extends JPanel
         set.add("jpeg");
         set.add("jpg");
         set.add("png");
-        set.add("bmp");
+        set.add("gif");
         if(set.contains(getExtension(file.getName()))) {
         	img = new ImageIcon(file.getPath());
         }
