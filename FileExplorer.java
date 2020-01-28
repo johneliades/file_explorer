@@ -267,7 +267,6 @@ public class FileExplorer extends JPanel
         set.add("gz"); 
         set.add("htm"); 
         set.add("html"); 
-        set.add("image"); 
         set.add("iso"); 
         set.add("jpeg"); 
         set.add("jpg"); 
@@ -334,15 +333,18 @@ public class FileExplorer extends JPanel
 			img = new ImageIcon(ICONPATH + iconName);
         }
 
+	    //Image folderImg = img.getImage().getScaledInstance(150, 60, Image.SCALE_DEFAULT);
+		folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
+
         Icon icon;
+        /* If false is removed you get small resolution system icons
+        Waiting for official better way
     	if(!iconSet.contains(extension) && iconName!="folder.png") {
     		icon = FileSystemView.getFileSystemView().getSystemIcon(file);
 			folderImg = iconToImage(icon).getScaledInstance(60, 60, Image.SCALE_DEFAULT);
     	}
-    	else {
-	        //Image folderImg = img.getImage().getScaledInstance(150, 60, Image.SCALE_DEFAULT);
-	        folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
-	    }
+    	*/
+
         img = new ImageIcon(folderImg);
 
         JPanel panel = new JPanel(new BorderLayout());
