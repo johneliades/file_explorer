@@ -549,18 +549,19 @@ public class FileExplorer extends JPanel
 
 	public static JMenuBar CreateMenuBar() {
 		JMenuBar bar=new JMenuBar();
-		JLabel label = new JLabel();
+		JButton button;
 		ImageIcon img;
 		Image pict;
-   
-		label.setBorder(new EmptyBorder(5,10,0,0)); //top,left,bottom,right
 
-		img = new ImageIcon(ICONPATH + "folder.png");
-		pict = img.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT);
-		img = new ImageIcon(pict);
- 
-		label.setIcon(img);
-		bar.add(label);
+//   	img = new ImageIcon(ICONPATH + "foldernew.png");
+//		pict = img.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT);
+//		img = new ImageIcon(pict);
+
+//		button = new JButton(img);
+//		button.setBorder(BorderFactory.createEmptyBorder());
+//		button.setContentAreaFilled(false);
+
+//		bar.add(button);
 
 		return bar;
 	}
@@ -575,7 +576,10 @@ public class FileExplorer extends JPanel
 		c.gridx = 0;
 		c.gridy = 0;
 
-		button = new JButton("filler");
+		button = new JButton("");
+		button.setOpaque(false);
+		button.setContentAreaFilled(false);
+		button.setBorderPainted(false);
 		button.setPreferredSize(new Dimension(button.getPreferredSize().width, 25));
 		topPanel.add(button, c);
 
@@ -939,7 +943,7 @@ public class FileExplorer extends JPanel
 			}
 		});
 
-		menuItem = new JMenuItem("New Directory");
+		menuItem = new JMenuItem("New Folder");
 		popupMenu.add(menuItem);
 		menuItem.addActionListener(new ActionListener() {
 			@Override
