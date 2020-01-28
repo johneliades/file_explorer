@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
+import javax.swing.filechooser.FileSystemView;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -295,6 +296,7 @@ public class FileExplorer extends JPanel
         ImageIcon img;
         Set<String> set = new HashSet<>(); 
         String name = file.getName();
+        String extension = getExtension(file.getName());
         
         if(name.trim().length() == 0)
         	name = "Local Disk(" + file.getPath().replace("\\", "") + ")";
@@ -304,7 +306,7 @@ public class FileExplorer extends JPanel
         set.add("jpg");
         set.add("png");
         set.add("bmp");
-        if(set.contains(getExtension(file.getName()))) {
+        if(set.contains(extension)) {
         	img = new ImageIcon(file.getPath());
         }
         else {
@@ -314,7 +316,7 @@ public class FileExplorer extends JPanel
         //Image folderImg = img.getImage().getScaledInstance(150, 60, Image.SCALE_DEFAULT);
         Image folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
         img = new ImageIcon(folderImg);
-        
+
         JPanel panel = new JPanel(new BorderLayout());
         
         label = new JLabel("", JLabel.CENTER);
@@ -330,6 +332,13 @@ public class FileExplorer extends JPanel
         panel.add(label,  BorderLayout.WEST);
 
         label = new JLabel(img, JLabel.CENTER);
+
+        Icon icon;
+    	if(!iconSet.contains(extension) && iconName!="folder.png") {
+    		icon = FileSystemView.getFileSystemView().getSystemIcon(file);
+			label = new JLabel(icon, JLabel.CENTER);
+    	}
+
 		//Border b = new BevelBorder(BevelBorder.RAISED, Color.LIGHT_GRAY, Color.DARK_GRAY);
         //label.setBorder(b);
 		panel.add(label,  BorderLayout.CENTER);
