@@ -287,6 +287,9 @@ public class FileExplorer extends JPanel
 		set.add("xlx"); 
 		set.add("xml"); 
 		set.add("zip"); 
+		set.add("class"); 
+		set.add("java"); 
+		set.add("log");
 
 		return set;
 	}
