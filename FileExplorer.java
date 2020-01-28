@@ -527,10 +527,18 @@ public class FileExplorer extends JPanel
 		ImageIcon folderIcon = new ImageIcon(ICONPATH + "folder.png");
 		Image folderImg = folderIcon.getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
 		folderIcon = new ImageIcon(folderImg);
+		
+		ImageIcon folderIconOpen = new ImageIcon(ICONPATH + "folderopen.png");
+		Image folderImgOpen = folderIconOpen.getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
+		folderIconOpen = new ImageIcon(folderImgOpen);
 
-		tRenderer.setLeafIcon(folderIcon);
+		ImageIcon folderIconEmpty = new ImageIcon(ICONPATH + "folderempty.png");
+		Image folderImgEmpty = folderIconEmpty.getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
+		folderIconEmpty = new ImageIcon(folderImgEmpty);
+
+		tRenderer.setLeafIcon(folderIconEmpty);
 		tRenderer.setClosedIcon(folderIcon);
-		tRenderer.setOpenIcon(folderIcon);
+		tRenderer.setOpenIcon(folderIconOpen);
 		tRenderer.setTextSelectionColor(Color.RED);
 
 		return tRenderer;
@@ -991,8 +999,8 @@ public class FileExplorer extends JPanel
 		//Gets screen's Dimensions
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-		int windowHeight=(int) screenSize.getHeight()*7/8;
-		int windowWidth=(int) screenSize.getWidth()*7/8;
+		int windowHeight=(int) screenSize.getHeight()*3/4;
+		int windowWidth=(int) screenSize.getWidth()*3/4;
 
 		//Set Window's dimensions
 		frame.setSize(windowWidth, windowHeight);
