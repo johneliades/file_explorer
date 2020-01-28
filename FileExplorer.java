@@ -336,8 +336,7 @@ public class FileExplorer extends JPanel
 
         Icon icon;
     	if(!iconSet.contains(extension) && iconName!="folder.png") {
-			javax.swing.JFileChooser fc = new javax.swing.JFileChooser();
-			icon = fc.getUI().getFileView(fc).getIcon(file);
+    		icon = FileSystemView.getFileSystemView().getSystemIcon(file);
 			folderImg = iconToImage(icon).getScaledInstance(60, 60, Image.SCALE_DEFAULT);
     	}
     	else {
