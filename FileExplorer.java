@@ -980,6 +980,7 @@ public class FileExplorer extends JPanel
 
         //Create and set up the window.
         JFrame frame = new JFrame("File Explorer");
+        frame.setIconImage(new ImageIcon(ICONPATH + "folder.png").getImage());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Gets screen's Dimensions
