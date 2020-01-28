@@ -385,7 +385,7 @@ public class FileExplorer extends JPanel
                     lastPanelSelected.setBackground(Color.white);
                     lastPanelSelected.setBorder(BorderFactory.createLineBorder(Color.white));
                 }
-                panel.setBackground(new Color(135, 206, 255, 200));
+                panel.setBackground(new Color(0x3fa9ff));
                 panel.setBorder(BorderFactory.createLineBorder(Color.black));
                 lastPanelSelected=panel;
 
@@ -416,7 +416,8 @@ public class FileExplorer extends JPanel
 
             @Override
             public void mouseEntered(MouseEvent event) {
-            	panel.setBackground(new Color(135, 206, 255, 120));
+				if(lastPanelSelected!=panel)
+					panel.setBackground(new Color(0x8fd2ff));
             }
             @Override
             public void mouseExited(MouseEvent event) {
