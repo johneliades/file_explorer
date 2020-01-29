@@ -294,115 +294,541 @@ public class FileExplorer extends JPanel
 		return set;
 	}
 
-/*
-	static Image iconToImage(Icon icon) {
-	   if (icon instanceof ImageIcon) {
-		  return ((ImageIcon)icon).getImage();
-	   } 
-	   else {
-		  int w = icon.getIconWidth();
-		  int h = icon.getIconHeight();
-		  GraphicsEnvironment ge = 
-			GraphicsEnvironment.getLocalGraphicsEnvironment();
-		  GraphicsDevice gd = ge.getDefaultScreenDevice();
-		  GraphicsConfiguration gc = gd.getDefaultConfiguration();
-		  BufferedImage image = gc.createCompatibleImage(w, h);
-		  Graphics2D g = image.createGraphics();
-		  icon.paintIcon(null, g, 0, 0);
-		  g.dispose();
-		  return image;
-	   }
-	 }
-*/
+	/*
+		static Image iconToImage(Icon icon) {
+		   if (icon instanceof ImageIcon) {
+			  return ((ImageIcon)icon).getImage();
+		   } 
+		   else {
+			  int w = icon.getIconWidth();
+			  int h = icon.getIconHeight();
+			  GraphicsEnvironment ge = 
+				GraphicsEnvironment.getLocalGraphicsEnvironment();
+			  GraphicsDevice gd = ge.getDefaultScreenDevice();
+			  GraphicsConfiguration gc = gd.getDefaultConfiguration();
+			  BufferedImage image = gc.createCompatibleImage(w, h);
+			  Graphics2D g = image.createGraphics();
+			  icon.paintIcon(null, g, 0, 0);
+			  g.dispose();
+			  return image;
+		   }
+		 }
+	*/
 
-	static JPanel getIcon(String iconName, File file, DefaultMutableTreeNode node) {
-		JLabel label;
-		ImageIcon img=null;
-		Image folderImg;
-		Set<String> set = new HashSet<>(); 
-		String name = file.getName();
-		String extension = getExtension(file.getName());
-		
-		if(name.trim().length() == 0) {
-			name = "Local Disk(" + file.getPath().replace("\\", "") + ")";
-			img = new ImageIcon(ICONPATH + "harddisk.png");
-		}
+		static JPanel getIcon(String iconName, File file, DefaultMutableTreeNode node) {
+			JLabel label;
+			ImageIcon img=null;
+			Image folderImg;
+			Set<String> set = new HashSet<>(); 
+			String name = file.getName();
+			String extension = getExtension(file.getName());
+			
+			if(name.trim().length() == 0) {
+				name = "Local Disk(" + file.getPath().replace("\\", "") + ")";
+				img = new ImageIcon(ICONPATH + "extensions/harddisk.png");
+			}
 
-		// Bad check for images
-		set.add("jpeg");
-		set.add("jpg");
-		set.add("png");
-		set.add("gif");
-		if(set.contains(extension)) {
-			img = new ImageIcon(file.getPath());
-		}
+			// Bad check for images
+			set.add("jpeg");
+			set.add("jpg");
+			set.add("png");
+			set.add("gif");
+			if(set.contains(extension)) {
+				img = new ImageIcon(file.getPath());
+			}
 
-		if(img==null)
-			img = new ImageIcon(ICONPATH + iconName);
+			if(img==null)
+				img = new ImageIcon(ICONPATH + "extensions/" + iconName);
 
-		//Image folderImg = img.getImage().getScaledInstance(150, 60, Image.SCALE_DEFAULT);
-		folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
+			//Image folderImg = img.getImage().getScaledInstance(150, 60, Image.SCALE_DEFAULT);
+			folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
 
-		Icon icon;
-		/* If false is removed you get small resolution system icons
-		Waiting for official better way
-		if(!iconSet.contains(extension) && iconName!="folder.png") {
-			icon = FileSystemView.getFileSystemView().getSystemIcon(file);
-			folderImg = iconToImage(icon).getScaledInstance(60, 60, Image.SCALE_DEFAULT);
-		}
-		*/
+			Icon icon;
+			/* If false is removed you get small resolution system icons
+			Waiting for official better way
+			if(!iconSet.contains(extension) && iconName!="folder.png") {
+				icon = FileSystemView.getFileSystemView().getSystemIcon(file);
+				folderImg = iconToImage(icon).getScaledInstance(60, 60, Image.SCALE_DEFAULT);
+			}
+			*/
 
-		img = new ImageIcon(folderImg);
+			img = new ImageIcon(folderImg);
 
-		JPanel panel = new JPanel(new BorderLayout());
-		
-		label = new JLabel("", JLabel.CENTER);
-		label.setPreferredSize(new Dimension(150, 10));
-		panel.add(label,  BorderLayout.NORTH);
+			JPanel panel = new JPanel(new BorderLayout());
+			
+			label = new JLabel("", JLabel.CENTER);
+			label.setPreferredSize(new Dimension(150, 10));
+			panel.add(label,  BorderLayout.NORTH);
 
-		label = new JLabel("", JLabel.CENTER);
-		label.setPreferredSize(new Dimension(10, 40));
-		panel.add(label,  BorderLayout.EAST);
+			label = new JLabel("", JLabel.CENTER);
+			label.setPreferredSize(new Dimension(10, 40));
+			panel.add(label,  BorderLayout.EAST);
 
-		label = new JLabel("", JLabel.CENTER);
-		label.setPreferredSize(new Dimension(10, 40));
-		panel.add(label,  BorderLayout.WEST);
+			label = new JLabel("", JLabel.CENTER);
+			label.setPreferredSize(new Dimension(10, 40));
+			panel.add(label,  BorderLayout.WEST);
 
-		label = new JLabel(img, JLabel.CENTER);
-		label.setPreferredSize(new Dimension(60, 60));
+			label = new JLabel(img, JLabel.CENTER);
+			label.setPreferredSize(new Dimension(60, 60));
 
-		//Border b = new BevelBorder(BevelBorder.RAISED, Color.LIGHT_GRAY, Color.DARK_GRAY);
-		//label.setBorder(b);
-		panel.add(label,  BorderLayout.CENTER);
+			//Border b = new BevelBorder(BevelBorder.RAISED, Color.LIGHT_GRAY, Color.DARK_GRAY);
+			//label.setBorder(b);
+			panel.add(label,  BorderLayout.CENTER);
 
-		label = new JLabel(name, JLabel.CENTER);
-		label.setPreferredSize(new Dimension(150, 30));
-		panel.add(label, BorderLayout.SOUTH);
+			label = new JLabel(name, JLabel.CENTER);
+			label.setPreferredSize(new Dimension(150, 30));
+			panel.add(label, BorderLayout.SOUTH);
 
-		label.setName(name);
-		panel.setName(name);
-		panel.setBorder(BorderFactory.createLineBorder(Color.white));
-		panel.setBackground(Color.white);
+			label.setName(name);
+			panel.setName(name);
+			panel.setBorder(BorderFactory.createLineBorder(Color.white));
+			panel.setBackground(Color.white);
 
-		panel.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseClicked(MouseEvent event) {
+			panel.addMouseListener(new MouseListener() {
+				@Override
+				public void mouseClicked(MouseEvent event) {
 
-				if(lastPanelSelected!=null) {
-					lastPanelSelected.setBackground(Color.white);
-					lastPanelSelected.setBorder(BorderFactory.createLineBorder(Color.white));
+					if(lastPanelSelected!=null) {
+						lastPanelSelected.setBackground(Color.white);
+						lastPanelSelected.setBorder(BorderFactory.createLineBorder(Color.white));
+					}
+					panel.setBackground(new Color(0x3fa9ff));
+					panel.setBorder(BorderFactory.createLineBorder(Color.black));
+					lastPanelSelected=panel;
+
+					if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
+						if(file.isDirectory()) {
+							TreePath path = new TreePath(node.getPath());
+							tree.expandPath(path);
+							tree.setSelectionPath(path);
+							tree.scrollPathToVisible(path);
+							showCurrentDirectory(node);
+						}
+						else {
+							try {
+								Desktop.getDesktop().open(file);
+							}
+							catch(IOException e) {
+
+							}
+
+						}
+					}
+					else if(event.getButton() == MouseEvent.BUTTON3) {
+						JPopupMenu menu = getFilePopupMenu();
+
+						menu.show(event.getComponent(), event.getX(), event.getY());
+					}
 				}
-				panel.setBackground(new Color(0x3fa9ff));
-				panel.setBorder(BorderFactory.createLineBorder(Color.black));
-				lastPanelSelected=panel;
 
-				if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
+				@Override
+				public void mouseEntered(MouseEvent event) {
+					if(lastPanelSelected!=panel)
+						panel.setBackground(new Color(0x8fd2ff));
+				}
+				@Override
+				public void mouseExited(MouseEvent event) {
+					if(lastPanelSelected!=panel)
+						panel.setBackground(Color.white);
+				}
+				@Override
+				public void mousePressed(MouseEvent event) {}
+				@Override
+				public void mouseReleased(MouseEvent event) {}
+			});
+
+			return panel;
+		}
+
+		TreeWillExpandListener treeWillExpandListener = new TreeWillExpandListener() {
+			@Override
+			public void treeWillCollapse(TreeExpansionEvent treeExpansionEvent) throws ExpandVetoException {
+				TreePath path = treeExpansionEvent.getPath();
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+			}
+	  
+			@Override
+			public void treeWillExpand(TreeExpansionEvent treeExpansionEvent) throws ExpandVetoException {
+				TreePath path = treeExpansionEvent.getPath();
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+				File current;
+
+				String data = node.getUserObject().toString();
+
+				current = (File) node.getUserObject();
+				if (current.isDirectory()) {
+					createNodes(node, 0);
+				}
+			}
+		};
+
+	 /** Required by TreeSelectionListener interface. */
+		@Override
+		public void valueChanged(TreeSelectionEvent e) {
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+			File current;
+			
+			if (node == null) 
+				return;
+
+			current = (File) node.getUserObject();
+			if (current.isDirectory()) {
+				createNodes(node, 0);
+			}
+			else {
+
+			}
+		}
+
+		static private void createNodes(DefaultMutableTreeNode top, int setting) {
+			DefaultMutableTreeNode file = null;
+			int i, numChild;
+			SortedSet<File> set = new TreeSet<>();
+			Iterator it;
+
+			File curDir = (File) top.getUserObject();
+			File current, children[] = curDir.listFiles(); 
+
+			numChild=tree.getModel().getChildCount(top);
+
+			if(children==null)
+				return;
+
+			for(File element : children) {
+				if(!showHiddenFiles && (element.isHidden() || element.getName().startsWith(".")))
+					continue;
+
+				if(element.isDirectory())
+					set.add(element);
+			}
+
+			it=set.iterator();
+			while (it.hasNext()) {
+				File element = (File) it.next();
+
+				for(i=0; i<numChild; i++) { 
+					current=(File) ((DefaultMutableTreeNode) tree.getModel().getChild(top, i)).getUserObject();
+					if(current.getName().compareTo(element.getName())==0) {
+						file=(DefaultMutableTreeNode) tree.getModel().getChild(top, i);
+						break;
+					}
+				}
+
+				if(i==numChild) {
+					file=new DefaultMutableTreeNode(new MyFile(element.getPath()));
+					top.add(file);
+				}
+
+				if(setting==0)
+					createNodes(file, 1);
+			}
+		}
+
+		private DefaultTreeCellRenderer getRenderer() {
+			DefaultTreeCellRenderer tRenderer = new DefaultTreeCellRenderer();
+
+			ImageIcon folderIcon = new ImageIcon(ICONPATH + "extensions/folder.png");
+			Image folderImg = folderIcon.getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
+			folderIcon = new ImageIcon(folderImg);
+			
+			ImageIcon folderIconOpen = new ImageIcon(ICONPATH + "other/folderopen.png");
+			Image folderImgOpen = folderIconOpen.getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
+			folderIconOpen = new ImageIcon(folderImgOpen);
+
+			ImageIcon folderIconEmpty = new ImageIcon(ICONPATH + "other/folderempty.png");
+			Image folderImgEmpty = folderIconEmpty.getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
+			folderIconEmpty = new ImageIcon(folderImgEmpty);
+
+			tRenderer.setLeafIcon(folderIconEmpty);
+			tRenderer.setClosedIcon(folderIcon);
+			tRenderer.setOpenIcon(folderIconOpen);
+			tRenderer.setTextSelectionColor(Color.RED);
+
+			return tRenderer;
+		}
+
+		public static JMenuBar CreateMenuBar() {
+			JMenuBar bar=new JMenuBar();
+			JButton button;
+			ImageIcon img;
+			Image pict;
+
+			/*
+		   	img = new ImageIcon(ICONPATH + "other/foldernew.png");
+			pict = img.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT);
+			img = new ImageIcon(pict);
+
+			button = new JButton(img);
+			button.setBorder(BorderFactory.createEmptyBorder());
+			button.setContentAreaFilled(false);
+
+			bar.add(button); */
+
+			return bar;
+		}
+		
+		public static JPanel createTopPanel() {
+			JPanel topPanel = new JPanel(new GridBagLayout());
+			GridBagConstraints c = new GridBagConstraints();
+			JButton button;
+
+			c.weightx = 0.05;
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.gridx = 0;
+			c.gridy = 0;
+
+			button = new JButton("");
+			button.setOpaque(false);
+			button.setContentAreaFilled(false);
+			button.setBorderPainted(false);
+			button.setPreferredSize(new Dimension(button.getPreferredSize().width, 25));
+			topPanel.add(button, c);
+
+			c.weightx = 0.8;
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.gridx = 1;
+			c.gridy = 0;
+
+			navigationField = new JTextField("");
+			navigationField.setPreferredSize(new Dimension(navigationField.getPreferredSize().width, 25));
+
+			topPanel.add(navigationField, c);
+
+			searchField = new JTextField("");
+			searchField.setPreferredSize(new Dimension(searchField.getPreferredSize().width, 25));
+			searchField.addKeyListener(new KeyListener() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					searchQuery += e.getKeyChar();					
+				}
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+						DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+						File top = (File) node.getUserObject();
+
+						folder.removeAll();
+						folder.repaint();
+						folder.revalidate();
+
+						searchField.setText("");
+						JPanel gridPanel = new JPanel(new GridLayout(0, 1, 8, 8));
+						gridPanel.setBackground(Color.white);
+						folder.add(gridPanel);
+						search(node, searchQuery, gridPanel);
+						searchQuery="";
+						folder.repaint();
+						folder.revalidate();
+					}
+				}
+				@Override
+				public void keyReleased(KeyEvent e) {}
+			});
+	   
+	   		searchField.addMouseListener(new MouseListener() {
+				@Override
+				public void mouseClicked(MouseEvent event) {
+
+					if(event.getButton() == MouseEvent.BUTTON1) {
+						searchField.setText("");
+						searchQuery="";
+					}
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent event) {}
+				@Override
+				public void mouseExited(MouseEvent event) {}
+				@Override
+				public void mousePressed(MouseEvent event) {}
+				@Override
+				public void mouseReleased(MouseEvent event) {}
+			});
+
+			searchField.addFocusListener(new FocusListener() {
+				String lastText="";
+
+				@Override
+				public void focusGained(FocusEvent e) {
+					lastText = searchField.getText();
+					searchField.setText("");
+					searchQuery = "";
+				}
+				public void focusLost(FocusEvent e) {
+					searchField.setText(lastText);
+				}
+			});
+
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 0.15;
+			c.gridx = 2;
+			c.gridy = 0;
+
+			topPanel.add(searchField, c);
+
+			return topPanel;
+		}
+
+		static public JPopupMenu getFilePopupMenu() {
+			JPopupMenu popupMenu = new JPopupMenu();
+			JMenuItem menuItem;
+
+			menuItem = new JMenuItem("Delete");
+			popupMenu.add(menuItem);
+			menuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+
+					delete(node);
+
+					showCurrentDirectory(node);
+				}
+			});
+
+			menuItem = new JMenuItem("Rename");
+			popupMenu.add(menuItem);
+			menuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					Component curComponents[] = lastPanelSelected.getComponents();
+					String FilePath = ((File) ((DefaultMutableTreeNode) tree.getLastSelectedPathComponent()).getUserObject()).getPath();
+					DefaultMutableTreeNode current=null, parent= (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+					String nameOld = curComponents[2].getName(), nameNew;
+					int i;
+			
+					File f = new File(FilePath + "/" + nameOld);
+
+					if(f.exists() && f.isFile()) {
+						nameNew=JOptionPane.showInputDialog(null, "Enter new name");
+						File file2 = new File(FilePath + "/" + nameNew);
+
+						if (file2.exists()) {
+							JOptionPane.showMessageDialog(null, "Rename Failed! File exists");
+						}
+
+						boolean success = f.renameTo(file2);
+
+						if (!success) {
+							JOptionPane.showMessageDialog(null, "Rename Failed!");
+						}
+					}
+					else if(f.exists() && f.isDirectory()){
+						nameNew=JOptionPane.showInputDialog(null, "Enter new name");
+						File file2 = new File(FilePath + "/" + nameNew);
+
+						if (file2.exists()) {
+							JOptionPane.showMessageDialog(null, "Rename Failed! File exists");
+						}
+
+						int numChild=tree.getModel().getChildCount(parent);
+
+						for(i=0; i<numChild; i++) { 
+							current=(DefaultMutableTreeNode) tree.getModel().getChild(parent, i);
+							File curFile=(File) (current).getUserObject();
+							if(curFile.getName().compareTo(nameOld)==0)
+								break;
+						}
+
+						boolean success = f.renameTo(file2);
+
+						if (!success) {
+							JOptionPane.showMessageDialog(null, "Rename Failed!");
+						}
+
+						current.removeFromParent();
+						DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
+						defMod1.reload();
+						TreePath path = new TreePath(parent.getPath());
+						tree.expandPath(path);
+						tree.setSelectionPath(path);
+						tree.scrollPathToVisible(path);	 
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "Rename Failed!");
+						return;
+					}
+		
+					showCurrentDirectory(parent);
+				}
+			});
+			
+			return popupMenu;
+		}
+
+		static void search(DefaultMutableTreeNode top, String searchQuery, JPanel gridPanel) {
+			int numChild=tree.getModel().getChildCount(top);
+			DefaultMutableTreeNode current;
+			File topFile = (File) top.getUserObject();
+
+			if(numChild==0)
+				return; 
+
+			boolean isSymbolicLink = Files.isSymbolicLink(topFile.toPath());
+			if(isSymbolicLink)
+				return;
+
+			createNodes(top, 0);
+
+			for(int i=0; i<numChild; i++) {	  
+				current=(DefaultMutableTreeNode) tree.getModel().getChild(top, i);
+				File element = (File) current.getUserObject();
+
+				if(element.getName().contains(searchQuery)) {
+					gridPanel.add(getSmallIcon("folder.png", element, current));
+				}
+				
+				File children[] = element.listFiles();
+				if(children==null)
+					continue;
+				for(File child : children) {
+					if(child.isFile() && child.getName().contains(searchQuery)) {
+						if(iconSet.contains(getExtension(child.getName())))
+							gridPanel.add(getSmallIcon(getExtension(child.getName()) + ".png", child, current));
+						else
+							gridPanel.add(getSmallIcon("question.png", child, current));
+					} 
+				}
+
+				search(current, searchQuery, gridPanel);
+			}		  
+		}
+
+		public static JLabel getSmallIcon(String name, File file, DefaultMutableTreeNode node) {
+			JLabel label = new JLabel();
+			ImageIcon img=null;
+			Image pict;
+			Set<String> set = new HashSet<>(); 
+
+			// Bad check for images
+			set.add("jpeg");
+			set.add("jpg");
+			set.add("png");
+			set.add("gif");
+			if(set.contains(getExtension(file.getName()))) {
+				img = new ImageIcon(file.getPath());
+			}
+
+			if(img==null)
+				img = new ImageIcon(ICONPATH + "extensions/" + name);
+
+			pict = img.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
+			img = new ImageIcon(pict);
+	 		
+			label.setIcon(img);
+			label.setText(file.getPath());
+			label.addMouseListener(new MouseListener(){
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					String fullPath = label.getText();
+					File file = new File(fullPath);
+
 					if(file.isDirectory()) {
 						TreePath path = new TreePath(node.getPath());
 						tree.expandPath(path);
 						tree.setSelectionPath(path);
 						tree.scrollPathToVisible(path);
-						showCurrentDirectory(node);
+						showCurrentDirectory(node); 
 					}
 					else {
 						try {
@@ -411,632 +837,269 @@ public class FileExplorer extends JPanel
 						catch(IOException e) {
 
 						}
-
 					}
 				}
-				else if(event.getButton() == MouseEvent.BUTTON3) {
-					JPopupMenu menu = getFilePopupMenu();
-
-					menu.show(event.getComponent(), event.getX(), event.getY());
-				}
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent event) {
-				if(lastPanelSelected!=panel)
-					panel.setBackground(new Color(0x8fd2ff));
-			}
-			@Override
-			public void mouseExited(MouseEvent event) {
-				if(lastPanelSelected!=panel)
-					panel.setBackground(Color.white);
-			}
-			@Override
-			public void mousePressed(MouseEvent event) {}
-			@Override
-			public void mouseReleased(MouseEvent event) {}
-		});
-
-		return panel;
-	}
-
-	TreeWillExpandListener treeWillExpandListener = new TreeWillExpandListener() {
-		@Override
-		public void treeWillCollapse(TreeExpansionEvent treeExpansionEvent) throws ExpandVetoException {
-			TreePath path = treeExpansionEvent.getPath();
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-		}
-  
-		@Override
-		public void treeWillExpand(TreeExpansionEvent treeExpansionEvent) throws ExpandVetoException {
-			TreePath path = treeExpansionEvent.getPath();
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-			File current;
-
-			String data = node.getUserObject().toString();
-
-			current = (File) node.getUserObject();
-			if (current.isDirectory()) {
-				createNodes(node, 0);
-			}
-		}
-	};
-
- /** Required by TreeSelectionListener interface. */
-	@Override
-	public void valueChanged(TreeSelectionEvent e) {
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
-		File current;
-		
-		if (node == null) 
-			return;
-
-		current = (File) node.getUserObject();
-		if (current.isDirectory()) {
-			createNodes(node, 0);
-		}
-		else {
-
-		}
-	}
-
-	static private void createNodes(DefaultMutableTreeNode top, int setting) {
-		DefaultMutableTreeNode file = null;
-		int i, numChild;
-		SortedSet<File> set = new TreeSet<>();
-		Iterator it;
-
-		File curDir = (File) top.getUserObject();
-		File current, children[] = curDir.listFiles(); 
-
-		numChild=tree.getModel().getChildCount(top);
-
-		if(children==null)
-			return;
-
-		for(File element : children) {
-			if(!showHiddenFiles && (element.isHidden() || element.getName().startsWith(".")))
-				continue;
-
-			if(element.isDirectory())
-				set.add(element);
-		}
-
-		it=set.iterator();
-		while (it.hasNext()) {
-			File element = (File) it.next();
-
-			for(i=0; i<numChild; i++) { 
-				current=(File) ((DefaultMutableTreeNode) tree.getModel().getChild(top, i)).getUserObject();
-				if(current.getName().compareTo(element.getName())==0) {
-					file=(DefaultMutableTreeNode) tree.getModel().getChild(top, i);
-					break;
-				}
-			}
-
-			if(i==numChild) {
-				file=new DefaultMutableTreeNode(new MyFile(element.getPath()));
-				top.add(file);
-			}
-
-			if(setting==0)
-				createNodes(file, 1);
-		}
-	}
-
-	private DefaultTreeCellRenderer getRenderer() {
-		DefaultTreeCellRenderer tRenderer = new DefaultTreeCellRenderer();
-
-		ImageIcon folderIcon = new ImageIcon(ICONPATH + "folder.png");
-		Image folderImg = folderIcon.getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
-		folderIcon = new ImageIcon(folderImg);
-		
-		ImageIcon folderIconOpen = new ImageIcon(ICONPATH + "folderopen.png");
-		Image folderImgOpen = folderIconOpen.getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
-		folderIconOpen = new ImageIcon(folderImgOpen);
-
-		ImageIcon folderIconEmpty = new ImageIcon(ICONPATH + "folderempty.png");
-		Image folderImgEmpty = folderIconEmpty.getImage().getScaledInstance(28, 28, Image.SCALE_DEFAULT);
-		folderIconEmpty = new ImageIcon(folderImgEmpty);
-
-		tRenderer.setLeafIcon(folderIconEmpty);
-		tRenderer.setClosedIcon(folderIcon);
-		tRenderer.setOpenIcon(folderIconOpen);
-		tRenderer.setTextSelectionColor(Color.RED);
-
-		return tRenderer;
-	}
-
-	public static JMenuBar CreateMenuBar() {
-		JMenuBar bar=new JMenuBar();
-		JButton button;
-		ImageIcon img;
-		Image pict;
-
-//   	img = new ImageIcon(ICONPATH + "foldernew.png");
-//		pict = img.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT);
-//		img = new ImageIcon(pict);
-
-//		button = new JButton(img);
-//		button.setBorder(BorderFactory.createEmptyBorder());
-//		button.setContentAreaFilled(false);
-
-//		bar.add(button);
-
-		return bar;
-	}
-	
-	public static JPanel createTopPanel() {
-		JPanel topPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		JButton button;
-
-		c.weightx = 0.05;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-
-		button = new JButton("");
-		button.setOpaque(false);
-		button.setContentAreaFilled(false);
-		button.setBorderPainted(false);
-		button.setPreferredSize(new Dimension(button.getPreferredSize().width, 25));
-		topPanel.add(button, c);
-
-		c.weightx = 0.8;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 0;
-
-		navigationField = new JTextField("");
-		navigationField.setPreferredSize(new Dimension(navigationField.getPreferredSize().width, 25));
-
-		topPanel.add(navigationField, c);
-
-		searchField = new JTextField("");
-		searchField.setPreferredSize(new Dimension(searchField.getPreferredSize().width, 25));
-		searchField.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				searchQuery += e.getKeyChar();					
-			}
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-					File top = (File) node.getUserObject();
-
-					folder.removeAll();
-					folder.repaint();
-					folder.revalidate();
-
-					searchField.setText("");
-					JPanel gridPanel = new JPanel(new GridLayout(0, 1, 8, 8));
-					gridPanel.setBackground(Color.white);
-					folder.add(gridPanel);
-					search(node, searchQuery, gridPanel);
-					searchQuery="";
-					folder.repaint();
-					folder.revalidate();
-				}
-			}
-			@Override
-			public void keyReleased(KeyEvent e) {}
-		});
-   
-   		searchField.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseClicked(MouseEvent event) {
-
-				if(event.getButton() == MouseEvent.BUTTON1) {
-					searchField.setText("");
-					searchQuery="";
-				}
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent event) {}
-			@Override
-			public void mouseExited(MouseEvent event) {}
-			@Override
-			public void mousePressed(MouseEvent event) {}
-			@Override
-			public void mouseReleased(MouseEvent event) {}
-		});
-
-		searchField.addFocusListener(new FocusListener() {
-			String lastText="";
-
-			@Override
-			public void focusGained(FocusEvent e) {
-				lastText = searchField.getText();
-				searchField.setText("");
-				searchQuery = "";
-			}
-			public void focusLost(FocusEvent e) {
-				searchField.setText(lastText);
-			}
-		});
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.15;
-		c.gridx = 2;
-		c.gridy = 0;
-
-		topPanel.add(searchField, c);
-
-		return topPanel;
-	}
-
-	static public JPopupMenu getFilePopupMenu() {
-		JPopupMenu popupMenu = new JPopupMenu();
-		JMenuItem menuItem;
-
-		menuItem = new JMenuItem("Delete");
-		popupMenu.add(menuItem);
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-
-				delete(node);
-
-				showCurrentDirectory(node);
-			}
-		});
-
-		menuItem = new JMenuItem("Rename");
-		popupMenu.add(menuItem);
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				Component curComponents[] = lastPanelSelected.getComponents();
-				String FilePath = ((File) ((DefaultMutableTreeNode) tree.getLastSelectedPathComponent()).getUserObject()).getPath();
-				DefaultMutableTreeNode current=null, parent= (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-				String nameOld = curComponents[2].getName(), nameNew;
-				int i;
-		
-				File f = new File(FilePath + "/" + nameOld);
-
-				if(f.exists() && f.isFile()) {
-					nameNew=JOptionPane.showInputDialog(null, "Enter new name");
-					File file2 = new File(FilePath + "/" + nameNew);
-
-					if (file2.exists()) {
-						JOptionPane.showMessageDialog(null, "Rename Failed! File exists");
-					}
-
-					boolean success = f.renameTo(file2);
-
-					if (!success) {
-						JOptionPane.showMessageDialog(null, "Rename Failed!");
-					}
-				}
-				else if(f.exists() && f.isDirectory()){
-					nameNew=JOptionPane.showInputDialog(null, "Enter new name");
-					File file2 = new File(FilePath + "/" + nameNew);
-
-					if (file2.exists()) {
-						JOptionPane.showMessageDialog(null, "Rename Failed! File exists");
-					}
-
-					int numChild=tree.getModel().getChildCount(parent);
-
-					for(i=0; i<numChild; i++) { 
-						current=(DefaultMutableTreeNode) tree.getModel().getChild(parent, i);
-						File curFile=(File) (current).getUserObject();
-						if(curFile.getName().compareTo(nameOld)==0)
-							break;
-					}
-
-					boolean success = f.renameTo(file2);
-
-					if (!success) {
-						JOptionPane.showMessageDialog(null, "Rename Failed!");
-					}
-
-					current.removeFromParent();
-					DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
-					defMod1.reload();
-					TreePath path = new TreePath(parent.getPath());
-					tree.expandPath(path);
-					tree.setSelectionPath(path);
-					tree.scrollPathToVisible(path);	 
-				}
-				else {
-					JOptionPane.showMessageDialog(null, "Rename Failed!");
-					return;
-				}
-	
-				showCurrentDirectory(parent);
-			}
-		});
-		
-		return popupMenu;
-	}
-
-	static void search(DefaultMutableTreeNode top, String searchQuery, JPanel gridPanel) {
-		int numChild=tree.getModel().getChildCount(top);
-		DefaultMutableTreeNode current;
-		File topFile = (File) top.getUserObject();
-
-		if(numChild==0)
-			return; 
-
-		boolean isSymbolicLink = Files.isSymbolicLink(topFile.toPath());
-		if(isSymbolicLink)
-			return;
-
-		createNodes(top, 0);
-
-		for(int i=0; i<numChild; i++) {	  
-			current=(DefaultMutableTreeNode) tree.getModel().getChild(top, i);
-			File element = (File) current.getUserObject();
-
-			if(element.getName().contains(searchQuery)) {
-				gridPanel.add(getSmallIcon("folder.png", element, current));
-			}
+				@Override
+				public void mouseReleased(MouseEvent arg0) {}
+				@Override
+				public void mousePressed(MouseEvent arg0) {}
+				@Override
+				public void mouseExited(MouseEvent arg0) {}
+				@Override
+				public void mouseEntered(MouseEvent arg0) {}
+			});
 			
-			File children[] = element.listFiles();
-			if(children==null)
-				continue;
-			for(File child : children) {
-				if(child.isFile() && child.getName().contains(searchQuery)) {
-					if(iconSet.contains(getExtension(child.getName())))
-						gridPanel.add(getSmallIcon(getExtension(child.getName()) + ".png", child, current));
-					else
-						gridPanel.add(getSmallIcon("question.png", child, current));
-				} 
-			}
-
-			search(current, searchQuery, gridPanel);
-		}		  
-	}
-
-	public static JLabel getSmallIcon(String name, File file, DefaultMutableTreeNode node) {
-		JLabel label = new JLabel();
-		ImageIcon img=null;
-		Image pict;
-		Set<String> set = new HashSet<>(); 
-
-		// Bad check for images
-		set.add("jpeg");
-		set.add("jpg");
-		set.add("png");
-		set.add("gif");
-		if(set.contains(getExtension(file.getName()))) {
-			img = new ImageIcon(file.getPath());
+			return label;
 		}
 
-		if(img==null)
-			img = new ImageIcon(ICONPATH + name);
+		static void delete(DefaultMutableTreeNode node) {
+			Component curComponents[] = lastPanelSelected.getComponents();
+			String FilePath = ((File) node.getUserObject()).getPath();
+			DefaultMutableTreeNode current=null;
+			String name = curComponents[2].getName();
+			int i;
 
-		pict = img.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
-		img = new ImageIcon(pict);
- 		
-		label.setIcon(img);
-		label.setText(file.getPath());
-		label.addMouseListener(new MouseListener(){
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				String fullPath = label.getText();
-				File file = new File(fullPath);
-
-				if(file.isDirectory()) {
-					TreePath path = new TreePath(node.getPath());
-					tree.expandPath(path);
-					tree.setSelectionPath(path);
-					tree.scrollPathToVisible(path);
-					showCurrentDirectory(node); 
+			File f = new File(FilePath + "/" + name);
+			if(f.exists() && f.isFile()){
+				try {
+					f.delete();
 				}
-				else {
-					try {
-						Desktop.getDesktop().open(file);
-					}
-					catch(IOException e) {
-
-					}
+				catch(Exception e) {
+					System.out.println(e.getMessage());
 				}
 			}
-			@Override
-			public void mouseReleased(MouseEvent arg0) {}
-			@Override
-			public void mousePressed(MouseEvent arg0) {}
-			@Override
-			public void mouseExited(MouseEvent arg0) {}
-			@Override
-			public void mouseEntered(MouseEvent arg0) {}
-		});
-		
-		return label;
-	}
-
-	static void delete(DefaultMutableTreeNode node) {
-		Component curComponents[] = lastPanelSelected.getComponents();
-		String FilePath = ((File) node.getUserObject()).getPath();
-		DefaultMutableTreeNode current=null;
-		String name = curComponents[2].getName();
-		int i;
-
-		File f = new File(FilePath + "/" + name);
-		if(f.exists() && f.isFile()){
-			try {
-				f.delete();
-			}
-			catch(Exception e) {
-				System.out.println(e.getMessage());
-			}
-		}
-		else if(f.exists() && f.isDirectory()) {
-			int numChild=tree.getModel().getChildCount(node);
-			for(i=0; i<numChild; i++) {
-				current=(DefaultMutableTreeNode) tree.getModel().getChild(node, i);
-				if(((File) current.getUserObject()).getName().compareTo(name)==0)
-					break;
-			}
-			if(current==null || i==numChild || ((File) current.getUserObject()).exists()==false)
-				return;
-
-			current.removeAllChildren();
-			current.removeFromParent();
-			removeDirectory(f);
-			f.delete(); 
-
-			DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
-			defMod1.reload();
-			TreePath path = new TreePath(node.getPath());
-			tree.expandPath(path);
-			tree.setSelectionPath(path);
-			tree.scrollPathToVisible(path);
-		}
-		else {
-			JOptionPane.showMessageDialog(null, "File didn't exist!");
-			return;
-		}
-	}
-
-	static void removeDirectory(File current) {
-		File children[] = current.listFiles();
-		
-		if(children==null)
-			return;
-		
-		for(File element : children) {
-
-			if(element.isDirectory()) {
-				removeDirectory(element);
-			}
-			element.delete();
-		}
-	}
-
-	public JPopupMenu getBackgroundPopupMenu() {
-		JPopupMenu popupMenu = new JPopupMenu();
-		JMenuItem menuItem;
-
-		menuItem = new JMenuItem("New Text File");
-		popupMenu.add(menuItem);
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-				String FilePath = ((File) node.getUserObject()).getPath();
-				String name;
-
-				name=JOptionPane.showInputDialog(null, "Enter file name");
-
-				File f = new File(FilePath + "/" + name);
-				if(!f.exists()){
-					try {
-						f.createNewFile();
-					}
-					catch(IOException e) {
-						System.out.println(e.getMessage());
-					}
+			else if(f.exists() && f.isDirectory()) {
+				int numChild=tree.getModel().getChildCount(node);
+				for(i=0; i<numChild; i++) {
+					current=(DefaultMutableTreeNode) tree.getModel().getChild(node, i);
+					if(((File) current.getUserObject()).getName().compareTo(name)==0)
+						break;
 				}
-				else {
-					JOptionPane.showMessageDialog(null, "File with that name already exists!");
+				if(current==null || i==numChild || ((File) current.getUserObject()).exists()==false)
 					return;
-				}
 
-				showCurrentDirectory(node);
-			}
-		});
+				current.removeAllChildren();
+				current.removeFromParent();
+				removeDirectory(f);
+				f.delete(); 
 
-		menuItem = new JMenuItem("New Folder");
-		popupMenu.add(menuItem);
-		menuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-				String FilePath = ((File) node.getUserObject()).getPath();
-				String name;
-				
-				name=JOptionPane.showInputDialog(null, "Enter directory name");
-
-				File f = new File(FilePath + "/" + name);
-				if(!f.exists()){
-					try {
-						f.mkdir();
-					}
-					catch(Exception e) {
-						System.out.println(e.getMessage());
-					}
-				}
-				else {
-					JOptionPane.showMessageDialog(null, "Directory with that name already exists!");
-					return;
-				}
-
-				/* add node to tree and reload tree here */
 				DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
 				defMod1.reload();
 				TreePath path = new TreePath(node.getPath());
 				tree.expandPath(path);
 				tree.setSelectionPath(path);
 				tree.scrollPathToVisible(path);
-	
-				showCurrentDirectory(node);
 			}
-		});
-	
-		return popupMenu;
-	}
-	
-	/**
-	 * Create the GUI and show it.	For thread safety,
-	 * this method should be invoked from the
-	 * event dispatch thread.
-	 */
-	private static void createAndShowGUI() {
-		if (useSystemLookAndFeel) {
-			try {
-				UIManager.setLookAndFeel(
-					UIManager.getSystemLookAndFeelClassName());
-			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
-				System.err.println("Couldn't use system look and feel.");
+			else {
+				JOptionPane.showMessageDialog(null, "File didn't exist!");
+				return;
 			}
 		}
 
-		//Create and set up the window.
-		JFrame frame = new JFrame("File Explorer");
-		frame.setIconImage(new ImageIcon(ICONPATH + "folder.png").getImage());
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		static void removeDirectory(File current) {
+			File children[] = current.listFiles();
+			
+			if(children==null)
+				return;
+			
+			for(File element : children) {
 
-		//Gets screen's Dimensions
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-		int windowHeight=(int) screenSize.getHeight()*3/4;
-		int windowWidth=(int) screenSize.getWidth()*3/4;
-
-		//Set Window's dimensions
-		frame.setSize(windowWidth, windowHeight);
-
-		//Set Window's location
-		frame.setLocation((screenSize.width-windowWidth)/2, (screenSize.height-windowHeight)/2);
-
-		//Set window layout manager
-		frame.setLayout(new BorderLayout());
-
-		//Set Menu Bar
-		frame.setJMenuBar(CreateMenuBar());
-
-		//Add content to the window.
-		frame.add(createTopPanel(), BorderLayout.NORTH);
-		frame.add(new FileExplorer(), BorderLayout.CENTER);
-	
-		//Display the window.
-		frame.setVisible(true);
-	}
-
-	public static void main(String[] args) {
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				createAndShowGUI();
+				if(element.isDirectory()) {
+					removeDirectory(element);
+				}
+				element.delete();
 			}
-		});
-	}
+		}
+
+		public JPopupMenu getBackgroundPopupMenu() {
+			JPopupMenu popupMenu = new JPopupMenu();
+			JMenuItem menuItem;
+			JMenu sectionsMenu = new JMenu("New");
+			ImageIcon img=null;
+			Image folderImg;
+
+			//New submenu(txt, folder)
+
+			menuItem = new JMenuItem("Text Document");
+			img = new ImageIcon(ICONPATH + "extensions/txt.png");
+			folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
+			menuItem.setIcon(new ImageIcon(folderImg));
+			menuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+					String FilePath = ((File) node.getUserObject()).getPath();
+					String name;
+					ImageIcon img=null;
+					Image folderImg;
+
+					img = new ImageIcon(ICONPATH + "extensions/txt.png");
+					folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+					name=(String) JOptionPane.showInputDialog(null, "Enter File Name", "New Text Document",
+											JOptionPane.INFORMATION_MESSAGE, new ImageIcon(folderImg), 
+											null, "File");
+					if(name==null || name.equals(""))
+						return;
+
+					File f;
+					if(getExtension(name).equals("txt"))
+						f = new File(FilePath + "/" + name);
+					else
+						f = new File(FilePath + "/" + name + ".txt");
+
+					if(!f.exists()) {
+						try {
+							f.createNewFile();
+						}
+						catch(IOException e) {
+							System.out.println(e.getMessage());
+						}
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "File with that name already exists!");
+						return;
+					}
+
+					showCurrentDirectory(node);
+				}
+			});
+			sectionsMenu.add(menuItem);
+
+			menuItem = new JMenuItem("Folder");
+			img = new ImageIcon(ICONPATH + "extensions/folder.png");
+			folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
+			menuItem.setIcon(new ImageIcon(folderImg));
+			menuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+					String FilePath = ((File) node.getUserObject()).getPath();
+					String name;
+					ImageIcon img=null;
+					Image folderImg;	
+
+					img = new ImageIcon(ICONPATH + "folder.png");
+					folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+					name=(String) JOptionPane.showInputDialog(null, "Enter Folder Name", "New Folder",
+											JOptionPane.INFORMATION_MESSAGE, new ImageIcon(folderImg), 
+											null, "Folder");
+					if(name==null || name.equals(""))
+						return;
+
+					File f = new File(FilePath + "/" + name);
+					if(!f.exists()){
+						try {
+							f.mkdir();
+						}
+						catch(Exception e) {
+							System.out.println(e.getMessage());
+						}
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "Directory with that name already exists!");
+						return;
+					}
+
+					/* add node to tree and reload tree here */
+					DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
+					defMod1.reload();
+					TreePath path = new TreePath(node.getPath());
+					tree.expandPath(path);
+					tree.setSelectionPath(path);
+					tree.scrollPathToVisible(path);
+		
+					showCurrentDirectory(node);
+				}
+			});
+
+			sectionsMenu.add(menuItem);
+		
+			img = new ImageIcon(ICONPATH + "other/plus.png");
+			folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
+			sectionsMenu.setIcon(new ImageIcon(folderImg));
+			popupMenu.add(sectionsMenu);
+
+			//Refresh option
+
+			menuItem = new JMenuItem("Refresh");
+			img = new ImageIcon(ICONPATH + "other/refresh.png");
+			folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
+			menuItem.setIcon(new ImageIcon(folderImg));
+			menuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+					
+					DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
+					defMod1.reload();
+					TreePath path = new TreePath(node.getPath());
+					tree.expandPath(path);
+					tree.setSelectionPath(path);
+					tree.scrollPathToVisible(path);
+
+					showCurrentDirectory(node);
+				}
+			});
+
+			popupMenu.add(menuItem);
+
+			return popupMenu;
+		}
+		
+		/**
+		 * Create the GUI and show it.	For thread safety,
+		 * this method should be invoked from the
+		 * event dispatch thread.
+		 */
+		private static void createAndShowGUI() {
+			if (useSystemLookAndFeel) {
+				try {
+					UIManager.setLookAndFeel(
+						UIManager.getSystemLookAndFeelClassName());
+				} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
+					System.err.println("Couldn't use system look and feel.");
+				}
+			}
+
+			//Create and set up the window.
+			JFrame frame = new JFrame("File Explorer");
+			frame.setIconImage(new ImageIcon(ICONPATH + "extensions/folder.png").getImage());
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+			//Gets screen's Dimensions
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+			int windowHeight=(int) screenSize.getHeight()*3/4;
+			int windowWidth=(int) screenSize.getWidth()*3/4;
+
+			//Set Window's dimensions
+			frame.setSize(windowWidth, windowHeight);
+
+			//Set Window's location
+			frame.setLocation((screenSize.width-windowWidth)/2, (screenSize.height-windowHeight)/2);
+
+			//Set window layout manager
+			frame.setLayout(new BorderLayout());
+
+			//Set Menu Bar
+			frame.setJMenuBar(CreateMenuBar());
+
+			//Add content to the window.
+			frame.add(createTopPanel(), BorderLayout.NORTH);
+			frame.add(new FileExplorer(), BorderLayout.CENTER);
+		
+			//Display the window.
+			frame.setVisible(true);
+		}
+
+		public static void main(String[] args) {
+			javax.swing.SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					createAndShowGUI();
+				}
+			});
+		}
 }
 
 class MyFile extends File {

@@ -1,0 +1,7 @@
+fix new text 
+fix new folder
+put them in submenu
+fix rename
+fix delete
+
+check JList for folder
