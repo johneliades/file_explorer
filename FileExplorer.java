@@ -133,10 +133,11 @@ public class FileExplorer extends JPanel
 				createNodes(current, 0);
 			}
 		}
+		showCurrentDirectory(top);
+		
 		TreePath path = new TreePath(top.getPath());
 		tree.setSelectionPath(path);
 		tree.expandPath(path);
-		showCurrentDirectory(top);
 		treeView.getVerticalScrollBar().setValue(0);
 
 		folderView.setMinimumSize(new Dimension(400, 50));
@@ -402,11 +403,12 @@ public class FileExplorer extends JPanel
 
 					if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
 						if(file.isDirectory()) {
+							showCurrentDirectory(node);
+
 							TreePath path = new TreePath(node.getPath());
 							tree.setSelectionPath(path);
 							tree.scrollPathToVisible(path);
 							tree.expandPath(path);
-							showCurrentDirectory(node);
 						}
 						else {
 							try {
@@ -756,17 +758,18 @@ public class FileExplorer extends JPanel
 						current.removeFromParent();
 						DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
 						defMod1.reload();
-						TreePath path = new TreePath(parent.getPath());
-						tree.setSelectionPath(path);
-						tree.scrollPathToVisible(path);
-						tree.expandPath(path);
 					}
 					else {
 						JOptionPane.showMessageDialog(null, "Rename Failed!");
 						return;
 					}
-		
+	
 					showCurrentDirectory(parent);
+
+					TreePath path = new TreePath(parent.getPath());
+					tree.setSelectionPath(path);
+					tree.scrollPathToVisible(path);
+					tree.expandPath(path);
 				}
 			});
 			
@@ -784,6 +787,11 @@ public class FileExplorer extends JPanel
 					deleteSon(node);
 
 					showCurrentDirectory(node);
+				
+					TreePath path = new TreePath(node.getPath());
+					tree.setSelectionPath(path);
+					tree.scrollPathToVisible(path);
+					tree.expandPath(path);
 				}
 			});
 
@@ -860,11 +868,12 @@ public class FileExplorer extends JPanel
 					File file = new File(fullPath);
 
 					if(file.isDirectory()) {
+						showCurrentDirectory(node); 
+
 						TreePath path = new TreePath(node.getPath());
 						tree.setSelectionPath(path);
 						tree.scrollPathToVisible(path);
 						tree.expandPath(path);
-						showCurrentDirectory(node); 
 					}
 					else {
 						try {
@@ -937,10 +946,6 @@ public class FileExplorer extends JPanel
 
 				DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
 				defMod1.reload();
-				TreePath path = new TreePath(node.getPath());
-				tree.setSelectionPath(path);
-				tree.scrollPathToVisible(path);
-				tree.expandPath(path);
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "File didn't exist!");
@@ -1054,12 +1059,13 @@ public class FileExplorer extends JPanel
 					/* add node to tree and reload tree here */
 					DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
 					defMod1.reload();
+
+					showCurrentDirectory(node);
+		
 					TreePath path = new TreePath(node.getPath());
 					tree.setSelectionPath(path);
 					tree.scrollPathToVisible(path);
 					tree.expandPath(path);
-
-					showCurrentDirectory(node);
 				}
 			});
 
@@ -1100,11 +1106,10 @@ public class FileExplorer extends JPanel
 							createNodes(current, 0);
 						}
 					}
+					showCurrentDirectory(node);
 					tree.setSelectionPath(path);
 					tree.scrollPathToVisible(path);
 					tree.expandPath(path);
-
-					showCurrentDirectory(node);
 				}
 			});
 
