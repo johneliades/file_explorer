@@ -1029,19 +1029,26 @@ public class FileExplorer extends JPanel
 				@Override
 				public void actionPerformed(ActionEvent event) {
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+
+					node.removeAllChildren();
+					DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
+					defMod1.reload();
+				
 					TreePath path = new TreePath(node.getPath());
-					if(path.equals("This PC")) {
+					if(path.toString().equals("[This PC]")) {
 						//Create root nodes.
 						File roots[]=File.listRoots();
 
 						for (File root : roots) {
 							node.add(new DefaultMutableTreeNode(root));
 						}
-					}
 
-					node.removeAllChildren();
-					DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
-					defMod1.reload();
+						int numChild=defMod1.getChildCount(node);
+						for(int i=0; i<numChild; i++) { 
+							DefaultMutableTreeNode current=(DefaultMutableTreeNode) defMod1.getChild(node, i);
+							createNodes(current, 0);
+						}
+					}
 					tree.setSelectionPath(path);
 					tree.scrollPathToVisible(path);
 					tree.expandPath(path);
