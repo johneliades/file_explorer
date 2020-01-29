@@ -467,7 +467,21 @@ public class FileExplorer extends JPanel
 
 	 	/* Targets selected node when clicked in tree */
 		@Override
-		public void valueChanged(TreeSelectionEvent e) {}
+		public void valueChanged(TreeSelectionEvent e) {
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+			File current;
+			
+			if (node == null) 
+				return;
+
+			current = (File) node.getUserObject();
+			if (current.isDirectory()) {
+				createNodes(node, 0);
+			}
+			else {
+
+			}
+		}
 
 		static private void createNodes(DefaultMutableTreeNode top, int setting) {
 			DefaultMutableTreeNode file = null;
