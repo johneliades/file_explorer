@@ -446,10 +446,7 @@ public class FileExplorer extends JPanel
 
 		TreeWillExpandListener treeWillExpandListener = new TreeWillExpandListener() {
 			@Override
-			public void treeWillCollapse(TreeExpansionEvent treeExpansionEvent) throws ExpandVetoException {
-				TreePath path = treeExpansionEvent.getPath();
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-			}
+			public void treeWillCollapse(TreeExpansionEvent treeExpansionEvent) throws ExpandVetoException {}
 	  
 			@Override
 			public void treeWillExpand(TreeExpansionEvent treeExpansionEvent) throws ExpandVetoException {
@@ -467,22 +464,10 @@ public class FileExplorer extends JPanel
 		};
 
 	 /** Required by TreeSelectionListener interface. */
+
+	 	/* Targets selected node when clicked in tree */
 		@Override
-		public void valueChanged(TreeSelectionEvent e) {
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
-			File current;
-			
-			if (node == null) 
-				return;
-
-			current = (File) node.getUserObject();
-			if (current.isDirectory()) {
-				createNodes(node, 0);
-			}
-			else {
-
-			}
-		}
+		public void valueChanged(TreeSelectionEvent e) {}
 
 		static private void createNodes(DefaultMutableTreeNode top, int setting) {
 			DefaultMutableTreeNode file = null;
