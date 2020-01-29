@@ -77,6 +77,8 @@ public class FileExplorer extends JPanel
 
 		//Create the scroll pane and add the tree to it. 
 		JScrollPane treeView = new JScrollPane(tree);
+		treeView.getVerticalScrollBar().setPreferredSize(new Dimension(13, 0));
+		treeView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 13));
 
 		//Create the folder viewing pane.
 		folder = new JPanel(new WrapLayout(FlowLayout.LEFT, 10, 10));
@@ -118,6 +120,8 @@ public class FileExplorer extends JPanel
 
 		JScrollPane folderView = new JScrollPane(folder);
 		folderView.getVerticalScrollBar().setUnitIncrement(16);
+		folderView.getVerticalScrollBar().setPreferredSize(new Dimension(13, 0));
+		folderView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 13));
 
 		if(roots.length==1)
 			createNodes(top, 0);
@@ -129,9 +133,9 @@ public class FileExplorer extends JPanel
 			}
 		}
 		TreePath path = new TreePath(top.getPath());
-		tree.expandPath(path);
 		tree.setSelectionPath(path);
 		tree.scrollPathToVisible(path);
+		tree.expandPath(path);
 		showCurrentDirectory(top);
 		
 		folderView.setMinimumSize(new Dimension(400, 50));
@@ -370,7 +374,6 @@ public class FileExplorer extends JPanel
 
 			label = new JLabel(img, JLabel.CENTER);
 			label.setPreferredSize(new Dimension(60, 60));
-
 			//Border b = new BevelBorder(BevelBorder.RAISED, Color.LIGHT_GRAY, Color.DARK_GRAY);
 			//label.setBorder(b);
 			panel.add(label,  BorderLayout.CENTER);
@@ -399,9 +402,9 @@ public class FileExplorer extends JPanel
 					if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
 						if(file.isDirectory()) {
 							TreePath path = new TreePath(node.getPath());
-							tree.expandPath(path);
 							tree.setSelectionPath(path);
 							tree.scrollPathToVisible(path);
+							tree.expandPath(path);
 							showCurrentDirectory(node);
 						}
 						else {
@@ -672,53 +675,65 @@ public class FileExplorer extends JPanel
 		static public JPopupMenu getFilePopupMenu() {
 			JPopupMenu popupMenu = new JPopupMenu();
 			JMenuItem menuItem;
-
-			menuItem = new JMenuItem("Delete");
-			popupMenu.add(menuItem);
-			menuItem.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent event) {
-					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-
-					delete(node);
-
-					showCurrentDirectory(node);
-				}
-			});
+			ImageIcon img=null;
+			Image folderImg;
 
 			menuItem = new JMenuItem("Rename");
-			popupMenu.add(menuItem);
+			img = new ImageIcon(ICONPATH + "other/rename.png");
+			folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
+			menuItem.setIcon(new ImageIcon(folderImg));
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent event) {
 					Component curComponents[] = lastPanelSelected.getComponents();
-					String FilePath = ((File) ((DefaultMutableTreeNode) tree.getLastSelectedPathComponent()).getUserObject()).getPath();
+					String filePath = ((File) ((DefaultMutableTreeNode) tree.getLastSelectedPathComponent()).getUserObject()).getPath();
 					DefaultMutableTreeNode current=null, parent= (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-					String nameOld = curComponents[2].getName(), nameNew;
+					String nameOld = curComponents[4].getName(), nameNew;
+					ImageIcon img=null;
+					Image folderImg;
 					int i;
 			
-					File f = new File(FilePath + "/" + nameOld);
+					File f = new File(filePath + "/" + nameOld);
 
 					if(f.exists() && f.isFile()) {
-						nameNew=JOptionPane.showInputDialog(null, "Enter new name");
-						File file2 = new File(FilePath + "/" + nameNew);
+						img = new ImageIcon(ICONPATH + "other/rename.png");
+						folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+						nameNew=(String) JOptionPane.showInputDialog(null, "Enter New Name", "Rename",
+											JOptionPane.INFORMATION_MESSAGE, new ImageIcon(folderImg), 
+											null, nameOld);
 
-						if (file2.exists()) {
+						if(nameNew==null || nameNew.equals(nameOld) || nameNew.equals(""))
+							return;
+
+						File file2 = new File(filePath + "/" + nameNew);
+
+						if(file2.exists()) {
 							JOptionPane.showMessageDialog(null, "Rename Failed! File exists");
+							return;
 						}
 
 						boolean success = f.renameTo(file2);
 
 						if (!success) {
 							JOptionPane.showMessageDialog(null, "Rename Failed!");
+							return;
 						}
 					}
 					else if(f.exists() && f.isDirectory()){
-						nameNew=JOptionPane.showInputDialog(null, "Enter new name");
-						File file2 = new File(FilePath + "/" + nameNew);
+						img = new ImageIcon(ICONPATH + "other/rename.png");
+						folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+						nameNew=(String) JOptionPane.showInputDialog(null, "Enter New Name", "Rename",
+											JOptionPane.INFORMATION_MESSAGE, new ImageIcon(folderImg), 
+											null, nameOld);
+						
+						if(nameNew==null || nameNew.equals(nameOld) || nameNew.equals(""))
+							return;
 
-						if (file2.exists()) {
+						File file2 = new File(filePath + "/" + nameNew);
+
+						if(file2.exists()) {
 							JOptionPane.showMessageDialog(null, "Rename Failed! File exists");
+							return;
 						}
 
 						int numChild=tree.getModel().getChildCount(parent);
@@ -729,20 +744,25 @@ public class FileExplorer extends JPanel
 							if(curFile.getName().compareTo(nameOld)==0)
 								break;
 						}
+						if(current==null || i==numChild || ((File) current.getUserObject()).exists()==false) {
+							JOptionPane.showMessageDialog(null, "This should never happen...!");
+							return;
+						}
 
 						boolean success = f.renameTo(file2);
 
-						if (!success) {
+						if(!success) {
 							JOptionPane.showMessageDialog(null, "Rename Failed!");
+							return;
 						}
 
 						current.removeFromParent();
 						DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
 						defMod1.reload();
 						TreePath path = new TreePath(parent.getPath());
-						tree.expandPath(path);
 						tree.setSelectionPath(path);
-						tree.scrollPathToVisible(path);	 
+						tree.scrollPathToVisible(path);
+						tree.expandPath(path);
 					}
 					else {
 						JOptionPane.showMessageDialog(null, "Rename Failed!");
@@ -753,6 +773,25 @@ public class FileExplorer extends JPanel
 				}
 			});
 			
+			popupMenu.add(menuItem);
+
+			menuItem = new JMenuItem("Delete");
+			img = new ImageIcon(ICONPATH + "other/delete.png");
+			folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
+			menuItem.setIcon(new ImageIcon(folderImg));
+			menuItem.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent event) {
+					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+
+					deleteSon(node);
+
+					showCurrentDirectory(node);
+				}
+			});
+
+			popupMenu.add(menuItem);
+
 			return popupMenu;
 		}
 
@@ -825,9 +864,9 @@ public class FileExplorer extends JPanel
 
 					if(file.isDirectory()) {
 						TreePath path = new TreePath(node.getPath());
-						tree.expandPath(path);
 						tree.setSelectionPath(path);
 						tree.scrollPathToVisible(path);
+						tree.expandPath(path);
 						showCurrentDirectory(node); 
 					}
 					else {
@@ -852,14 +891,30 @@ public class FileExplorer extends JPanel
 			return label;
 		}
 
-		static void delete(DefaultMutableTreeNode node) {
+		static void deleteSon(DefaultMutableTreeNode node) {
 			Component curComponents[] = lastPanelSelected.getComponents();
-			String FilePath = ((File) node.getUserObject()).getPath();
+			String filePath = ((File) node.getUserObject()).getPath();
 			DefaultMutableTreeNode current=null;
-			String name = curComponents[2].getName();
+			String name = curComponents[4].getName();
+			ImageIcon img=null;
+			Image folderImg;
 			int i;
 
-			File f = new File(FilePath + "/" + name);
+			if(name==null) {
+				return;
+			}
+			File f = new File(filePath + "/" + name);
+
+			img = new ImageIcon(ICONPATH + "other/delete.png");
+			folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+
+			int input = JOptionPane.showConfirmDialog(null, "Delete \"" + name + "\" ?",
+						"Any deletion is permanent", JOptionPane.OK_CANCEL_OPTION, 
+						JOptionPane.INFORMATION_MESSAGE, new ImageIcon(folderImg));
+		
+			if(input==2 || input==-1)
+				return;
+
 			if(f.exists() && f.isFile()){
 				try {
 					f.delete();
@@ -886,9 +941,9 @@ public class FileExplorer extends JPanel
 				DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
 				defMod1.reload();
 				TreePath path = new TreePath(node.getPath());
-				tree.expandPath(path);
 				tree.setSelectionPath(path);
 				tree.scrollPathToVisible(path);
+				tree.expandPath(path);
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "File didn't exist!");
@@ -903,7 +958,6 @@ public class FileExplorer extends JPanel
 				return;
 			
 			for(File element : children) {
-
 				if(element.isDirectory()) {
 					removeDirectory(element);
 				}
@@ -928,7 +982,7 @@ public class FileExplorer extends JPanel
 				@Override
 				public void actionPerformed(ActionEvent event) {
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-					String FilePath = ((File) node.getUserObject()).getPath();
+					String filePath = ((File) node.getUserObject()).getPath();
 					String name;
 					ImageIcon img=null;
 					Image folderImg;
@@ -943,9 +997,9 @@ public class FileExplorer extends JPanel
 
 					File f;
 					if(getExtension(name).equals("txt"))
-						f = new File(FilePath + "/" + name);
+						f = new File(filePath + "/" + name);
 					else
-						f = new File(FilePath + "/" + name + ".txt");
+						f = new File(filePath + "/" + name + ".txt");
 
 					if(!f.exists()) {
 						try {
@@ -973,7 +1027,7 @@ public class FileExplorer extends JPanel
 				@Override
 				public void actionPerformed(ActionEvent event) {
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-					String FilePath = ((File) node.getUserObject()).getPath();
+					String filePath = ((File) node.getUserObject()).getPath();
 					String name;
 					ImageIcon img=null;
 					Image folderImg;	
@@ -986,7 +1040,7 @@ public class FileExplorer extends JPanel
 					if(name==null || name.equals(""))
 						return;
 
-					File f = new File(FilePath + "/" + name);
+					File f = new File(filePath + "/" + name);
 					if(!f.exists()){
 						try {
 							f.mkdir();
@@ -1004,10 +1058,10 @@ public class FileExplorer extends JPanel
 					DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
 					defMod1.reload();
 					TreePath path = new TreePath(node.getPath());
-					tree.expandPath(path);
 					tree.setSelectionPath(path);
 					tree.scrollPathToVisible(path);
-		
+					tree.expandPath(path);
+
 					showCurrentDirectory(node);
 				}
 			});
