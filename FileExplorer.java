@@ -1032,7 +1032,7 @@ public class FileExplorer extends JPanel
 					ImageIcon img=null;
 					Image folderImg;	
 
-					img = new ImageIcon(ICONPATH + "folder.png");
+					img = new ImageIcon(ICONPATH + "extensions/folder.png");
 					folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 					name=(String) JOptionPane.showInputDialog(null, "Enter Folder Name", "New Folder",
 											JOptionPane.INFORMATION_MESSAGE, new ImageIcon(folderImg), 

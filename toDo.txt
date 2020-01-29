@@ -1,1 +1,9 @@
 check JList for folder
+open as
+cut
+copy
+paste
+select all
+zip/unzip
+mouse button back/forward
+open in default explorer
