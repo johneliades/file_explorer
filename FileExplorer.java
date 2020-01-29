@@ -46,6 +46,7 @@ public class FileExplorer extends JPanel
 		//Create a tree that allows one selection at a time.
 		tree = new JTree(top);
 		tree.setBorder(new EmptyBorder(5, 10, 5, 0)); //top,left,bottom,right
+		tree.putClientProperty("JTree.lineStyle", "None");
 
 		tree.setEditable(true);
 		tree.setCellRenderer(getRenderer());

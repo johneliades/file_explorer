@@ -1,9 +1,11 @@
-check JList for folder
+check JList for folder/navigate with arrows and enter, enter at tree
 open as
 cut
 copy
 paste
 select all
-zip/unzip
 mouse button back/forward
 open in default explorer
+right click at tree
+drag n drop
+zip/unzip
