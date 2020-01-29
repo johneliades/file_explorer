@@ -1030,12 +1030,13 @@ public class FileExplorer extends JPanel
 				public void actionPerformed(ActionEvent event) {
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 					
+					node.removeAllChildren();
 					DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
 					defMod1.reload();
 					TreePath path = new TreePath(node.getPath());
-					tree.expandPath(path);
 					tree.setSelectionPath(path);
 					tree.scrollPathToVisible(path);
+					tree.expandPath(path);
 
 					showCurrentDirectory(node);
 				}
