@@ -134,10 +134,10 @@ public class FileExplorer extends JPanel
 		}
 		TreePath path = new TreePath(top.getPath());
 		tree.setSelectionPath(path);
-		tree.scrollPathToVisible(path);
 		tree.expandPath(path);
 		showCurrentDirectory(top);
-		
+		treeView.getVerticalScrollBar().setValue(0);
+
 		folderView.setMinimumSize(new Dimension(400, 50));
 		treeView.setMinimumSize(new Dimension(250, 50));
 
