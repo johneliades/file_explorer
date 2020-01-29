@@ -450,7 +450,16 @@ public class FileExplorer extends JPanel
 	  
 			@Override
 			public void treeWillExpand(TreeExpansionEvent treeExpansionEvent) throws ExpandVetoException {
+				TreePath path = treeExpansionEvent.getPath();
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+				File current;
 
+				String data = node.getUserObject().toString();
+
+				current = (File) node.getUserObject();
+				if (current.isDirectory()) {
+					createNodes(node, 0);
+				}
 			}
 		};
 
