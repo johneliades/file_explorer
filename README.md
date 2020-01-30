@@ -25,7 +25,7 @@ java -cp classes FileExplorer
 
 ## Notes
 
-Fully working on Windows and Unix, not tested in Mac.
+Fully working on Windows and Unix, not tested on Mac.
 
 ## Author
 
