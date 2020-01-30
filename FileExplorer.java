@@ -1105,10 +1105,10 @@ public class FileExplorer extends JPanel implements TreeSelectionListener {
 						createNodes(current, 0);
 					}
 				}
-				showCurrentDirectory(node);
 				tree.setSelectionPath(path);
 				tree.scrollPathToVisible(path);
 				tree.expandPath(path);
+				showCurrentDirectory(node);
 			}
 		});
 
@@ -1172,6 +1172,10 @@ public class FileExplorer extends JPanel implements TreeSelectionListener {
 		});
 	}
 }
+
+/* Dear john-from-the-future, this is john-from-the-past. You
+almost certainly think I messed up here and that the code could be
+cleaned up. Well don't! It’s like this for a reason! */
 
 class MyFile extends File {
 	
