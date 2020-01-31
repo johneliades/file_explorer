@@ -151,10 +151,12 @@ public class WrapLayout extends FlowLayout {
 
 			addRow(dim, rowWidth, rowHeight);
 
-			if(rmembers==1) {
+			if(rmembers==0 || rmembers==1)
 				setHgap(initialHGap);
-			}
-			else if(rmembers!=0)  {
+			else {
+				// Folder window width minus size of elements in row total
+				// divided by the number of space areas between icons
+				// plus the initial gap of the initialisation????
 				setHgap((maxWidth - currentRowWidth)/(rmembers + 1) + initialHGap);
 			}
 
