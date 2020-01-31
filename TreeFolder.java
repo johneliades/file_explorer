@@ -86,6 +86,27 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 			public void mouseReleased(MouseEvent e) {}
 		});
 
+		tree.addKeyListener(new KeyListener() {
+			boolean pressed = false;
+
+			@Override
+			public void keyTyped(KeyEvent e) {}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER && !pressed) {
+					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+					pressed = true;
+					showCurrentDirectory(node);
+				}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					pressed = false;
+				}
+			}
+		});
+
 		//Create the scroll pane and add the tree to it. 
 		JScrollPane treeView = new JScrollPane(tree);
 		treeView.getVerticalScrollBar().setPreferredSize(new Dimension(13, 0));
