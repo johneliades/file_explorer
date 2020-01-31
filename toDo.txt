@@ -11,4 +11,5 @@ drag n drop
 zip/unzip
 no delete option in important places
 
+objects in navigation bar
 YES OPTION CANCEL OPTION NOT NUMBERS

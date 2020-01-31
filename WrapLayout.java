@@ -124,16 +124,15 @@ public class WrapLayout extends FlowLayout {
 				{
 					Dimension d = preferred ? m.getPreferredSize() : m.getMinimumSize();
 
-					if (rowWidth + d.width > maxWidth && first) {
-						rmembers = i;
-						currentRowWidth = rowWidth;
-						first = false;
-					}
-
 					//  Can't add the component to current row. Start a new row.
 
-					if (rowWidth + d.width > maxWidth)
-					{
+					if (rowWidth + d.width > maxWidth) {
+						if(first) {
+							rmembers = i;
+							currentRowWidth = rowWidth;
+							first = false;			
+						}
+
 						addRow(dim, rowWidth, rowHeight);
 						rowWidth = 0;
 						rowHeight = 0;
@@ -141,8 +140,7 @@ public class WrapLayout extends FlowLayout {
 
 					//  Add a horizontal gap for all components after the first
 
-					if (rowWidth != 0)
-					{
+					if (rowWidth != 0) {
 						rowWidth += hgap;
 					}
 
@@ -151,13 +149,14 @@ public class WrapLayout extends FlowLayout {
 				}
 			}
 
-			if(rmembers==1) {
-				setHgap(10);
-			}
-			else if(rmembers!=0)
-				setHgap((targetWidth - currentRowWidth)/rmembers);
-
 			addRow(dim, rowWidth, rowHeight);
+
+			if(rmembers==1) {
+				setHgap(initialHGap);
+			}
+			else if(rmembers!=0)  {
+				setHgap((maxWidth - currentRowWidth)/(rmembers + 1) + initialHGap);
+			}
 
 			dim.width += horizontalInsetsAndGap;
 			dim.height += insets.top + insets.bottom + vgap * 2;
