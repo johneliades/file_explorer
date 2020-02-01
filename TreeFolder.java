@@ -458,7 +458,7 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 						f.createNewFile();
 					}
 					catch(IOException e) {
-						System.out.println(e.getMessage());
+						JOptionPane.showMessageDialog(null, e.getMessage());
 					}
 				}
 				else {
@@ -498,7 +498,7 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 						f.mkdir();
 					}
 					catch(Exception e) {
-						System.out.println(e.getMessage());
+						JOptionPane.showMessageDialog(null, e.getMessage());
 					}
 				}
 				else {
@@ -597,7 +597,7 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 		Set<String> set = new HashSet<>(); 
 		String name = file.getName();
 		String extension = Utility.getExtension(file.getName());
-		
+
 		if(name.trim().length() == 0) {
 			name = "Local Disk(" + file.getPath().replace("\\", "") + ")";
 			img = new ImageIcon(ICONPATH + "extensions/harddisk.png");
@@ -826,7 +826,7 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 				f.delete();
 			}
 			catch(Exception e) {
-				System.out.println(e.getMessage());
+				JOptionPane.showMessageDialog(null, e.getMessage());
 			}
 		}
 		else if(f.exists() && f.isDirectory()) {

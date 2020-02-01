@@ -1,15 +1,19 @@
-check JList for folder/navigate with arrows and enter, enter at tree
-open as
-cut
-copy
-paste
-select all
-mouse button back/forward
-open in default explorer
-right click at tree
-drag n drop
-zip/unzip
-no delete option in important places
+#navigate with arrows and enter in folder
+#open as
+#cut
+#copy
+#paste
+#select all
+#mouse button back/forward
+#open in default explorer
+#right click at tree
+#drag n drop
+#zip/unzip
+#no delete option in important places
+#ftp
 
-objects in navigation bar
-YES OPTION CANCEL OPTION NOT NUMBERS
+#opening a folder and then selecting an other with arrows and clicking refresh
+refreshes the other folder.
+
+#objects in navigation bar
+#YES OPTION CANCEL OPTION NOT NUMBERS
