@@ -57,7 +57,7 @@ public class FileExplorer {
 
 		//Add content to the window.
 		frame.add(new TopPanel(), BorderLayout.NORTH);
-		frame.add(new TreeFolder(), BorderLayout.CENTER);
+		frame.add(new MainWindow(), BorderLayout.CENTER);
 	
 		//Display the window.
 		frame.setVisible(true);

@@ -52,8 +52,8 @@ public class TopPanel extends JPanel {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					JTree tree = TreeFolder.getTree();
-					JPanel folder = TreeFolder.getFolder();
+					JTree tree = MainWindow.getTree();
+					JPanel folder = MainWindow.getFolder();
 					searchQuery = searchField.getText();
 
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
@@ -145,8 +145,8 @@ public class TopPanel extends JPanel {
 		label.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				JTree tree = TreeFolder.getTree();
-				JPanel folder = TreeFolder.getFolder();
+				JTree tree = MainWindow.getTree();
+				JPanel folder = MainWindow.getFolder();
 
 				String fullPath = label.getText();
 				File file = new File(fullPath);
@@ -157,7 +157,7 @@ public class TopPanel extends JPanel {
 					tree.scrollPathToVisible(path);
 					tree.expandPath(path);
 
-					TreeFolder.showCurrentDirectory(node); 
+					MainWindow.showCurrentDirectory(node); 
 				}
 				else {
 					try {
@@ -193,7 +193,7 @@ public class TopPanel extends JPanel {
 		if(isSymbolicLink)
 			return;
 
-		TreeFolder.createNodes(top, 0);
+		MainWindow.createNodes(top, 0);
 
 		for(int i=0; i<numChild; i++) {	  
 			current=(DefaultMutableTreeNode) tree.getModel().getChild(top, i);
