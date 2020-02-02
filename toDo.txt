@@ -13,4 +13,3 @@
 #ftp
 
 #objects in navigation bar
-#YES OPTION CANCEL OPTION NOT NUMBERS

@@ -306,10 +306,15 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				Component curComponents[] = lastPanelSelected.getComponents();
 				DefaultMutableTreeNode current = null, parent = lastNodeOpened;
 				String filePath = ((File) parent.getUserObject()).getPath();
-				String nameOld = curComponents[4].getName(), nameNew;
+				String nameNew,	nameOld="";
+		
+				Component curComponents[] = lastPanelSelected.getComponents();
+				for(Component comp : curComponents)
+					if(comp.getName()!=null && comp.getName()!="")
+						nameOld = comp.getName();
+
 				ImageIcon img=null;
 				Image folderImg;
 				int i;
@@ -788,10 +793,15 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 	}
 
 	static void deleteSon(DefaultMutableTreeNode node) {
-		Component curComponents[] = lastPanelSelected.getComponents();
 		String filePath = ((File) node.getUserObject()).getPath();
 		DefaultMutableTreeNode current=null;
-		String name = curComponents[4].getName();
+
+		String name="";
+		Component curComponents[] = lastPanelSelected.getComponents();
+		for(Component comp : curComponents)
+			if(comp.getName()!=null && comp.getName()!="")
+				name = comp.getName();
+		
 		ImageIcon img=null;
 		Image folderImg;
 		int i;
