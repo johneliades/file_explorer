@@ -323,10 +323,8 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 										JOptionPane.INFORMATION_MESSAGE, new ImageIcon(folderImg), 
 										null, nameOld);
 
-					if(nameNew==null || nameNew.equals(nameOld) || nameNew.equals("")) {
-						System.out.println("lol");
+					if(nameNew==null || nameNew.equals(nameOld) || nameNew.equals(""))
 						return;
-					}
 
 					File file2 = new File(filePath + "/" + nameNew);
 
@@ -348,10 +346,9 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 							JOptionPane.showMessageDialog(null, "This should never happen...!");
 							return;
 						}
-		
+
 						current.removeFromParent();
-						DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
-						defMod1.reload();
+
 					}
 
 					boolean success = f.renameTo(file2);
@@ -365,6 +362,9 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 					JOptionPane.showMessageDialog(null, "Rename Failed!");
 					return;
 				}
+
+				DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
+				defMod1.reload();
 
 				TreePath path = new TreePath(parent.getPath());
 				tree.setSelectionPath(path);
@@ -478,7 +478,7 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 					return;
 
 				File f = new File(filePath + "/" + name);
-				if(!f.exists()) {
+				if(!f.exists()){
 					try {
 						f.mkdir();
 					}
@@ -812,7 +812,7 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 			return;
 		}
 
-		if(f.exists() && f.isFile()) {
+		if(f.exists() && f.isFile()){
 			try {
 				f.delete();
 			}
