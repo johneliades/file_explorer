@@ -316,21 +316,42 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 		
 				File f = new File(filePath + "/" + nameOld);
 
-				if(f.exists() && f.isFile()) {
+				if(f.exists()) {
 					img = new ImageIcon(ICONPATH + "other/rename.png");
 					folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 					nameNew=(String) JOptionPane.showInputDialog(null, "Enter New Name", "Rename",
 										JOptionPane.INFORMATION_MESSAGE, new ImageIcon(folderImg), 
 										null, nameOld);
 
-					if(nameNew==null || nameNew.equals(nameOld) || nameNew.equals(""))
+					if(nameNew==null || nameNew.equals(nameOld) || nameNew.equals("")) {
+						System.out.println("lol");
 						return;
+					}
 
 					File file2 = new File(filePath + "/" + nameNew);
 
 					if(file2.exists()) {
 						JOptionPane.showMessageDialog(null, "Rename Failed! File exists");
 						return;
+					}
+
+					if(f.isDirectory()) {
+						int numChild=tree.getModel().getChildCount(parent);
+
+						for(i=0; i<numChild; i++) { 
+							current=(DefaultMutableTreeNode) tree.getModel().getChild(parent, i);
+							File curFile=(File) (current).getUserObject();
+							if(curFile.getName().compareTo(nameOld)==0)
+								break;
+						}
+						if(current==null || i==numChild || ((File) current.getUserObject()).exists()==false) {
+							JOptionPane.showMessageDialog(null, "This should never happen...!");
+							return;
+						}
+		
+						current.removeFromParent();
+						DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
+						defMod1.reload();
 					}
 
 					boolean success = f.renameTo(file2);
@@ -339,47 +360,6 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 						JOptionPane.showMessageDialog(null, "Rename Failed!");
 						return;
 					}
-				}
-				else if(f.exists() && f.isDirectory()){
-					img = new ImageIcon(ICONPATH + "other/rename.png");
-					folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
-					nameNew=(String) JOptionPane.showInputDialog(null, "Enter New Name", "Rename",
-										JOptionPane.INFORMATION_MESSAGE, new ImageIcon(folderImg), 
-										null, nameOld);
-					
-					if(nameNew==null || nameNew.equals(nameOld) || nameNew.equals(""))
-						return;
-
-					File file2 = new File(filePath + "/" + nameNew);
-
-					if(file2.exists()) {
-						JOptionPane.showMessageDialog(null, "Rename Failed! File exists");
-						return;
-					}
-
-					int numChild=tree.getModel().getChildCount(parent);
-
-					for(i=0; i<numChild; i++) { 
-						current=(DefaultMutableTreeNode) tree.getModel().getChild(parent, i);
-						File curFile=(File) (current).getUserObject();
-						if(curFile.getName().compareTo(nameOld)==0)
-							break;
-					}
-					if(current==null || i==numChild || ((File) current.getUserObject()).exists()==false) {
-						JOptionPane.showMessageDialog(null, "This should never happen...!");
-						return;
-					}
-
-					boolean success = f.renameTo(file2);
-
-					if(!success) {
-						JOptionPane.showMessageDialog(null, "Rename Failed!");
-						return;
-					}
-
-					current.removeFromParent();
-					DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
-					defMod1.reload();
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "Rename Failed!");
@@ -498,7 +478,7 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 					return;
 
 				File f = new File(filePath + "/" + name);
-				if(!f.exists()){
+				if(!f.exists()) {
 					try {
 						f.mkdir();
 					}
@@ -828,10 +808,11 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 					"Any deletion is permanent", JOptionPane.OK_CANCEL_OPTION, 
 					JOptionPane.INFORMATION_MESSAGE, new ImageIcon(folderImg));
 	
-		if(input==2 || input==-1)
+		if(input==JOptionPane.CANCEL_OPTION || input==-1) {
 			return;
+		}
 
-		if(f.exists() && f.isFile()){
+		if(f.exists() && f.isFile()) {
 			try {
 				f.delete();
 			}
