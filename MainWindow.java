@@ -299,7 +299,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		ImageIcon img=null;
 		Image folderImg;
 
-		menuItem = new JMenuItem("Rename");
+		menuItem = new JMenuItem(" Rename ");
 		img = new ImageIcon(ICONPATH + "other/rename.png");
 		folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
 		menuItem.setIcon(new ImageIcon(folderImg));
@@ -383,10 +383,11 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				showCurrentDirectory(parent);
 			}
 		});
-		
+			
+		menuItem.setBackground(Color.white);
 		popupMenu.add(menuItem);
 
-		menuItem = new JMenuItem("Delete");
+		menuItem = new JMenuItem(" Delete ");
 		img = new ImageIcon(ICONPATH + "other/delete.png");
 		folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
 		menuItem.setIcon(new ImageIcon(folderImg));
@@ -399,7 +400,13 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 			}
 		});
 
+		menuItem.setBackground(Color.white);
 		popupMenu.add(menuItem);
+
+		popupMenu.setBorder(new CompoundBorder(
+				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red), 
+				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black)));		
+		popupMenu.setBackground(Color.white);
 
 		return popupMenu;
 	}
@@ -407,13 +414,13 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 	public JPopupMenu getBackgroundPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem menuItem;
-		JMenu sectionsMenu = new JMenu("New");
+		JMenu sectionsMenu = new JMenu(" New ");
 		ImageIcon img=null;
 		Image folderImg;
 
 		//New submenu(txt, folder)
 
-		menuItem = new JMenuItem("Text Document");
+		menuItem = new JMenuItem(" Text Document ");
 		img = new ImageIcon(ICONPATH + "extensions/txt.png");
 		folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
 		menuItem.setIcon(new ImageIcon(folderImg));
@@ -456,9 +463,12 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				showCurrentDirectory(node);
 			}
 		});
+
+		menuItem.setBackground(Color.white);
+
 		sectionsMenu.add(menuItem);
 
-		menuItem = new JMenuItem("Folder");
+		menuItem = new JMenuItem(" Folder ");
 		img = new ImageIcon(ICONPATH + "extensions/folder.png");
 		folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
 		menuItem.setIcon(new ImageIcon(folderImg));
@@ -506,16 +516,25 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 			}
 		});
 
+		menuItem.setBackground(Color.white);
 		sectionsMenu.add(menuItem);
 	
 		img = new ImageIcon(ICONPATH + "other/plus.png");
 		folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
-		sectionsMenu.setIcon(new ImageIcon(folderImg));
+		sectionsMenu.setIcon(new ImageIcon(folderImg));	
+
+		popupMenu.addSeparator();
 		popupMenu.add(sectionsMenu);
+		popupMenu.addSeparator();
+
+		popupMenu.setBorder(new CompoundBorder(
+				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red), 
+				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black)));
+		popupMenu.setBackground(Color.white);	
 
 		//Refresh option
 
-		menuItem = new JMenuItem("Refresh");
+		menuItem = new JMenuItem(" Refresh ");
 		img = new ImageIcon(ICONPATH + "other/refresh.png");
 		folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
 		menuItem.setIcon(new ImageIcon(folderImg));
@@ -526,6 +545,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 			}
 		});
 
+		menuItem.setBackground(Color.white);
 		popupMenu.add(menuItem);
 
 		return popupMenu;

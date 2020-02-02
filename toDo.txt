@@ -9,7 +9,6 @@
 #right click at tree
 #drag n drop
 #zip/unzip
-#no delete option in important places
 #ftp
 
 #objects in navigation bar
