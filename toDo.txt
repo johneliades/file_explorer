@@ -12,8 +12,5 @@
 #no delete option in important places
 #ftp
 
-#opening a folder and then selecting an other with arrows and clicking refresh
-refreshes the other folder.
-
 #objects in navigation bar
 #YES OPTION CANCEL OPTION NOT NUMBERS

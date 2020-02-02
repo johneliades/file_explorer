@@ -19,6 +19,7 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 	private static JTree tree;
 
 	static JPanel lastPanelSelected; 
+	static DefaultMutableTreeNode lastNodeOpened;
 
 	public TreeFolder() {
 		super(new GridLayout(1, 0));
@@ -35,6 +36,7 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 				top.add(new DefaultMutableTreeNode(root));
 			}
 		}
+		lastNodeOpened=top;
 
 		//Create a tree that allows one selection at a time.
 		tree = new JTree(top);
@@ -73,7 +75,8 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 				if(node==null)
 					return;
-
+				
+				lastNodeOpened=node;
 				showCurrentDirectory(node);
 			}
 			@Override
@@ -96,6 +99,8 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER && !pressed) {
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 					pressed = true;
+
+					lastNodeOpened=node;
 					showCurrentDirectory(node);
 				}
 			}
@@ -302,8 +307,8 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				Component curComponents[] = lastPanelSelected.getComponents();
-				String filePath = ((File) ((DefaultMutableTreeNode) tree.getLastSelectedPathComponent()).getUserObject()).getPath();
-				DefaultMutableTreeNode current=null, parent= (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+				DefaultMutableTreeNode current = null, parent = lastNodeOpened;
+				String filePath = ((File) parent.getUserObject()).getPath();
 				String nameOld = curComponents[4].getName(), nameNew;
 				ImageIcon img=null;
 				Image folderImg;
@@ -399,7 +404,7 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+				DefaultMutableTreeNode node = lastNodeOpened;
 
 				deleteSon(node);
 			
@@ -433,7 +438,7 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+				DefaultMutableTreeNode node = lastNodeOpened;
 				String filePath = ((File) node.getUserObject()).getPath();
 				String name;
 				ImageIcon img=null;
@@ -478,7 +483,7 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+				DefaultMutableTreeNode node = lastNodeOpened;
 				String filePath = ((File) node.getUserObject()).getPath();
 				String name;
 				ImageIcon img=null;
@@ -535,38 +540,42 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-
-				node.removeAllChildren();
-				DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
-				defMod1.reload();
-			
-				TreePath path = new TreePath(node.getPath());
-				if(path.toString().equals("[This PC]")) {
-					//Create root nodes.
-					File roots[]=File.listRoots();
-
-					for (File root : roots) {
-						node.add(new DefaultMutableTreeNode(root));
-					}
-
-					int numChild=defMod1.getChildCount(node);
-					for(int i=0; i<numChild; i++) { 
-						DefaultMutableTreeNode current=(DefaultMutableTreeNode) defMod1.getChild(node, i);
-						createNodes(current, 0);
-					}
-				}
-				tree.setSelectionPath(path);
-				tree.scrollPathToVisible(path);
-				tree.expandPath(path);
-
-				showCurrentDirectory(node);
+				refresh();
 			}
 		});
 
 		popupMenu.add(menuItem);
 
 		return popupMenu;
+	}
+
+	static void refresh() {
+		DefaultMutableTreeNode node = lastNodeOpened;
+
+		node.removeAllChildren();
+		DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
+		defMod1.reload();
+	
+		TreePath path = new TreePath(node.getPath());
+		if(path.toString().equals("[This PC]")) {
+			//Create root nodes.
+			File roots[]=File.listRoots();
+
+			for (File root : roots) {
+				node.add(new DefaultMutableTreeNode(root));
+			}
+
+			int numChild=defMod1.getChildCount(node);
+			for(int i=0; i<numChild; i++) { 
+				DefaultMutableTreeNode current=(DefaultMutableTreeNode) defMod1.getChild(node, i);
+				createNodes(current, 0);
+			}
+		}
+		tree.setSelectionPath(path);
+		tree.scrollPathToVisible(path);
+		tree.expandPath(path);
+
+		showCurrentDirectory(node);
 	}
 
 	/*
@@ -676,7 +685,8 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 						tree.setSelectionPath(path);
 						tree.scrollPathToVisible(path);
 						tree.expandPath(path);
-
+					
+						lastNodeOpened=node;
 						showCurrentDirectory(node);
 					}
 					else {
