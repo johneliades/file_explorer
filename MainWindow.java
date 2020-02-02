@@ -10,7 +10,7 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.util.*;
 
-public class TreeFolder extends JPanel implements TreeSelectionListener {
+public class MainWindow extends JPanel implements TreeSelectionListener {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	private static final boolean showHiddenFiles = FileExplorer.getHiddenFilesOption();
 	static Set<String> iconSet = FileExplorer.addExtensions();
@@ -21,7 +21,7 @@ public class TreeFolder extends JPanel implements TreeSelectionListener {
 	static JPanel lastPanelSelected; 
 	static DefaultMutableTreeNode lastNodeOpened;
 
-	public TreeFolder() {
+	public MainWindow() {
 		super(new GridLayout(1, 0));
 
 		//Create the nodes.
