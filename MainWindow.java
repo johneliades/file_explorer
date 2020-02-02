@@ -321,7 +321,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		
 				File f = new File(filePath + "/" + nameOld);
 
-				if(f.exists()) {
+				if(f.exists() && f.canWrite()) {
 					img = new ImageIcon(ICONPATH + "other/rename.png");
 					folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 					nameNew=(String) JOptionPane.showInputDialog(null, "Enter New Name", "Rename",
@@ -353,7 +353,6 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 						}
 
 						current.removeFromParent();
-
 					}
 
 					boolean success = f.renameTo(file2);
@@ -364,6 +363,11 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 					}
 				}
 				else {
+					if(!f.canWrite()) {
+						JOptionPane.showMessageDialog(null, "Not enough permissions!");
+						return;
+					}
+
 					JOptionPane.showMessageDialog(null, "Rename Failed!");
 					return;
 				}
@@ -392,13 +396,6 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				DefaultMutableTreeNode node = lastNodeOpened;
 
 				deleteSon(node);
-			
-				TreePath path = new TreePath(node.getPath());
-				tree.setSelectionPath(path);
-				tree.scrollPathToVisible(path);
-				tree.expandPath(path);
-
-				showCurrentDirectory(node);
 			}
 		});
 
@@ -814,15 +811,15 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		img = new ImageIcon(ICONPATH + "other/delete.png");
 		folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 
-		int input = JOptionPane.showConfirmDialog(null, "Delete \"" + name + "\" ?",
-					"Any deletion is permanent", JOptionPane.OK_CANCEL_OPTION, 
-					JOptionPane.INFORMATION_MESSAGE, new ImageIcon(folderImg));
-	
-		if(input==JOptionPane.CANCEL_OPTION || input==-1) {
-			return;
-		}
+		if(f.exists() && f.isFile() && f.canWrite()){
+			int input = JOptionPane.showConfirmDialog(null, "Deleting file \"" + name + "\" ?",
+						"Any deletion is permanent", JOptionPane.OK_CANCEL_OPTION, 
+						JOptionPane.INFORMATION_MESSAGE, new ImageIcon(folderImg));
+		
+			if(input==JOptionPane.CANCEL_OPTION || input==-1) {
+				return;
+			}
 
-		if(f.exists() && f.isFile()){
 			try {
 				f.delete();
 			}
@@ -830,7 +827,15 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				JOptionPane.showMessageDialog(null, e.getMessage());
 			}
 		}
-		else if(f.exists() && f.isDirectory()) {
+		else if(f.exists() && f.isDirectory() && f.canWrite()) {
+			int input = JOptionPane.showConfirmDialog(null, "Deleting folder \"" + name + "\" ?",
+						"Any deletion is permanent", JOptionPane.OK_CANCEL_OPTION, 
+						JOptionPane.INFORMATION_MESSAGE, new ImageIcon(folderImg));
+		
+			if(input==JOptionPane.CANCEL_OPTION || input==-1) {
+				return;
+			}
+
 			int numChild=tree.getModel().getChildCount(node);
 			for(i=0; i<numChild; i++) {
 				current=(DefaultMutableTreeNode) tree.getModel().getChild(node, i);
@@ -849,9 +854,25 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 			defMod1.reload();
 		}
 		else {
+			if(!f.canWrite()) {
+				JOptionPane.showMessageDialog(null, "Not enough permissions!");
+				if(lastPanelSelected!=null) {
+					lastPanelSelected.setBackground(new Color(0x3fa9ff));
+					lastPanelSelected.setBorder(BorderFactory.createLineBorder(Color.black));
+				}
+				return;
+			}
+
 			JOptionPane.showMessageDialog(null, "File didn't exist!");
 			return;
 		}
+
+		TreePath path = new TreePath(node.getPath());
+		tree.setSelectionPath(path);
+		tree.scrollPathToVisible(path);
+		tree.expandPath(path);
+
+		showCurrentDirectory(node);
 	}
 
 	static void removeDirectory(File current) {
