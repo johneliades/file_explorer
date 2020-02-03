@@ -319,11 +319,11 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				Image folderImg;
 				int i;
 
-				File f = new File(filePath + "/");
-				if(!f.exists()) {
-					findExistingParent(f);
-					return;
-				}
+		//		File f = new File(filePath + "/");
+		//		if(!f.exists()) {
+		//			findExistingParent(f);
+		//			return;
+		//		}
 
 				nameOld = lastPanelName;
 
@@ -900,11 +900,11 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		Image folderImg;
 		int i;
 
-		File f = new File(filePath + "/");
-		if(!f.exists()) {
-			findExistingParent(f);
-			return;
-		}
+//		File f = new File(filePath + "/");
+//		if(!f.exists()) {
+//			findExistingParent(f);
+//			return;
+//		}
 
 		name = lastPanelName;
 		if(name==null) {
