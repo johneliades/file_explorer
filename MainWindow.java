@@ -21,6 +21,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 	static JPanel lastPanelSelected; 
 	static DefaultMutableTreeNode lastTreeNodeOpened, lastPanelNode=null;
 	static String lastPanelName="";
+	static final String windowsTopName="This PC";
 
 	public MainWindow() {
 		super(new GridLayout(1, 0));
@@ -32,7 +33,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		if(roots.length==1)
 			top = new DefaultMutableTreeNode(roots[0]);
 		else {
-			top = new DefaultMutableTreeNode(new MyFile("This PC"));
+			top = new DefaultMutableTreeNode(new MyFile(windowsTopName));
 			for (File root : roots) {
 				top.add(new DefaultMutableTreeNode(root));
 			}
@@ -128,7 +129,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				String filePath = ((File) lastTreeNodeOpened.getUserObject()).getPath();
 
 				File f = new File(filePath + "/");
-				if(!f.exists()) {
+				if(!f.getName().equals(windowsTopName) && !f.exists()) {
 					findExistingParent(f);
 					return;
 				}
@@ -578,7 +579,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				curFile = ((File) lastTreeNodeOpened.getUserObject());
 
 				try {		
-					if(curFile.getName().equals("This PC")) {
+					if(curFile.getName().equals(windowsTopName)) {
 						Runtime.getRuntime().exec("cmd /c start explorer");
 						return;
 					}
