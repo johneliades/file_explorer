@@ -125,6 +125,14 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		folder.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
+				String filePath = ((File) lastTreeNodeOpened.getUserObject()).getPath();
+
+				File f = new File(filePath + "/");
+				if(!f.exists()) {
+					findExistingParent(f);
+					return;
+				}
+
 				if(event.getButton() == MouseEvent.BUTTON1) {
 					if(lastPanelSelected!=null) {
 						lastPanelSelected.setBackground(Color.white);
@@ -319,12 +327,6 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				Image folderImg;
 				int i;
 
-		//		File f = new File(filePath + "/");
-		//		if(!f.exists()) {
-		//			findExistingParent(f);
-		//			return;
-		//		}
-
 				nameOld = lastPanelName;
 
 				File f = new File(filePath + "/" + nameOld);
@@ -430,12 +432,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				String name;
 				ImageIcon img=null;
 				Image folderImg;
-
-				File f = new File(filePath + "/");
-				if(!f.exists()) {
-					findExistingParent(f);
-					return;
-				}
+				File f;
 
 				img = new ImageIcon(ICONPATH + "extensions/txt.png");
 				folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
@@ -483,13 +480,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				String filePath = ((File) node.getUserObject()).getPath();
 				String name;
 				ImageIcon img=null;
-				Image folderImg;	
-
-				File f = new File(filePath + "/");
-				if(!f.exists()) {
-					findExistingParent(f);
-					return;
-				}
+				Image folderImg;
 
 				img = new ImageIcon(ICONPATH + "extensions/folder.png");
 				folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
@@ -499,7 +490,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				if(name==null || name.equals(""))
 					return;
 
-				f = new File(filePath + "/" + name);
+				File f = new File(filePath + "/" + name);
 				if(!f.exists()){
 					try {
 						f.mkdir();
@@ -554,11 +545,6 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 			public void actionPerformed(ActionEvent event) {
 				DefaultMutableTreeNode node = lastTreeNodeOpened;
 				File f = (File) node.getUserObject();
-
-				if(!f.exists()) {
-					findExistingParent(f);
-					return;
-				}
 			}
 		});
 
@@ -899,12 +885,6 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		ImageIcon img=null;
 		Image folderImg;
 		int i;
-
-//		File f = new File(filePath + "/");
-//		if(!f.exists()) {
-//			findExistingParent(f);
-//			return;
-//		}
 
 		name = lastPanelName;
 		if(name==null) {
