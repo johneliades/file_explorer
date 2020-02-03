@@ -433,6 +433,12 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				ImageIcon img=null;
 				Image folderImg;
 				File f;
+ 
+ 				f = new File(filePath + "/");
+ 				if(!f.canWrite()) {
+					JOptionPane.showMessageDialog(null, "Not enough permissions!");
+					return;
+ 				}
 
 				img = new ImageIcon(ICONPATH + "extensions/txt.png");
 				folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
@@ -481,6 +487,12 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				String name;
 				ImageIcon img=null;
 				Image folderImg;
+ 				
+ 				File f = new File(filePath + "/");
+ 				if(!f.canWrite()) {
+					JOptionPane.showMessageDialog(null, "Not enough permissions!");
+					return;
+ 				}
 
 				img = new ImageIcon(ICONPATH + "extensions/folder.png");
 				folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
@@ -490,7 +502,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				if(name==null || name.equals(""))
 					return;
 
-				File f = new File(filePath + "/" + name);
+				f = new File(filePath + "/" + name);
 				if(!f.exists()){
 					try {
 						f.mkdir();
@@ -544,7 +556,8 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				DefaultMutableTreeNode node = lastTreeNodeOpened;
-				File f = (File) node.getUserObject();
+
+				refresh(node);
 			}
 		});
 
