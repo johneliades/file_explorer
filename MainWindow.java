@@ -327,7 +327,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 
 				nameOld = lastPanelName;
 
-				f = new File(filePath + "/" + nameOld);
+				File f = new File(filePath + "/" + nameOld);
 
 				if(f.exists() && f.canWrite()) {
 					img = new ImageIcon(ICONPATH + "other/rename.png");
@@ -910,7 +910,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		if(name==null) {
 			return;
 		}
-		f = new File(filePath + "/" + name);
+		File f = new File(filePath + "/" + name);
 
 		img = new ImageIcon(ICONPATH + "other/delete.png");
 		folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
