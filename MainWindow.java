@@ -19,7 +19,8 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 	private static JTree tree;
 
 	static JPanel lastPanelSelected; 
-	static DefaultMutableTreeNode lastNodeOpened;
+	static DefaultMutableTreeNode lastTreeNodeOpened, lastPanelNode=null;
+	static String lastPanelName="";
 
 	public MainWindow() {
 		super(new GridLayout(1, 0));
@@ -36,7 +37,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				top.add(new DefaultMutableTreeNode(root));
 			}
 		}
-		lastNodeOpened=top;
+		lastTreeNodeOpened=top;
 
 		//Create a tree that allows one selection at a time.
 		tree = new JTree(top);
@@ -76,7 +77,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				if(node==null)
 					return;
 				
-				lastNodeOpened=node;
+				lastTreeNodeOpened=node;
 				showCurrentDirectory(node);
 			}
 			@Override
@@ -100,7 +101,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 					pressed = true;
 
-					lastNodeOpened=node;
+					lastTreeNodeOpened=node;
 					showCurrentDirectory(node);
 				}
 			}
@@ -129,6 +130,8 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 						lastPanelSelected.setBackground(Color.white);
 						lastPanelSelected.setBorder(BorderFactory.createLineBorder(Color.white));
 						lastPanelSelected=null;
+						lastPanelNode=null;
+						lastPanelName=null;
 					}
 				}
 				else if(event.getButton() == MouseEvent.BUTTON3) {
@@ -141,6 +144,8 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 						lastPanelSelected.setBackground(Color.white);
 						lastPanelSelected.setBorder(BorderFactory.createLineBorder(Color.white));
 						lastPanelSelected=null;
+						lastPanelNode=null;
+						lastPanelName=null;
 					}
 				}
 			}
@@ -306,19 +311,16 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode current = null, parent = lastNodeOpened;
+				DefaultMutableTreeNode current = null, parent = lastTreeNodeOpened;
 				String filePath = ((File) parent.getUserObject()).getPath();
 				String nameNew,	nameOld="";
-		
-				Component curComponents[] = lastPanelSelected.getComponents();
-				for(Component comp : curComponents)
-					if(comp.getName()!=null && comp.getName()!="")
-						nameOld = comp.getName();
 
 				ImageIcon img=null;
 				Image folderImg;
 				int i;
 		
+				nameOld = lastPanelName;
+
 				File f = new File(filePath + "/" + nameOld);
 
 				if(f.exists() && f.canWrite()) {
@@ -339,18 +341,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 					}
 
 					if(f.isDirectory()) {
-						int numChild=tree.getModel().getChildCount(parent);
-
-						for(i=0; i<numChild; i++) { 
-							current=(DefaultMutableTreeNode) tree.getModel().getChild(parent, i);
-							File curFile=(File) (current).getUserObject();
-							if(curFile.getName().compareTo(nameOld)==0)
-								break;
-						}
-						if(current==null || i==numChild || ((File) current.getUserObject()).exists()==false) {
-							JOptionPane.showMessageDialog(null, "This should never happen...!");
-							return;
-						}
+						current = lastPanelNode;
 
 						current.removeFromParent();
 					}
@@ -395,7 +386,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode node = lastNodeOpened;
+				DefaultMutableTreeNode node = lastTreeNodeOpened;
 
 				deleteSon(node);
 			}
@@ -428,7 +419,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode node = lastNodeOpened;
+				DefaultMutableTreeNode node = lastTreeNodeOpened;
 				String filePath = ((File) node.getUserObject()).getPath();
 				String name;
 				ImageIcon img=null;
@@ -477,7 +468,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode node = lastNodeOpened;
+				DefaultMutableTreeNode node = lastTreeNodeOpened;
 				String filePath = ((File) node.getUserObject()).getPath();
 				String name;
 				ImageIcon img=null;
@@ -562,7 +553,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				String name="";
 				File curFile;
 
-				curFile = ((File) lastNodeOpened.getUserObject());
+				curFile = ((File) lastTreeNodeOpened.getUserObject());
 
 				try {
 					Desktop.getDesktop().open(curFile);
@@ -580,7 +571,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 	}
 
 	static void refresh() {
-		DefaultMutableTreeNode node = lastNodeOpened;
+		DefaultMutableTreeNode node = lastTreeNodeOpened;
 
 		node.removeAllChildren();
 		DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
@@ -704,7 +695,10 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		panel.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
-
+				DefaultMutableTreeNode current = null, parent = lastTreeNodeOpened;
+				String name="";
+				File curFile=null;
+		
 				if(lastPanelSelected!=null) {
 					lastPanelSelected.setBackground(Color.white);
 					lastPanelSelected.setBorder(BorderFactory.createLineBorder(Color.white));
@@ -713,6 +707,29 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				panel.setBorder(BorderFactory.createLineBorder(Color.black));
 				lastPanelSelected=panel;
 
+				// Get node and name of last selected panel
+				Component curComponents[] = lastPanelSelected.getComponents();
+				for(Component comp : curComponents)
+					if(comp.getName()!=null && comp.getName()!="")
+						name = comp.getName();
+
+				lastPanelName = name;
+
+				int i, numChild=tree.getModel().getChildCount(parent);
+				for(i=0; i<numChild; i++) { 
+					current=(DefaultMutableTreeNode) tree.getModel().getChild(parent, i);
+					curFile=(File) (current).getUserObject();
+					if(curFile.getName().compareTo(name)==0)
+						break;
+				}
+
+				if(current==null || i==numChild || curFile.exists()==false) {
+		//			JOptionPane.showMessageDialog(null, "Chose file");
+		//			return;
+				}
+				lastPanelNode = current;
+				// /Get node and name of last selected panel
+
 				if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
 					if(file.isDirectory()) {
 						TreePath path = new TreePath(node.getPath());
@@ -720,7 +737,8 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 						tree.scrollPathToVisible(path);
 						tree.expandPath(path);
 					
-						lastNodeOpened=node;
+						lastTreeNodeOpened=node;
+						lastPanelNode=null;
 						showCurrentDirectory(node);
 					}
 					else {
@@ -844,17 +862,13 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 	static void deleteSon(DefaultMutableTreeNode node) {
 		String filePath = ((File) node.getUserObject()).getPath();
 		DefaultMutableTreeNode current=null;
-
 		String name="";
-		Component curComponents[] = lastPanelSelected.getComponents();
-		for(Component comp : curComponents)
-			if(comp.getName()!=null && comp.getName()!="")
-				name = comp.getName();
-		
+
 		ImageIcon img=null;
 		Image folderImg;
 		int i;
 
+		name = lastPanelName;
 		if(name==null) {
 			return;
 		}
@@ -888,15 +902,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				return;
 			}
 
-			int numChild=tree.getModel().getChildCount(node);
-			for(i=0; i<numChild; i++) {
-				current=(DefaultMutableTreeNode) tree.getModel().getChild(node, i);
-				if(((File) current.getUserObject()).getName().compareTo(name)==0)
-					break;
-			}
-			if(current==null || i==numChild || ((File) current.getUserObject()).exists()==false)
-				return;
-
+			current = lastPanelNode;
 			current.removeAllChildren();
 			current.removeFromParent();
 			removeDirectory(f);
