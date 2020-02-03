@@ -318,10 +318,16 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				ImageIcon img=null;
 				Image folderImg;
 				int i;
-		
+
+				File f = new File(filePath + "/");
+				if(!f.exists()) {
+					findExistingParent(f);
+					return;
+				}
+
 				nameOld = lastPanelName;
 
-				File f = new File(filePath + "/" + nameOld);
+				f = new File(filePath + "/" + nameOld);
 
 				if(f.exists() && f.canWrite()) {
 					img = new ImageIcon(ICONPATH + "other/rename.png");
@@ -425,6 +431,12 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				ImageIcon img=null;
 				Image folderImg;
 
+				File f = new File(filePath + "/");
+				if(!f.exists()) {
+					findExistingParent(f);
+					return;
+				}
+
 				img = new ImageIcon(ICONPATH + "extensions/txt.png");
 				folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 				name=(String) JOptionPane.showInputDialog(null, "Enter File Name", "New Text Document",
@@ -433,7 +445,6 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				if(name==null || name.equals(""))
 					return;
 
-				File f;
 				if(Utility.getExtension(name).equals("txt"))
 					f = new File(filePath + "/" + name);
 				else
@@ -474,6 +485,12 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				ImageIcon img=null;
 				Image folderImg;	
 
+				File f = new File(filePath + "/");
+				if(!f.exists()) {
+					findExistingParent(f);
+					return;
+				}
+
 				img = new ImageIcon(ICONPATH + "extensions/folder.png");
 				folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 				name=(String) JOptionPane.showInputDialog(null, "Enter Folder Name", "New Folder",
@@ -482,7 +499,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				if(name==null || name.equals(""))
 					return;
 
-				File f = new File(filePath + "/" + name);
+				f = new File(filePath + "/" + name);
 				if(!f.exists()){
 					try {
 						f.mkdir();
@@ -535,7 +552,13 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				refresh();
+				DefaultMutableTreeNode node = lastTreeNodeOpened;
+				File f = (File) node.getUserObject();
+
+				if(!f.exists()) {
+					findExistingParent(f);
+					return;
+				}
 			}
 		});
 
@@ -570,9 +593,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		return popupMenu;
 	}
 
-	static void refresh() {
-		DefaultMutableTreeNode node = lastTreeNodeOpened;
-
+	static void refresh(DefaultMutableTreeNode node) {
 		node.removeAllChildren();
 		DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
 		defMod1.reload();
@@ -595,6 +616,8 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		tree.setSelectionPath(path);
 		tree.scrollPathToVisible(path);
 		tree.expandPath(path);
+
+		lastTreeNodeOpened = node;
 
 		showCurrentDirectory(node);
 	}
@@ -699,6 +722,11 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				String name="";
 				File curFile=null;
 		
+				if(!file.exists()) {
+					findExistingParent(file);
+					return;
+				}
+
 				if(lastPanelSelected!=null) {
 					lastPanelSelected.setBackground(Color.white);
 					lastPanelSelected.setBorder(BorderFactory.createLineBorder(Color.white));
@@ -868,11 +896,17 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		Image folderImg;
 		int i;
 
+		File f = new File(filePath + "/");
+		if(!f.exists()) {
+			findExistingParent(f);
+			return;
+		}
+
 		name = lastPanelName;
 		if(name==null) {
 			return;
 		}
-		File f = new File(filePath + "/" + name);
+		f = new File(filePath + "/" + name);
 
 		img = new ImageIcon(ICONPATH + "other/delete.png");
 		folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
@@ -944,6 +978,23 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 				removeDirectory(element);
 			}
 			element.delete();
+		}
+	}
+
+	static void findExistingParent(File f) {
+		DefaultMutableTreeNode node = lastTreeNodeOpened;
+
+		if(!f.exists()) {
+			JOptionPane.showMessageDialog(null, "This directory no longer exists");
+			// Restore to previous working directory
+
+			while(!f.exists()) {
+				node = (DefaultMutableTreeNode) node.getParent();
+				f=(File) node.getUserObject();
+			}
+
+			refresh(node);
+			return;
 		}
 	}
 }
