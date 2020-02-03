@@ -578,7 +578,11 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 
 				curFile = ((File) lastTreeNodeOpened.getUserObject());
 
-				try {
+				try {		
+					if(curFile.getName().equals("This PC")) {
+						Runtime.getRuntime().exec("cmd /c start explorer");
+						return;
+					}
 					Desktop.getDesktop().open(curFile);
 				}
 				catch(IOException e) {

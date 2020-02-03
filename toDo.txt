@@ -1,4 +1,4 @@
-#open in default explorer bug at This PC, new folder bug when created in place that doesnt exist
+#open in default explorer bug at This PC
 #navigate with arrows and enter in folder
 #open as
 #cut
