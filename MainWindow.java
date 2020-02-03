@@ -994,6 +994,8 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 
 			while(!f.exists()) {
 				node = (DefaultMutableTreeNode) node.getParent();
+				if(node==null)
+					return;
 				f=(File) node.getUserObject();
 			}
 
