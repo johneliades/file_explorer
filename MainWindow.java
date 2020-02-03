@@ -253,11 +253,11 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 
 			if(showHiddenFiles ?  true : !currentFile.isHidden() || !currentFile.getName().startsWith(".")) {
 				if (currentFile.isDirectory())
-					folder.add(getIcon("folder.png", currentFile, currentNode));
+					folder.add(getPanel("folder.png", currentFile, currentNode));
 				else if(iconSet.contains(Utility.getExtension(currentFile.getName())))
-					folder.add(getIcon(Utility.getExtension(currentFile.getName()) + ".png", currentFile, currentNode));
+					folder.add(getPanel(Utility.getExtension(currentFile.getName()) + ".png", currentFile, currentNode));
 				else
-					folder.add(getIcon("question.png", currentFile, currentNode));
+					folder.add(getPanel("question.png", currentFile, currentNode));
 			}
 		}
 		
@@ -280,11 +280,11 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 			if(element.isFile()) {
 				if(showHiddenFiles ?  true : !element.isHidden() || !element.getName().startsWith(".")) {
 					if (element.isDirectory())
-						folder.add(getIcon("folder.png", element, null));
+						folder.add(getPanel("folder.png", element, null));
 					else if(iconSet.contains(Utility.getExtension(element.getName())))
-						folder.add(getIcon(Utility.getExtension(element.getName()) + ".png", element, null));
+						folder.add(getPanel(Utility.getExtension(element.getName()) + ".png", element, null));
 					else
-						folder.add(getIcon("question.png", element, null));
+						folder.add(getPanel("question.png", element, null));
 				}
 			}
 		}
@@ -387,6 +387,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		menuItem.setBackground(Color.white);
 		popupMenu.add(menuItem);
 
+
 		menuItem = new JMenuItem(" Delete ");
 		img = new ImageIcon(ICONPATH + "other/delete.png");
 		folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
@@ -468,6 +469,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 
 		sectionsMenu.add(menuItem);
 
+
 		menuItem = new JMenuItem(" Folder ");
 		img = new ImageIcon(ICONPATH + "extensions/folder.png");
 		folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
@@ -519,6 +521,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 		menuItem.setBackground(Color.white);
 		sectionsMenu.add(menuItem);
 	
+
 		img = new ImageIcon(ICONPATH + "other/plus.png");
 		folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
 		sectionsMenu.setIcon(new ImageIcon(folderImg));	
@@ -542,6 +545,31 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				refresh();
+			}
+		});
+
+		menuItem.setBackground(Color.white);
+		popupMenu.add(menuItem);
+
+
+		menuItem = new JMenuItem(" OS Explorer ");
+		img = new ImageIcon(ICONPATH + "other/osexplorer.png");
+		folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
+		menuItem.setIcon(new ImageIcon(folderImg));
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				String name="";
+				File curFile;
+
+				curFile = ((File) lastNodeOpened.getUserObject());
+
+				try {
+					Desktop.getDesktop().open(curFile);
+				}
+				catch(IOException e) {
+
+				}
 			}
 		});
 
@@ -601,7 +629,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 	 }
 	*/
 
-	static JPanel getIcon(String iconName, File file, DefaultMutableTreeNode node) {
+	static JPanel getPanel(String iconName, File file, DefaultMutableTreeNode node) {
 		JLabel label;
 		ImageIcon img=null;
 		Image folderImg;
@@ -623,15 +651,19 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 			img = new ImageIcon(file.getPath());
 		}
 
-		if(img==null)
-			img = new ImageIcon(ICONPATH + "extensions/" + iconName);
+		if(img==null) {
+			if(iconName=="folder.png" && file.list()!=null && file.list().length==0)
+				img = new ImageIcon(ICONPATH + "other/" + "folderempty.png");
+			else
+				img = new ImageIcon(ICONPATH + "extensions/" + iconName);
+		}
 
 		//Image folderImg = img.getImage().getScaledInstance(150, 60, Image.SCALE_DEFAULT);
 		folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
 
+		/* You get small resolution system icons. Waiting for official better way
 		Icon icon;
-		/* If false is removed you get small resolution system icons
-		Waiting for official better way
+
 		if(!iconSet.contains(extension) && iconName!="folder.png") {
 			icon = FileSystemView.getFileSystemView().getSystemIcon(file);
 			folderImg = iconToImage(icon).getScaledInstance(60, 60, Image.SCALE_DEFAULT);
