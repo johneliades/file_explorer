@@ -1,9 +1,21 @@
 #navigate with arrows and enter in folder
+
 #open as
-#cut
-#copy
-#paste
-#select all
+
+edit
+public void edit(File file)
+          throws IOException
+Launches the associated editor application and opens a file for editing.
+Parameters:
+file - the file to be opened for editing
+
+https://stackoverflow.com/questions/526037/how-to-open-user-system-preferred-editor-for-given-file
+
+#f5 delete
+#cut ctrl+X
+#copy ctrl+C
+#paste ctrl+V
+#select all ctrl+A
 #mouse button back/forward
 #right click at tree
 #drag n drop
