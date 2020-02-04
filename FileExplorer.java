@@ -88,6 +88,7 @@ public class FileExplorer {
 		set.add("htm"); 
 		set.add("html"); 
 		set.add("iso"); 
+		set.add("jar"); 
 		set.add("java"); 
 		set.add("json"); 
 		set.add("log");
