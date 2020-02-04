@@ -102,6 +102,7 @@ public class FileExplorer {
 		set.add("tar"); 
 		set.add("tgz"); 
 		set.add("txt"); 
+		set.add("url"); 
 		set.add("video"); 
 		set.add("wav"); 
 		set.add("wmv"); 
