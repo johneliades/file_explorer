@@ -1,3 +1,5 @@
+#small bug if icon has only extension
+
 #navigate with arrows and enter in folder
 #open as
 #f5 delete
