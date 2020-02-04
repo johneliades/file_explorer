@@ -73,7 +73,8 @@ public class FileExplorer {
 	
 	public static Set<String> addExtensions() {
 		Set<String> set = new HashSet<>(); 
-				
+	
+		set.add("3gp"); 
 		set.add("audio"); 
 		set.add("avi"); 
 		set.add("bmp"); 
@@ -81,6 +82,7 @@ public class FileExplorer {
 		set.add("css"); 
 		set.add("doc"); 
 		set.add("docx"); 
+		set.add("exe"); 
 		set.add("gz"); 
 		set.add("htm"); 
 		set.add("html"); 
@@ -90,6 +92,7 @@ public class FileExplorer {
 		set.add("log");
 		set.add("mkv"); 
 		set.add("mp3"); 
+		set.add("mp4"); 
 		set.add("ods"); 
 		set.add("odt"); 
 		set.add("ogg"); 
