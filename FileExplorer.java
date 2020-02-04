@@ -77,6 +77,7 @@ public class FileExplorer {
 		set.add("3gp"); 
 		set.add("audio"); 
 		set.add("avi"); 
+		set.add("bat"); 
 		set.add("bmp"); 
 		set.add("class"); 
 		set.add("css"); 
