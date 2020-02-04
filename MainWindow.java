@@ -73,7 +73,13 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 
 		tree.addMouseListener(new MouseListener() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 				if(node==null)
 					return;
@@ -90,12 +96,6 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 
 				showCurrentDirectory(node);
 			}
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-			@Override
-			public void mouseExited(MouseEvent e) {}
-			@Override
-			public void mousePressed(MouseEvent e) {}
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 		});
@@ -134,7 +134,13 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 
 		folder.addMouseListener(new MouseListener() {
 			@Override
-			public void mouseClicked(MouseEvent event) {
+			public void mouseClicked(MouseEvent event) {}
+			@Override
+			public void mouseEntered(MouseEvent event) {}
+			@Override
+			public void mouseExited(MouseEvent event) {}
+			@Override
+			public void mousePressed(MouseEvent event) {
 				String filePath = ((File) lastTreeNodeOpened.getUserObject()).getPath();
 
 				File f = new File(filePath + "/");
@@ -167,13 +173,6 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 					}
 				}
 			}
-
-			@Override
-			public void mouseEntered(MouseEvent event) {}
-			@Override
-			public void mouseExited(MouseEvent event) {}
-			@Override
-			public void mousePressed(MouseEvent event) {}
 			@Override
 			public void mouseReleased(MouseEvent event) {}
 		});
@@ -730,7 +729,19 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 
 		panel.addMouseListener(new MouseListener() {
 			@Override
-			public void mouseClicked(MouseEvent event) {
+			public void mouseClicked(MouseEvent event) {}
+			@Override
+			public void mouseEntered(MouseEvent event) {
+				if(lastPanelSelected!=panel)
+					panel.setBackground(new Color(0x8fd2ff));
+			}
+			@Override
+			public void mouseExited(MouseEvent event) {
+				if(lastPanelSelected!=panel)
+					panel.setBackground(Color.white);
+			}
+			@Override
+			public void mousePressed(MouseEvent event) {
 				DefaultMutableTreeNode current = null, parent = lastTreeNodeOpened;
 				String name="";
 				File curFile=null;
@@ -798,19 +809,6 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 					menu.show(event.getComponent(), event.getX(), event.getY());
 				}
 			}
-
-			@Override
-			public void mouseEntered(MouseEvent event) {
-				if(lastPanelSelected!=panel)
-					panel.setBackground(new Color(0x8fd2ff));
-			}
-			@Override
-			public void mouseExited(MouseEvent event) {
-				if(lastPanelSelected!=panel)
-					panel.setBackground(Color.white);
-			}
-			@Override
-			public void mousePressed(MouseEvent event) {}
 			@Override
 			public void mouseReleased(MouseEvent event) {}
 		});
