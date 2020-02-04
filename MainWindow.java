@@ -14,6 +14,7 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	private static final boolean showHiddenFiles = FileExplorer.getHiddenFilesOption();
 	static Set<String> iconSet = FileExplorer.addExtensions();
+	static final String windowsTopName="This PC";
 
 	private static JPanel folder;
 	private static JTree tree;
@@ -21,7 +22,6 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 	static JPanel lastPanelSelected; 
 	static DefaultMutableTreeNode lastTreeNodeOpened, lastPanelNode=null;
 	static String lastPanelName="";
-	static final String windowsTopName="This PC";
 
 	public MainWindow() {
 		super(new GridLayout(1, 0));
@@ -79,6 +79,15 @@ public class MainWindow extends JPanel implements TreeSelectionListener {
 					return;
 				
 				lastTreeNodeOpened=node;
+
+				String filePath = ((File) lastTreeNodeOpened.getUserObject()).getPath();
+
+				File f = new File(filePath + "/");
+				if(!f.getName().equals(windowsTopName) && !f.exists()) {
+					findExistingParent(f);
+					return;
+				}
+
 				showCurrentDirectory(node);
 			}
 			@Override

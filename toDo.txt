@@ -1,4 +1,3 @@
-#clicking on folder that doesnt exist in tree
 #navigate with arrows and enter in folder
 #open as
 #cut
