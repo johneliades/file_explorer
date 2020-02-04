@@ -103,6 +103,7 @@ public class FileExplorer {
 		set.add("txt"); 
 		set.add("video"); 
 		set.add("wav"); 
+		set.add("wmv"); 
 		set.add("xlsx"); 
 		set.add("xlx"); 
 		set.add("xml"); 
