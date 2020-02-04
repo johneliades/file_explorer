@@ -13,7 +13,6 @@ import java.util.*;
 public class MainWindow extends JPanel implements TreeSelectionListener {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	private static final boolean showHiddenFiles = FileExplorer.getHiddenFilesOption();
-	static Set<String> iconSet = FileExplorer.addExtensions();
 	static final String windowsTopName="This PC";
 
 	private static JPanel folder;

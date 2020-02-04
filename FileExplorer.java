@@ -75,24 +75,25 @@ public class FileExplorer {
 		Set<String> set = new HashSet<>(); 
 				
 		set.add("audio"); 
+		set.add("avi"); 
 		set.add("bmp"); 
+		set.add("class"); 
 		set.add("css"); 
 		set.add("doc"); 
 		set.add("docx"); 
-		set.add("giff"); 
 		set.add("gz"); 
 		set.add("htm"); 
 		set.add("html"); 
 		set.add("iso"); 
-		set.add("jpeg"); 
-		set.add("jpg"); 
+		set.add("java"); 
 		set.add("json"); 
+		set.add("log");
+		set.add("mkv"); 
 		set.add("mp3"); 
 		set.add("ods"); 
 		set.add("odt"); 
 		set.add("ogg"); 
 		set.add("pdf"); 
-		set.add("png"); 
 		set.add("ppt"); 
 		set.add("tar"); 
 		set.add("tgz"); 
@@ -103,9 +104,6 @@ public class FileExplorer {
 		set.add("xlx"); 
 		set.add("xml"); 
 		set.add("zip"); 
-		set.add("class"); 
-		set.add("java"); 
-		set.add("log");
 
 		return set;
 	}
