@@ -91,6 +91,7 @@ public class FileExplorer {
 		set.add("jar"); 
 		set.add("java"); 
 		set.add("json"); 
+		set.add("lnk");
 		set.add("log");
 		set.add("mkv"); 
 		set.add("mp3"); 
