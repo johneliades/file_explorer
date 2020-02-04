@@ -157,7 +157,7 @@ public class TopPanel extends JPanel {
 					tree.scrollPathToVisible(path);
 					tree.expandPath(path);
 
-					MainWindow.showCurrentDirectory(node); 
+					FolderPanel.showCurrentDirectory(node); 
 				}
 				else {
 					try {

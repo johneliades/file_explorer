@@ -1,16 +1,5 @@
 #navigate with arrows and enter in folder
-
 #open as
-
-edit
-public void edit(File file)
-          throws IOException
-Launches the associated editor application and opens a file for editing.
-Parameters:
-file - the file to be opened for editing
-
-https://stackoverflow.com/questions/526037/how-to-open-user-system-preferred-editor-for-given-file
-
 #f5 delete
 #cut ctrl+X
 #copy ctrl+C
