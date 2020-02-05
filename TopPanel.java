@@ -87,14 +87,16 @@ public class TopPanel extends JPanel {
 			}
 			public void focusLost(FocusEvent e) {
 				DefaultMutableTreeNode node = Tree.getLastTreeNodeOpened();
-				
-				String FileName = ((File) node.getUserObject()).getName();
+				File file = (File) node.getUserObject();
+				String fileName;
 
-				if(FileName.compareTo("/")!=0) {
-					FileName = ((File) node.getUserObject()).getPath();
+				fileName = file.getName();
+
+				if(file.toString().equals("/")) {
+					fileName = ((File) node.getUserObject()).getPath();
 				}
 
-				searchField.setText(" Search" + " \"" + FileName + "\"");
+				searchField.setText(" Search" + " \"" + fileName + "\"");
 			}
 		});
 
