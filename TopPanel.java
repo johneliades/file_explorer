@@ -20,6 +20,8 @@ public class TopPanel extends JPanel {
 		super(new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints();
+		this.setBackground(Color.white);
+
 		JButton button;
 
 		c.weightx = 0.05;
@@ -77,37 +79,22 @@ public class TopPanel extends JPanel {
 			public void keyReleased(KeyEvent e) {}
 		});
 
-		searchField.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseClicked(MouseEvent event) {
-
-				if(event.getButton() == MouseEvent.BUTTON1) {
-					searchField.setText("");
-					searchQuery="";
-				}
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent event) {}
-			@Override
-			public void mouseExited(MouseEvent event) {}
-			@Override
-			public void mousePressed(MouseEvent event) {}
-			@Override
-			public void mouseReleased(MouseEvent event) {}
-		});
-
 		searchField.addFocusListener(new FocusListener() {
-			String lastText="";
-
 			@Override
 			public void focusGained(FocusEvent e) {
-				lastText = searchField.getText();
 				searchField.setText("");
 				searchQuery = "";
 			}
 			public void focusLost(FocusEvent e) {
-				searchField.setText(lastText);
+				DefaultMutableTreeNode node = Tree.getLastTreeNodeOpened();
+				
+				String FileName = ((File) node.getUserObject()).getName();
+
+				if(FileName.compareTo("/")!=0) {
+					FileName = ((File) node.getUserObject()).getPath();
+				}
+
+				searchField.setText(" Search" + " \"" + FileName + "\"");
 			}
 		});
 
@@ -193,7 +180,7 @@ public class TopPanel extends JPanel {
 		if(isSymbolicLink)
 			return;
 
-		MainWindow.createNodes(top, 0);
+		Tree.createNodes(top, 0);
 
 		for(int i=0; i<numChild; i++) {	  
 			current=(DefaultMutableTreeNode) tree.getModel().getChild(top, i);

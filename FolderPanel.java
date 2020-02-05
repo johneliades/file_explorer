@@ -14,8 +14,8 @@ public class FolderPanel extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	private static final boolean showHiddenFiles = FileExplorer.getHiddenFilesOption();
 	static Set<String> iconSet = FileExplorer.addExtensions();
-	String windowsTopName = MainWindow.getWindowsTopName();
-	
+	private String windowsTopName = Tree.getWindowsTopName();
+
 	private static JPanel lastPanelSelected; 
 	private static String lastPanelName="";
 
@@ -33,15 +33,17 @@ public class FolderPanel extends JPanel {
 			public void mouseExited(MouseEvent event) {}
 			@Override
 			public void mousePressed(MouseEvent event) {
-				DefaultMutableTreeNode lastTreeNodeOpened = MainWindow.getLastTreeNodeOpened();
+				DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
 				DefaultMutableTreeNode lastPanelNode = MainWindow.getLastPanelNode();
 				JTree tree = MainWindow.getTree();
+				
+				requestFocusInWindow();
 
 				String filePath = ((File) lastTreeNodeOpened.getUserObject()).getPath();
 
 				File f = new File(filePath + "/");
 				if(!f.getName().equals(windowsTopName) && !f.exists()) {
-					MainWindow.findExistingParent(f);
+					Tree.findExistingParent(f);
 					return;
 				}
 
@@ -90,7 +92,7 @@ public class FolderPanel extends JPanel {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode lastTreeNodeOpened = MainWindow.getLastTreeNodeOpened();
+				DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
 				JTree tree = MainWindow.getTree();
 
 				DefaultMutableTreeNode node = lastTreeNodeOpened;
@@ -148,7 +150,7 @@ public class FolderPanel extends JPanel {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode lastTreeNodeOpened = MainWindow.getLastTreeNodeOpened();
+				DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
 				JTree tree = MainWindow.getTree();
 
 				DefaultMutableTreeNode node = lastTreeNodeOpened;
@@ -224,7 +226,7 @@ public class FolderPanel extends JPanel {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode lastTreeNodeOpened = MainWindow.getLastTreeNodeOpened();
+				DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
 
 				MainWindow.refresh(lastTreeNodeOpened);
 			}
@@ -241,7 +243,7 @@ public class FolderPanel extends JPanel {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode lastTreeNodeOpened = MainWindow.getLastTreeNodeOpened();
+				DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
 
 				String name="";
 				File curFile;
@@ -280,71 +282,9 @@ public class FolderPanel extends JPanel {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode lastTreeNodeOpened = MainWindow.getLastTreeNodeOpened();
-				DefaultMutableTreeNode lastPanelNode = MainWindow.getLastPanelNode();
-				JTree tree = MainWindow.getTree();
+				DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
 
-				DefaultMutableTreeNode current = null, parent = lastTreeNodeOpened;
-				String filePath = ((File) parent.getUserObject()).getPath();
-				String nameNew,	nameOld="";
-
-				ImageIcon img=null;
-				Image folderImg;
-				int i;
-
-				nameOld = lastPanelName;
-
-				File f = new File(filePath + "/" + nameOld);
-
-				if(f.exists() && f.canWrite()) {
-					img = new ImageIcon(ICONPATH + "other/rename.png");
-					folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
-					nameNew=(String) JOptionPane.showInputDialog(null, "Enter New Name", "Rename",
-										JOptionPane.INFORMATION_MESSAGE, new ImageIcon(folderImg), 
-										null, nameOld);
-
-					if(nameNew==null || nameNew.equals(nameOld) || nameNew.equals(""))
-						return;
-
-					File file2 = new File(filePath + "/" + nameNew);
-
-					if(file2.exists()) {
-						JOptionPane.showMessageDialog(null, "Rename Failed! File exists");
-						return;
-					}
-
-					if(f.isDirectory()) {
-						current = lastPanelNode;
-
-						current.removeFromParent();
-					}
-
-					boolean success = f.renameTo(file2);
-
-					if (!success) {
-						JOptionPane.showMessageDialog(null, "Rename Failed!");
-						return;
-					}
-				}
-				else {
-					if(!f.canWrite()) {
-						JOptionPane.showMessageDialog(null, "Not enough permissions!");
-						return;
-					}
-
-					JOptionPane.showMessageDialog(null, "Rename Failed!");
-					return;
-				}
-
-				DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
-				defMod1.reload();
-
-				TreePath path = new TreePath(parent.getPath());
-				tree.setSelectionPath(path);
-				tree.scrollPathToVisible(path);
-				tree.expandPath(path);
-
-				showCurrentDirectory(parent);
+				MainWindow.renameSon(lastTreeNodeOpened);
 			}
 		});
 			
@@ -359,7 +299,7 @@ public class FolderPanel extends JPanel {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode lastTreeNodeOpened = MainWindow.getLastTreeNodeOpened();
+				DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
 
 				MainWindow.deleteSon(lastTreeNodeOpened);
 			}
@@ -475,6 +415,27 @@ public class FolderPanel extends JPanel {
 		folder.revalidate();
 	}
 
+	/*
+	static Image iconToImage(Icon icon) {
+	   if (icon instanceof ImageIcon) {
+		  return ((ImageIcon)icon).getImage();
+	   } 
+	   else {
+		  int w = icon.getIconWidth();
+		  int h = icon.getIconHeight();
+		  GraphicsEnvironment ge = 
+			GraphicsEnvironment.getLocalGraphicsEnvironment();
+		  GraphicsDevice gd = ge.getDefaultScreenDevice();
+		  GraphicsConfiguration gc = gd.getDefaultConfiguration();
+		  BufferedImage image = gc.createCompatibleImage(w, h);
+		  Graphics2D g = image.createGraphics();
+		  icon.paintIcon(null, g, 0, 0);
+		  g.dispose();
+		  return image;
+	   }
+	 }
+	*/
+
 	static JPanel getPanel(String iconName, File file, DefaultMutableTreeNode node) {
 		JLabel label;
 		ImageIcon img=null;
@@ -562,16 +523,18 @@ public class FolderPanel extends JPanel {
 			}
 			@Override
 			public void mousePressed(MouseEvent event) {
-				DefaultMutableTreeNode lastTreeNodeOpened = MainWindow.getLastTreeNodeOpened();
+				DefaultMutableTreeNode lastTreeNodeOpened = 
+										Tree.getLastTreeNodeOpened();
 				JTree tree = MainWindow.getTree();
-				DefaultMutableTreeNode lastPanelNode = MainWindow.getLastPanelNode();
+				DefaultMutableTreeNode lastPanelNode =
+										MainWindow.getLastPanelNode();
 
 				DefaultMutableTreeNode current = null, parent = lastTreeNodeOpened;
 				String name="";
 				File curFile=null;
 		
 				if(!file.exists()) {
-					MainWindow.findExistingParent(file);
+					Tree.findExistingParent(file);
 					return;
 				}
 
@@ -600,8 +563,8 @@ public class FolderPanel extends JPanel {
 				}
 
 				if(current==null || i==numChild || curFile.exists()==false) {
-		//			JOptionPane.showMessageDialog(null, "Chose file");
-		//			return;
+				//	JOptionPane.showMessageDialog(null, "Chose file");
+				//	return;
 				}
 				MainWindow.setLastPanelNode(current);
 				// /Get node and name of last selected panel
@@ -613,7 +576,7 @@ public class FolderPanel extends JPanel {
 						tree.scrollPathToVisible(path);
 						tree.expandPath(path);
 					
-						MainWindow.setLastTreeNodeOpened(node);
+						Tree.setLastTreeNodeOpened(node);
 						MainWindow.setLastPanelNode(null);
 						showCurrentDirectory(node);
 					}

@@ -1,8 +1,12 @@
 #small bug if icon has only extension
+#small bug requires soft refresh?: Node is created then external source makes 
+		folder in it and node is clicked again so createnode is not called again.
 
+#objects in navigation bar
 #navigate with arrows and enter in folder
 #open as
-#f5 delete
+#f5 
+#delete
 #cut ctrl+X
 #copy ctrl+C
 #paste ctrl+V
@@ -12,4 +16,3 @@
 #drag n drop
 #zip/unzip
 #ftp
-#objects in navigation bar
