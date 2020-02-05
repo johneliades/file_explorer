@@ -87,12 +87,9 @@ public class TopPanel extends JPanel {
 			}
 			public void focusLost(FocusEvent e) {
 				DefaultMutableTreeNode node = Tree.getLastTreeNodeOpened();
-				File file = (File) node.getUserObject();
-				String fileName;
+				String fileName = ((File) node.getUserObject()).getName();
 
-				fileName = file.getName();
-
-				if(file.toString().equals("/")) {
+				if(fileName.equals("") || fileName==null) {
 					fileName = ((File) node.getUserObject()).getPath();
 				}
 

@@ -529,6 +529,8 @@ public class FolderPanel extends JPanel {
 				DefaultMutableTreeNode lastPanelNode =
 										MainWindow.getLastPanelNode();
 
+				panel.requestFocusInWindow();
+
 				DefaultMutableTreeNode current = null, parent = lastTreeNodeOpened;
 				String name="";
 				File curFile=null;
@@ -598,6 +600,16 @@ public class FolderPanel extends JPanel {
 			}
 			@Override
 			public void mouseReleased(MouseEvent event) {}
+		});
+
+		panel.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+
+			}
+			public void focusLost(FocusEvent e) {
+
+			}
 		});
 
 		return panel;
