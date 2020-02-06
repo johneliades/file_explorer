@@ -14,7 +14,7 @@ git clone https://github.com/johneliades/file_explorer.git
 ## Compile (unnecessary)
 
 ```
-javac *.java -d classes
+javac java/*.java -d classes
 ```
 
 ## Run
