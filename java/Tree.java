@@ -17,14 +17,56 @@ public class Tree extends JTree implements TreeSelectionListener {
 	private static final boolean showHiddenFiles = 
 									FileExplorer.getHiddenFilesOption();
 
+	private static final ImageIcon folderIcon = new ImageIcon(
+		new ImageIcon(ICONPATH + "extensions/folder.png").getImage().
+						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
+
+	private static final ImageIcon folderIconOpen = new ImageIcon(
+		new ImageIcon(ICONPATH + "other/folderopen.png").getImage().
+						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
+
+	private static final ImageIcon folderIconEmpty = new ImageIcon(
+		new ImageIcon(ICONPATH + "other/folderempty.png").getImage().
+						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
+
 	public Tree(DefaultMutableTreeNode top) {
 		super(top);
 
-		this.setBorder(new EmptyBorder(5, 10, 5, 0)); //top,left,bottom,right
+		this.setBorder(new EmptyBorder(0, 20, 20, 0)); //top,left,bottom,right
 		this.putClientProperty("JTree.lineStyle", "None");
+		this.setBackground(new Color(53, 53, 53));
 
 		this.setEditable(true);
-		this.setCellRenderer(getRenderer());
+		this.setCellRenderer(new DefaultTreeCellRenderer() {
+			public Component getTreeCellRendererComponent ( JTree tree, 
+										Object value, boolean sel,
+										boolean expanded, boolean leaf,
+										int row, boolean hasFocus ) {
+
+				JLabel label = (JLabel) super.getTreeCellRendererComponent(tree, 
+									value, sel, expanded, leaf, row, hasFocus );
+
+				setBackground(new Color(53, 53, 53));
+				setTextNonSelectionColor(Color.WHITE);
+				setTextSelectionColor(Color.RED);
+				setOpaque(true);
+
+				DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) value;
+				File file = (File) nodo.getUserObject();
+				if(file.list()!=null && file.list().length==0) {
+					setIcon(folderIconEmpty);
+				}
+				else if(expanded) {
+					setIcon(folderIconOpen);
+				}
+				else {
+					setIcon(folderIcon);
+				}
+
+				return label;
+			}
+		});
+
 		this.getSelectionModel().setSelectionMode
 				(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
@@ -106,29 +148,6 @@ public class Tree extends JTree implements TreeSelectionListener {
 				}
 			}
 		});
-	}
-
-	private DefaultTreeCellRenderer getRenderer() {
-		DefaultTreeCellRenderer tRenderer = new DefaultTreeCellRenderer();
-
-		ImageIcon folderIcon = new ImageIcon(ICONPATH + "extensions/folder.png");
-		Image folderImg = folderIcon.getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT);
-		folderIcon = new ImageIcon(folderImg);
-		
-		ImageIcon folderIconOpen = new ImageIcon(ICONPATH + "other/folderopen.png");
-		Image folderImgOpen = folderIconOpen.getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT);
-		folderIconOpen = new ImageIcon(folderImgOpen);
-
-		ImageIcon folderIconEmpty = new ImageIcon(ICONPATH + "other/folderempty.png");
-		Image folderImgEmpty = folderIconEmpty.getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT);
-		folderIconEmpty = new ImageIcon(folderImgEmpty);
-
-		tRenderer.setLeafIcon(folderIconEmpty);
-		tRenderer.setClosedIcon(folderIcon);
-		tRenderer.setOpenIcon(folderIconOpen);
-		tRenderer.setTextSelectionColor(Color.RED);
-
-		return tRenderer;
 	}
 
 	static public void createNodes(DefaultMutableTreeNode top, int setting) {

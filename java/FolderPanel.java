@@ -22,7 +22,7 @@ public class FolderPanel extends JPanel {
 	public FolderPanel() {
 		//Create the folder viewing pane.
 		super(new WrapLayout(FlowLayout.LEFT, 10, 10));
-		this.setBackground(Color.white);
+		this.setBackground(new Color(54, 53, 53));
 
 		this.addMouseListener(new MouseListener() {
 			@Override
@@ -49,8 +49,8 @@ public class FolderPanel extends JPanel {
 
 				if(event.getButton() == MouseEvent.BUTTON1) {
 					if(lastPanelSelected!=null) {
-						lastPanelSelected.setBackground(Color.white);
-						lastPanelSelected.setBorder(BorderFactory.createLineBorder(Color.white));
+						lastPanelSelected.setBackground(new Color(53, 53, 53));
+						lastPanelSelected.setBorder(BorderFactory.createLineBorder(new Color(53, 53, 53)));
 						lastPanelSelected=null;
 						MainWindow.setLastPanelNode(null);
 						lastPanelName=null;
@@ -501,12 +501,13 @@ public class FolderPanel extends JPanel {
 
 		label = new JLabel(name, JLabel.CENTER);
 		label.setPreferredSize(new Dimension(150, 30));
+		label.setForeground (Color.white);
 		panel.add(label, BorderLayout.SOUTH);
 
 		label.setName(name);
 		panel.setName(name);
-		panel.setBorder(BorderFactory.createLineBorder(Color.white));
-		panel.setBackground(Color.white);
+		panel.setBorder(BorderFactory.createLineBorder(new Color(53, 53, 53)));
+		panel.setBackground(new Color(53, 53, 53));
 
 		panel.addMouseListener(new MouseListener() {
 			@Override
@@ -519,7 +520,7 @@ public class FolderPanel extends JPanel {
 			@Override
 			public void mouseExited(MouseEvent event) {
 				if(lastPanelSelected!=panel)
-					panel.setBackground(Color.white);
+					panel.setBackground(new Color(53, 53, 53));
 			}
 			@Override
 			public void mousePressed(MouseEvent event) {
@@ -541,11 +542,11 @@ public class FolderPanel extends JPanel {
 				}
 
 				if(lastPanelSelected!=null) {
-					lastPanelSelected.setBackground(Color.white);
-					lastPanelSelected.setBorder(BorderFactory.createLineBorder(Color.white));
+					lastPanelSelected.setBackground(new Color(53, 53, 53));
+					lastPanelSelected.setBorder(BorderFactory.createLineBorder(new Color(53, 53, 53)));
 				}
 				panel.setBackground(new Color(0x3fa9ff));
-				panel.setBorder(BorderFactory.createLineBorder(Color.black));
+				panel.setBorder(BorderFactory.createLineBorder(Color.white));
 				lastPanelSelected=panel;
 
 				// Get node and name of last selected panel

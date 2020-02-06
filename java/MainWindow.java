@@ -42,14 +42,20 @@ public class MainWindow extends JPanel {
 		tree = new Tree(top);
 		//Create the scroll pane and add the tree to it. 
 		JScrollPane treeView = new JScrollPane(tree);
-		treeView.getVerticalScrollBar().setPreferredSize(new Dimension(13, 0));
-		treeView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 13));
+		treeView.getVerticalScrollBar().setPreferredSize(new Dimension(12, 0));
+		treeView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 12));
+		
+		treeView.getVerticalScrollBar().setBackground(new Color(53, 53, 53));
+		treeView.getHorizontalScrollBar().setBackground(new Color(53, 53, 53));
 
 		folder = new FolderPanel();
 		JScrollPane folderView = new JScrollPane(folder);
 		folderView.getVerticalScrollBar().setUnitIncrement(16);
-		folderView.getVerticalScrollBar().setPreferredSize(new Dimension(13, 0));
-		folderView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 13));
+		folderView.getVerticalScrollBar().setPreferredSize(new Dimension(12, 0));
+		folderView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 12));
+
+		folderView.getVerticalScrollBar().setBackground(new Color(53, 53, 53));
+		folderView.getHorizontalScrollBar().setBackground(new Color(53, 53, 53));
 
 		if(roots.length==1)
 			Tree.createNodes(top, 0);
