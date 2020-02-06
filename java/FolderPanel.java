@@ -63,8 +63,8 @@ public class FolderPanel extends JPanel {
 						menu.show(event.getComponent(), event.getX(), event.getY());
 
 					if(lastPanelSelected!=null) {
-						lastPanelSelected.setBackground(Color.white);
-						lastPanelSelected.setBorder(BorderFactory.createLineBorder(Color.white));
+						lastPanelSelected.setBackground(new Color(53, 53, 53));
+						lastPanelSelected.setBorder(BorderFactory.createLineBorder(new Color(53, 53, 53)));
 						lastPanelSelected=null;
 						MainWindow.setLastPanelNode(null);
 						lastPanelName=null;
