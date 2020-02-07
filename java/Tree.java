@@ -40,7 +40,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 	public Tree(DefaultMutableTreeNode top) {
 		super(top);
 
-		this.setBorder(new EmptyBorder(0, 20, 20, 0)); //top,left,bottom,right
+		this.setBorder(new EmptyBorder(0, 15, 15, 0)); //top,left,bottom,right
 		this.putClientProperty("JTree.lineStyle", "None");
 		this.setBackground(new Color(53, 53, 53));
 		final Font currentFont = this.getFont();
@@ -69,9 +69,11 @@ public class Tree extends JTree implements TreeSelectionListener {
 
 				TreeModel tmodel = tree.getModel();
 				Object root = tmodel.getRoot();
+				label.setBorder(new EmptyBorder(0, 0, 0, 0)); //top,left,bottom,right
 
 				if(nodo==root) {
 					setIcon(folderIconPC);
+					label.setBorder(new EmptyBorder(15, 0, 0, 0)); //top,left,bottom,right
 				}
 				else if(name.trim().length() == 0 && nodo.getParent()==root) {
 					setIcon(folderIconDisk);
