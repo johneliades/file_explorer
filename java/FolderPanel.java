@@ -445,7 +445,7 @@ public class FolderPanel extends JPanel {
 		String extension = Utility.getExtension(file.getName());
 
 		if(name.trim().length() == 0) {
-			name = "Local Disk(" + file.getPath().replace("\\", "") + ")";
+			name = "Local Disk (" + file.getPath().replace("\\", "") + ")";
 			img = new ImageIcon(ICONPATH + "other/harddisk.png");
 		}
 
