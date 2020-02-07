@@ -3,6 +3,7 @@ import java.nio.file.Files;
 
 import javax.swing.*;
 import javax.swing.tree.*;
+import javax.swing.border.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -67,7 +68,8 @@ public class TopPanel extends JPanel {
 
 					searchField.setText("");
 					JPanel gridPanel = new JPanel(new GridLayout(0, 1, 8, 8));
-					gridPanel.setBackground(Color.white);
+					gridPanel.setBackground(new Color(53, 53, 53));
+					gridPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); //top,left,bottom,right
 					folder.add(gridPanel);
 					search(tree, node, searchQuery, gridPanel);
 					searchQuery="";
@@ -123,11 +125,17 @@ public class TopPanel extends JPanel {
 		if(img==null)
 			img = new ImageIcon(ICONPATH + "extensions/" + name);
 
-		pict = img.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT);
+		pict = img.getImage().getScaledInstance(45, 45, Image.SCALE_DEFAULT);
 		img = new ImageIcon(pict);
- 		
+
 		label.setIcon(img);
 		label.setText(file.getPath());
+		
+		final Font currentFont = label.getFont();
+		final Font bigFont = new Font(currentFont.getName(), 
+					currentFont.getStyle(), currentFont.getSize() + 1);
+		label.setFont(bigFont);
+		label.setForeground(Color.WHITE);
 		label.addMouseListener(new MouseListener(){
 			@Override
 			public void mouseClicked(MouseEvent arg0) {

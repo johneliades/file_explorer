@@ -2,6 +2,8 @@
 #small bug requires soft refresh?: Node is created then external source makes 
 		folder in it and node is clicked again so createnode is not called again.
 #faster rendering of pictures (favourite in chrome)
+#second enter after search causes a buggy search
+#search results make some padding between text and image
 
 #objects in navigation bar
 #navigate with arrows and enter in folder
