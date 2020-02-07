@@ -47,8 +47,17 @@ public class Tree extends JTree implements TreeSelectionListener {
 		final Font bigFont = new Font(currentFont.getName(), 
 					currentFont.getStyle(), currentFont.getSize() + 1);
 		this.setFont(bigFont);
-
 		this.setEditable(true);
+		this.setCellEditor(new DefaultTreeCellEditor(this, 
+				(DefaultTreeCellRenderer) this.getCellRenderer()) {
+			@Override
+			public boolean isCellEditable(EventObject event) {
+				if(event instanceof MouseEvent){
+					return false;
+				}
+				return super.isCellEditable(event);
+			}
+		});
 		this.setCellRenderer(new DefaultTreeCellRenderer() {
 			public Component getTreeCellRendererComponent ( JTree tree, 
 										Object value, boolean sel,
