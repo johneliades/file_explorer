@@ -32,6 +32,10 @@ public class Tree extends JTree implements TreeSelectionListener {
 	private static final ImageIcon folderIconDisk = new ImageIcon(
 		new ImageIcon(ICONPATH + "other/harddisk.png").getImage().
 						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
+	
+	private static final ImageIcon folderIconPC = new ImageIcon(
+		new ImageIcon(ICONPATH + "other/pc.png").getImage().
+						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
 
 	public Tree(DefaultMutableTreeNode top) {
 		super(top);
@@ -66,7 +70,10 @@ public class Tree extends JTree implements TreeSelectionListener {
 				TreeModel tmodel = tree.getModel();
 				Object root = tmodel.getRoot();
 
-				if(name.trim().length() == 0 && nodo.getParent()==root) {
+				if(nodo==root) {
+					setIcon(folderIconPC);
+				}
+				else if(name.trim().length() == 0 && nodo.getParent()==root) {
 					setIcon(folderIconDisk);
 				}
 				else if(file.list()!=null && file.list().length==0) {
