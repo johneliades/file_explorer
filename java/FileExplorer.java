@@ -36,7 +36,7 @@ public class FileExplorer {
 		JFrame frame = new JFrame("File Explorer");
 		frame.setBackground(new Color(53, 53, 53));
 
-		frame.setIconImage(new ImageIcon(ICONPATH + "extensions/folder.png").getImage());
+		frame.setIconImage(new ImageIcon(ICONPATH + "other/folder.png").getImage());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		//Gets screen's Dimensions

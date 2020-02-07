@@ -144,7 +144,7 @@ public class FolderPanel extends JPanel {
 
 
 		menuItem = new JMenuItem(" Folder ");
-		img = new ImageIcon(ICONPATH + "extensions/folder.png");
+		img = new ImageIcon(ICONPATH + "other/folder.png");
 		folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
 		menuItem.setIcon(new ImageIcon(folderImg));
 		menuItem.addActionListener(new ActionListener() {
@@ -165,7 +165,7 @@ public class FolderPanel extends JPanel {
 					return;
  				}
 
-				img = new ImageIcon(ICONPATH + "extensions/folder.png");
+				img = new ImageIcon(ICONPATH + "other/folder.png");
 				folderImg = img.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
 				name=(String) JOptionPane.showInputDialog(null, "Enter Folder Name", "New Folder",
 										JOptionPane.INFORMATION_MESSAGE, new ImageIcon(folderImg), 
@@ -446,7 +446,7 @@ public class FolderPanel extends JPanel {
 
 		if(name.trim().length() == 0) {
 			name = "Local Disk(" + file.getPath().replace("\\", "") + ")";
-			img = new ImageIcon(ICONPATH + "extensions/harddisk.png");
+			img = new ImageIcon(ICONPATH + "other/harddisk.png");
 		}
 
 		// Bad check for images
@@ -459,8 +459,16 @@ public class FolderPanel extends JPanel {
 		}
 
 		if(img==null) {
-			if(iconName=="folder.png" && file.list()!=null && file.list().length==0)
-				img = new ImageIcon(ICONPATH + "other/" + "folderempty.png");
+			if(iconName=="folder.png") {
+				if(file.list()!=null && file.list().length==0)
+					img = new ImageIcon(ICONPATH + "other/" + "folderempty.png");
+				else {
+					img = new ImageIcon(ICONPATH + "other/" + "folder.png");
+				}
+			}
+			else if(iconName=="question.png") {
+				img = new ImageIcon(ICONPATH + "other/" + "question.png");
+			}
 			else
 				img = new ImageIcon(ICONPATH + "extensions/" + iconName);
 		}

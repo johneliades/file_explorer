@@ -18,7 +18,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 									FileExplorer.getHiddenFilesOption();
 
 	private static final ImageIcon folderIcon = new ImageIcon(
-		new ImageIcon(ICONPATH + "extensions/folder.png").getImage().
+		new ImageIcon(ICONPATH + "other/folder.png").getImage().
 						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
 
 	private static final ImageIcon folderIconOpen = new ImageIcon(
@@ -30,7 +30,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
 	
 	private static final ImageIcon folderIconDisk = new ImageIcon(
-		new ImageIcon(ICONPATH + "extensions/harddisk.png").getImage().
+		new ImageIcon(ICONPATH + "other/harddisk.png").getImage().
 						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
 
 	public Tree(DefaultMutableTreeNode top) {
@@ -61,10 +61,10 @@ public class Tree extends JTree implements TreeSelectionListener {
 
 				DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) value;
 				File file = (File) nodo.getUserObject();
-	
+				String name = file.getName();
+
 				TreeModel tmodel = tree.getModel();
 				Object root = tmodel.getRoot();
-				String name = file.getName();
 
 				if(name.trim().length() == 0 && nodo.getParent()==root) {
 					setIcon(folderIconDisk);
