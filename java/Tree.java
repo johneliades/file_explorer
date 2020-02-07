@@ -28,6 +28,10 @@ public class Tree extends JTree implements TreeSelectionListener {
 	private static final ImageIcon folderIconEmpty = new ImageIcon(
 		new ImageIcon(ICONPATH + "other/folderempty.png").getImage().
 						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
+	
+	private static final ImageIcon folderIconDisk = new ImageIcon(
+		new ImageIcon(ICONPATH + "extensions/harddisk.png").getImage().
+						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
 
 	public Tree(DefaultMutableTreeNode top) {
 		super(top);
@@ -35,6 +39,10 @@ public class Tree extends JTree implements TreeSelectionListener {
 		this.setBorder(new EmptyBorder(0, 20, 20, 0)); //top,left,bottom,right
 		this.putClientProperty("JTree.lineStyle", "None");
 		this.setBackground(new Color(53, 53, 53));
+		final Font currentFont = this.getFont();
+		final Font bigFont = new Font(currentFont.getName(), 
+					currentFont.getStyle(), currentFont.getSize() + 1);
+		this.setFont(bigFont);
 
 		this.setEditable(true);
 		this.setCellRenderer(new DefaultTreeCellRenderer() {
@@ -48,12 +56,20 @@ public class Tree extends JTree implements TreeSelectionListener {
 
 				setBackground(new Color(53, 53, 53));
 				setTextNonSelectionColor(Color.WHITE);
-				setTextSelectionColor(Color.RED);
+				setTextSelectionColor(new Color(0, 255, 255));
 				setOpaque(true);
 
 				DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) value;
 				File file = (File) nodo.getUserObject();
-				if(file.list()!=null && file.list().length==0) {
+	
+				TreeModel tmodel = tree.getModel();
+				Object root = tmodel.getRoot();
+				String name = file.getName();
+
+				if(name.trim().length() == 0 && nodo.getParent()==root) {
+					setIcon(folderIconDisk);
+				}
+				else if(file.list()!=null && file.list().length==0) {
 					setIcon(folderIconEmpty);
 				}
 				else if(expanded) {
@@ -200,7 +216,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)
 									getLastSelectedPathComponent();
 		File current;
-		
+	
 		if (node == null) 
 			return;
 

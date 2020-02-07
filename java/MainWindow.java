@@ -73,11 +73,13 @@ public class MainWindow extends JPanel {
 		FolderPanel.showCurrentDirectory(top);
 
 		folderView.setMinimumSize(new Dimension(400, 50));
-		treeView.setMinimumSize(new Dimension(250, 50));
+		treeView.setMinimumSize(new Dimension(220, 50));
 		treeView.getVerticalScrollBar().setValue(0);
 
 		//Add the scroll panes to a split pane.
-		JSplitPaneWithZeroSizeDivider splitPane = new JSplitPaneWithZeroSizeDivider(JSplitPaneWithZeroSizeDivider.HORIZONTAL_SPLIT);
+		JSplitPaneWithZeroSizeDivider splitPane = new 
+					JSplitPaneWithZeroSizeDivider(
+						JSplitPaneWithZeroSizeDivider.HORIZONTAL_SPLIT);
 		splitPane.setLeftComponent(treeView);
 		splitPane.setRightComponent(folderView);
 
