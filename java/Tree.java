@@ -85,7 +85,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 					label.setBorder(new EmptyBorder(15, 0, 0, 0)); //top,left,bottom,right
 				}
 				else if(name.trim().length() == 0 && nodo.getParent()==root) {
-					setText("Local Disk (" + file.getPath().replace("\\", "") + ")");
+					setText(file.getPath().replace("\\", ""));
 					setIcon(folderIconDisk);
 				}
 				else if(file.list()!=null && file.list().length==0) {
