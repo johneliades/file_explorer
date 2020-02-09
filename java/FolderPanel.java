@@ -74,6 +74,28 @@ public class FolderPanel extends JPanel {
 			@Override
 			public void mouseReleased(MouseEvent event) {}
 		});
+
+		this.addKeyListener(new KeyListener() {
+			boolean pressed = false;
+
+			@Override
+			public void keyTyped(KeyEvent e) {}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_F5 && !pressed) {
+					DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
+					pressed = true;
+
+					MainWindow.refresh(lastTreeNodeOpened);
+				}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_F5) {
+					pressed = false;
+				}
+			}
+		});
 	}
 
 	public JPopupMenu getBackgroundPopupMenu() {
@@ -609,6 +631,28 @@ public class FolderPanel extends JPanel {
 			}
 			@Override
 			public void mouseReleased(MouseEvent event) {}
+		});
+
+		panel.addKeyListener(new KeyListener() {
+			boolean pressed = false;
+
+			@Override
+			public void keyTyped(KeyEvent e) {}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_F5 && !pressed) {
+					DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
+					pressed = true;
+
+					MainWindow.refresh(lastTreeNodeOpened);
+				}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_F5) {
+					pressed = false;
+				}
+			}
 		});
 
 		panel.addFocusListener(new FocusListener() {

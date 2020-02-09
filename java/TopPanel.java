@@ -59,6 +59,8 @@ public class TopPanel extends JPanel {
 					JTree tree = MainWindow.getTree();
 					folder = MainWindow.getFolder();
 					searchQuery = searchField.getText();
+					
+					tree.requestFocusInWindow();
 
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 					File top = (File) node.getUserObject();
@@ -78,7 +80,6 @@ public class TopPanel extends JPanel {
 							search(tree, node, searchQuery, gridPanel);
 						}
 					};
-
 					thread.start();
 				}
 			}
