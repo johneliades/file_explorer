@@ -1,10 +1,11 @@
-#small bug if icon has only extension
 #small bug requires soft refresh?: Node is created then external source makes 
-		folder in it and node is clicked again so createnode is not called again.
+		folder in it and node is clicked again so createnode is called but doesnt
+		add the new node.
 #faster rendering of pictures (favourite in chrome)
 #second enter after search causes a buggy search
 #search results make some padding between text and image
 
+#threaded search stops only when finished
 #objects in navigation bar
 #navigate with arrows and enter in folder
 #open as

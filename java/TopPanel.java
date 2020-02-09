@@ -71,10 +71,16 @@ public class TopPanel extends JPanel {
 					gridPanel.setBackground(new Color(53, 53, 53));
 					gridPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); //top,left,bottom,right
 					folder.add(gridPanel);
-					search(tree, node, searchQuery, gridPanel);
-					searchQuery="";
-					folder.repaint();
-					folder.revalidate();
+	
+					Thread thread = new Thread() {
+						public void run() {
+							search(tree, node, searchQuery, gridPanel);
+							folder.repaint();
+							folder.revalidate();
+						}
+					};
+
+					thread.start();
 				}
 			}
 			@Override
@@ -85,7 +91,6 @@ public class TopPanel extends JPanel {
 			@Override
 			public void focusGained(FocusEvent e) {
 				searchField.setText("");
-				searchQuery = "";
 			}
 			public void focusLost(FocusEvent e) {
 				DefaultMutableTreeNode node = Tree.getLastTreeNodeOpened();
@@ -122,8 +127,20 @@ public class TopPanel extends JPanel {
 			img = new ImageIcon(file.getPath());
 		}
 
-		if(img==null)
-			img = new ImageIcon(ICONPATH + "extensions/" + name);
+		if(img==null) {
+			if(name=="folder.png") {
+				if(file.list()!=null && file.list().length==0)
+					img = new ImageIcon(ICONPATH + "other/" + "folderempty.png");
+				else {
+					img = new ImageIcon(ICONPATH + "other/" + "folder.png");
+				}
+			}
+			else if(name=="question.png") {
+				img = new ImageIcon(ICONPATH + "other/" + "question.png");
+			}
+			else
+				img = new ImageIcon(ICONPATH + "extensions/" + name);
+		}
 
 		pict = img.getImage().getScaledInstance(45, 45, Image.SCALE_DEFAULT);
 		img = new ImageIcon(pict);

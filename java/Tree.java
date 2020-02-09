@@ -118,9 +118,6 @@ public class Tree extends JTree implements TreeSelectionListener {
 										path.getLastPathComponent();
 
 				File current;
-
-				String data = node.getUserObject().toString();
-
 				current = (File) node.getUserObject();
 				if (current.isDirectory()) {
 					createNodes(node, 0);
@@ -153,6 +150,13 @@ public class Tree extends JTree implements TreeSelectionListener {
 					return;
 				}
 
+				File current;
+
+				current = (File) node.getUserObject();
+				if (current.isDirectory()) {
+					createNodes(node, 0);
+				}
+
 				FolderPanel.showCurrentDirectory(node);
 			}
 			@Override
@@ -173,6 +177,12 @@ public class Tree extends JTree implements TreeSelectionListener {
 					pressed = true;
 
 					lastTreeNodeOpened = node;
+					File current;
+
+					current = (File) node.getUserObject();
+					if (current.isDirectory()) {
+						createNodes(node, 0);
+					}
 					FolderPanel.showCurrentDirectory(node);
 				}
 			}
