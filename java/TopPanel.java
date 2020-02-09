@@ -146,7 +146,8 @@ public class TopPanel extends JPanel {
 
 		label.setIcon(img);
 		label.setText(file.getPath());
-		
+		label.setBorder(new EmptyBorder(5, 0, 5, 0));
+
 		final Font currentFont = label.getFont();
 		final Font bigFont = new Font(currentFont.getName(), 
 					currentFont.getStyle(), currentFont.getSize() + 1);
@@ -154,38 +155,50 @@ public class TopPanel extends JPanel {
 		label.setForeground(Color.WHITE);
 		label.addMouseListener(new MouseListener(){
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
+			public void mouseClicked(MouseEvent arg0) {}
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+			}
+			@Override
+			public void mousePressed(MouseEvent event) {
 				JTree tree = MainWindow.getTree();
 				JPanel folder = MainWindow.getFolder();
 
 				String fullPath = label.getText();
 				File file = new File(fullPath);
+							
+				label.setForeground(Color.RED);		
 
-				if(file.isDirectory()) {
-					TreePath path = new TreePath(node.getPath());
-					tree.setSelectionPath(path);
-					tree.scrollPathToVisible(path);
-					tree.expandPath(path);
+				if(event.getButton() == MouseEvent.BUTTON1) {
+					if(file.isDirectory()) {
+						TreePath path = new TreePath(node.getPath());
+						tree.setSelectionPath(path);
+						tree.scrollPathToVisible(path);
+						tree.expandPath(path);
 
-					FolderPanel.showCurrentDirectory(node); 
+						FolderPanel.showCurrentDirectory(node); 
+					}
+					else {
+						try {
+							Desktop.getDesktop().open(file);
+						}
+						catch(IOException e) {
+
+						}
+					}
 				}
-				else {
-					try {
-						Desktop.getDesktop().open(file);
-					}
-					catch(IOException e) {
-
-					}
+				else if(event.getButton() == MouseEvent.BUTTON3) {
+					System.out.println("right click");
 				}
 			}
 			@Override
-			public void mouseReleased(MouseEvent arg0) {}
+			public void mouseExited(MouseEvent arg0) {
+				label.setForeground(Color.WHITE);		
+			}
 			@Override
-			public void mousePressed(MouseEvent arg0) {}
-			@Override
-			public void mouseExited(MouseEvent arg0) {}
-			@Override
-			public void mouseEntered(MouseEvent arg0) {}
+			public void mouseEntered(MouseEvent arg0) {
+				label.setForeground(new Color(0, 255, 255));		
+			}
 		});
 		
 		return label;
@@ -195,9 +208,6 @@ public class TopPanel extends JPanel {
 		int numChild=tree.getModel().getChildCount(top);
 		DefaultMutableTreeNode current;
 		File topFile = (File) top.getUserObject();
-		
-		folder.repaint();
-		folder.revalidate();
 
 		if(numChild==0)
 			return; 
@@ -214,6 +224,8 @@ public class TopPanel extends JPanel {
 
 			if(element.getName().contains(searchQuery)) {
 				gridPanel.add(getSmallIcon("folder.png", element, current));
+				folder.repaint();
+				folder.revalidate();
 			}
 			
 			File children[] = element.listFiles();
@@ -225,6 +237,9 @@ public class TopPanel extends JPanel {
 						gridPanel.add(getSmallIcon(Utility.getExtension(child.getName()) + ".png", child, current));
 					else
 						gridPanel.add(getSmallIcon("question.png", child, current));
+				
+					folder.repaint();
+					folder.revalidate();
 				} 
 			}
 
