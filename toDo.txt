@@ -6,6 +6,7 @@
 #search results make some padding between text and image
 
 #threaded search stops only when finished
+#entering a folder from search doesnt mark it as last opened? refresh fails
 #objects in navigation bar
 #navigate with arrows and enter in folder
 #open as
