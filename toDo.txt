@@ -1,12 +1,12 @@
 #small bug requires soft refresh?: Node is created then external source makes 
 		folder in it and node is clicked again so createnode is called but doesnt
 		add the new node.
+
 #search results make some padding between text and image
 #the existence of the second panel behind wraplayout causes bug in positioning of items
 	when search is running
-#threaded search stops only when finished
-
 #consider using jtable instead of gridlayout in search
+#threaded search stops only when finished
 #objects in navigation bar
 #faster rendering of pictures (favourite in chrome)
 #navigate with arrows and enter in folder
