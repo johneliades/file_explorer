@@ -13,6 +13,7 @@ import java.util.*;
 public class TopPanel extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	static Set<String> iconSet = FileExplorer.addExtensions();
+	static JPanel folder;
 
 	private static JTextField searchField, navigationField;
 	private static String searchQuery = "";
@@ -56,7 +57,7 @@ public class TopPanel extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 					JTree tree = MainWindow.getTree();
-					JPanel folder = MainWindow.getFolder();
+					folder = MainWindow.getFolder();
 					searchQuery = searchField.getText();
 
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
@@ -75,8 +76,6 @@ public class TopPanel extends JPanel {
 					Thread thread = new Thread() {
 						public void run() {
 							search(tree, node, searchQuery, gridPanel);
-							folder.repaint();
-							folder.revalidate();
 						}
 					};
 
@@ -196,6 +195,9 @@ public class TopPanel extends JPanel {
 		int numChild=tree.getModel().getChildCount(top);
 		DefaultMutableTreeNode current;
 		File topFile = (File) top.getUserObject();
+		
+		folder.repaint();
+		folder.revalidate();
 
 		if(numChild==0)
 			return; 
