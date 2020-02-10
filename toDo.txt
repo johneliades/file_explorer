@@ -1,3 +1,7 @@
++=======+
+|BUGLIST|
++-------+
+
 #small bug requires soft refresh?: Node is created then external source makes 
 		folder in it and node is clicked again so createnode is called but doesnt
 		add the new node. Maybe create a garbage cleaner in createnode.
@@ -6,18 +10,30 @@
 		when search is running
 #threaded search stops only when finished
 
-#consider using jtable instead of gridlayout in search
-#objects in navigation bar
-#faster rendering of pictures (favourite in chrome)
-#navigate with arrows and enter in folder
-#open as
++=======+
+|EZ_FAST|
++=======+
+
+#consider using focuslost instead of remembering last panel selected
+#enter in folder
 #delete
+#objects in navigation bar
+#right click at tree
+#button back/forward
+#mouse button back/forward
+
++=======+
+|_LATER_|
++=======+
+
+#consider using jtable instead of gridlayout in search
+#faster rendering of pictures (favourite in chrome)
+#navigate with arrows in folder
+#open as
 #cut ctrl+X
 #copy ctrl+C
 #paste ctrl+V
 #select all ctrl+A
-#mouse button back/forward
-#right click at tree
 #drag n drop
 #zip/unzip
 #ftp
