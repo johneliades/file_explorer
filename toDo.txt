@@ -1,6 +1,6 @@
 +=======+
 |BUGLIST|
-+-------+
++=======+
 
 #small bug requires soft refresh?: Node is created then external source makes 
 		folder in it and node is clicked again so createnode is called but doesnt
@@ -14,9 +14,7 @@
 |EZ_FAST|
 +=======+
 
-#consider using focuslost instead of remembering last panel selected
-#enter in folder
-#delete
+#folder keys select the first element
 #objects in navigation bar
 #right click at tree
 #button back/forward

@@ -96,6 +96,13 @@ public class FolderPanel extends JPanel {
 				}
 			}
 		});
+
+		this.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+			}
+			public void focusLost(FocusEvent e) {}
+		});	
 	}
 
 	public JPopupMenu getBackgroundPopupMenu() {
@@ -603,25 +610,7 @@ public class FolderPanel extends JPanel {
 				// /Get node and name of last selected panel
 
 				if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
-					if(file.isDirectory()) {
-						TreePath path = new TreePath(node.getPath());
-						tree.setSelectionPath(path);
-						tree.scrollPathToVisible(path);
-						tree.expandPath(path);
-					
-						Tree.setLastTreeNodeOpened(node);
-						MainWindow.setLastPanelNode(null);
-						showCurrentDirectory(node);
-					}
-					else {
-						try {
-							Desktop.getDesktop().open(file);
-						}
-						catch(IOException e) {
-
-						}
-
-					}
+					enterFolder(file, node);
 				}
 				else if(event.getButton() == MouseEvent.BUTTON3) {
 					JPopupMenu menu = getFilePopupMenu();
@@ -634,25 +623,49 @@ public class FolderPanel extends JPanel {
 		});
 
 		panel.addKeyListener(new KeyListener() {
-			boolean pressed = false;
-
 			@Override
 			public void keyTyped(KeyEvent e) {}
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_F5 && !pressed) {
-					DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
-					pressed = true;
+				DefaultMutableTreeNode lastTreeNodeOpened = 
+									Tree.getLastTreeNodeOpened();
+				
+				switch(e.getKeyCode()) {
+					case KeyEvent.VK_F5:
+						MainWindow.refresh(lastTreeNodeOpened);
+						break;
 
-					MainWindow.refresh(lastTreeNodeOpened);
+					case KeyEvent.VK_DELETE:
+						MainWindow.deleteSon(lastTreeNodeOpened);		
+						break;
+				
+					case KeyEvent.VK_F2:
+						MainWindow.renameSon(lastTreeNodeOpened);		
+						break;
+				
+					case KeyEvent.VK_ENTER:
+						enterFolder(file, node);
+						break;
+				
+					case KeyEvent.VK_LEFT:
+						System.out.println("Left Arrow");
+						break;
+				
+					case KeyEvent.VK_DOWN:
+						System.out.println("Down Arrow");
+						break;
+				
+					case KeyEvent.VK_UP:
+						System.out.println("Up Arrow");
+						break;
+				
+					case KeyEvent.VK_RIGHT:
+						System.out.println("Right Arrow");
+						break;
 				}
 			}
 			@Override
-			public void keyReleased(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_F5) {
-					pressed = false;
-				}
-			}
+			public void keyReleased(KeyEvent e) {}
 		});
 
 		panel.addFocusListener(new FocusListener() {
@@ -666,6 +679,29 @@ public class FolderPanel extends JPanel {
 		});
 
 		return panel;
+	}
+
+	static private void enterFolder(File file, DefaultMutableTreeNode node) {
+		JTree tree = MainWindow.getTree();
+
+		if(file.isDirectory()) {
+			TreePath path = new TreePath(node.getPath());
+			tree.setSelectionPath(path);
+			tree.scrollPathToVisible(path);
+			tree.expandPath(path);
+		
+			Tree.setLastTreeNodeOpened(node);
+			MainWindow.setLastPanelNode(null);
+			showCurrentDirectory(node);
+		}
+		else {
+			try {
+				Desktop.getDesktop().open(file);
+			}
+			catch(IOException e) {
+
+			}
+		}
 	}
 
 	public static JPanel getLastPanelSelected() {
