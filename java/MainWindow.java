@@ -132,7 +132,7 @@ public class MainWindow extends JPanel {
 		Image folderImg;
 		int i;
 
-		nameOld = FolderPanel.getLastPanelName();
+		nameOld = FolderPanel.getCurrentPanelName();
 
 		File f = new File(filePath + "/" + nameOld);
 
@@ -195,8 +195,8 @@ public class MainWindow extends JPanel {
 		String filePath = ((File) node.getUserObject()).getPath();
 		DefaultMutableTreeNode current=null;
 		String name="";
-		String lastPanelName = FolderPanel.getLastPanelName();
-		JPanel lastPanelSelected = FolderPanel.getLastPanelSelected();
+		String lastPanelName = FolderPanel.getCurrentPanelName();
+		JPanel lastPanelSelected = FolderPanel.getCurrentPanelSelected();
 
 		ImageIcon img=null;
 		Image folderImg;

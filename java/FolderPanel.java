@@ -16,8 +16,8 @@ public class FolderPanel extends JPanel {
 	static Set<String> iconSet = FileExplorer.addExtensions();
 	private String windowsTopName = Tree.getWindowsTopName();
 
-	private static JPanel lastPanelSelected; 
-	private static String lastPanelName="";
+	private static JPanel currentPanelSelected; 
+	private static String currentPanelName="";
 
 	public FolderPanel() {
 		//Create the folder viewing pane.
@@ -46,6 +46,7 @@ public class FolderPanel extends JPanel {
 					Tree.findExistingParent(f);
 					return;
 				}
+
 
 				if(event.getButton() == MouseEvent.BUTTON1) {
 					clearLastPanelSelection();
@@ -86,7 +87,7 @@ public class FolderPanel extends JPanel {
 						panel.setBorder(BorderFactory.createLineBorder(Color.white));
 						panel.requestFocusInWindow();
 
-						lastPanelSelected=panel;
+						currentPanelSelected=panel;
 
 						break;
 				}
@@ -554,12 +555,12 @@ public class FolderPanel extends JPanel {
 			public void mouseClicked(MouseEvent event) {}
 			@Override
 			public void mouseEntered(MouseEvent event) {		
-				if(lastPanelSelected!=panel)
+				if(currentPanelSelected!=panel)
 					panel.setBackground(new Color(0, 170, 170));
 			}
 			@Override
 			public void mouseExited(MouseEvent event) {
-				if(lastPanelSelected!=panel)
+				if(currentPanelSelected!=panel)
 					panel.setBackground(new Color(53, 53, 53));
 			}
 			@Override
@@ -585,15 +586,15 @@ public class FolderPanel extends JPanel {
 
 				panel.setBackground(new Color(0, 100, 100));
 				panel.setBorder(BorderFactory.createLineBorder(Color.white));
-				lastPanelSelected=panel;
+				currentPanelSelected=panel;
 
 				// Get node and name of last selected panel
-				Component curComponents[] = lastPanelSelected.getComponents();
+				Component curComponents[] = currentPanelSelected.getComponents();
 				for(Component comp : curComponents)
 					if(comp.getName()!=null && comp.getName()!="")
 						name = comp.getName();
 
-				lastPanelName = name;
+				currentPanelName = name;
 
 				int i, numChild=tree.getModel().getChildCount(parent);
 				for(i=0; i<numChild; i++) { 
@@ -631,9 +632,13 @@ public class FolderPanel extends JPanel {
 				DefaultMutableTreeNode lastTreeNodeOpened = 
 									Tree.getLastTreeNodeOpened();
 				JPanel current=null;
-				int position = WrapLayout.getIndex(lastPanelSelected);
+				int position = WrapLayout.getIndex(currentPanelSelected);
 
 				switch(e.getKeyCode()) {
+					case KeyEvent.VK_F2:
+						MainWindow.renameSon(lastTreeNodeOpened);		
+						break;
+
 					case KeyEvent.VK_F5:
 						MainWindow.refresh(lastTreeNodeOpened);
 						break;
@@ -642,47 +647,36 @@ public class FolderPanel extends JPanel {
 						MainWindow.deleteSon(lastTreeNodeOpened);		
 						break;
 				
-					case KeyEvent.VK_F2:
-						MainWindow.renameSon(lastTreeNodeOpened);		
-						break;
-				
 					case KeyEvent.VK_ENTER:
 						enterFolder(file, node);
 						break;
 				
 					case KeyEvent.VK_LEFT:
 						current = (JPanel) WrapLayout.getComponent(position - 1);
-						clearLastPanelSelection();
 						break;
 				
 					case KeyEvent.VK_DOWN:
 						current = (JPanel) WrapLayout.
 									getComponent(position + WrapLayout.getRowLength());
-						clearLastPanelSelection();
-
 						break;
 				
 					case KeyEvent.VK_UP:
 						current = (JPanel) WrapLayout.
 									getComponent(position - WrapLayout.getRowLength());
-						if(current!=null) {
-							clearLastPanelSelection();
-						}					
 						break;
 				
 					case KeyEvent.VK_RIGHT:
 						current = (JPanel) WrapLayout.getComponent(position + 1);
-						clearLastPanelSelection();
-
 						break;
 					default:
 				}
 
 				if(current!=null) {
+					clearLastPanelSelection();
 					current.setBackground(new Color(0, 100, 100));
 					current.setBorder(BorderFactory.createLineBorder(Color.white));
 					current.requestFocusInWindow();
-					lastPanelSelected = current;
+					currentPanelSelected = current;
 				}
 			}
 			@Override
@@ -728,20 +722,20 @@ public class FolderPanel extends JPanel {
 	}
 
 	static private void clearLastPanelSelection() {
-		if(lastPanelSelected!=null) {
-			lastPanelSelected.setBackground(new Color(53, 53, 53));
-			lastPanelSelected.setBorder(BorderFactory.createLineBorder(new Color(53, 53, 53)));
-			lastPanelSelected=null;
+		if(currentPanelSelected!=null) {
+			currentPanelSelected.setBackground(new Color(53, 53, 53));
+			currentPanelSelected.setBorder(BorderFactory.createLineBorder(new Color(53, 53, 53)));
+			currentPanelSelected=null;
 			MainWindow.setLastPanelNode(null);
-			lastPanelName=null;
+			currentPanelName=null;
 		}
 	}
 
-	public static JPanel getLastPanelSelected() {
-		return lastPanelSelected;
+	public static JPanel getCurrentPanelSelected() {
+		return currentPanelSelected;
 	}
 
-	public static String getLastPanelName() {
-		return lastPanelName;
+	public static String getCurrentPanelName() {
+		return currentPanelName;
 	}
 }
