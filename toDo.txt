@@ -2,6 +2,7 @@
 |BUGLIST|
 +=======+
 
+#when going lower that scroll with arrows
 #small bug requires soft refresh?: Node is created then external source makes 
 		folder in it and node is clicked again so createnode is called but doesnt
 		add the new node. Maybe create a garbage cleaner in createnode.
