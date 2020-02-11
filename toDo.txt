@@ -14,7 +14,6 @@
 |EZ_FAST|
 +=======+
 
-#folder keys select the first element
 #objects in navigation bar
 #right click at tree
 #button back/forward
@@ -26,7 +25,6 @@
 
 #consider using jtable instead of gridlayout in search
 #faster rendering of pictures (favourite in chrome)
-#navigate with arrows in folder
 #open as
 #cut ctrl+X
 #copy ctrl+C

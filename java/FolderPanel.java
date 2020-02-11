@@ -48,13 +48,7 @@ public class FolderPanel extends JPanel {
 				}
 
 				if(event.getButton() == MouseEvent.BUTTON1) {
-					if(lastPanelSelected!=null) {
-						lastPanelSelected.setBackground(new Color(53, 53, 53));
-						lastPanelSelected.setBorder(BorderFactory.createLineBorder(new Color(53, 53, 53)));
-						lastPanelSelected=null;
-						MainWindow.setLastPanelNode(null);
-						lastPanelName=null;
-					}
+					clearLastPanelSelection();
 				}
 				else if(event.getButton() == MouseEvent.BUTTON3) {
 					JPopupMenu menu = getBackgroundPopupMenu();
@@ -62,13 +56,7 @@ public class FolderPanel extends JPanel {
 					if(tree.getLastSelectedPathComponent()!=null)
 						menu.show(event.getComponent(), event.getX(), event.getY());
 
-					if(lastPanelSelected!=null) {
-						lastPanelSelected.setBackground(new Color(53, 53, 53));
-						lastPanelSelected.setBorder(BorderFactory.createLineBorder(new Color(53, 53, 53)));
-						lastPanelSelected=null;
-						MainWindow.setLastPanelNode(null);
-						lastPanelName=null;
-					}
+					clearLastPanelSelection();
 				}
 			}
 			@Override
@@ -82,12 +70,27 @@ public class FolderPanel extends JPanel {
 			public void keyTyped(KeyEvent e) {}
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_F5 && !pressed) {
-					DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
-					pressed = true;
+				DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
+				JPanel panel;
 
-					MainWindow.refresh(lastTreeNodeOpened);
+				switch(e.getKeyCode()) {
+					case KeyEvent.VK_F5:
+						MainWindow.refresh(lastTreeNodeOpened);
+						break;
+					case KeyEvent.VK_LEFT:
+					case KeyEvent.VK_UP:
+					case KeyEvent.VK_RIGHT:
+					case KeyEvent.VK_DOWN:
+						panel = (JPanel) WrapLayout.getComponent(0);
+						panel.setBackground(new Color(0, 100, 100));
+						panel.setBorder(BorderFactory.createLineBorder(Color.white));
+						panel.requestFocusInWindow();
+
+						lastPanelSelected=panel;
+
+						break;
 				}
+
 			}
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -578,10 +581,8 @@ public class FolderPanel extends JPanel {
 					return;
 				}
 
-				if(lastPanelSelected!=null) {
-					lastPanelSelected.setBackground(new Color(53, 53, 53));
-					lastPanelSelected.setBorder(BorderFactory.createLineBorder(new Color(53, 53, 53)));
-				}
+				clearLastPanelSelection();
+
 				panel.setBackground(new Color(0, 100, 100));
 				panel.setBorder(BorderFactory.createLineBorder(Color.white));
 				lastPanelSelected=panel;
@@ -629,7 +630,9 @@ public class FolderPanel extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				DefaultMutableTreeNode lastTreeNodeOpened = 
 									Tree.getLastTreeNodeOpened();
-				
+				JPanel panel;
+				int position;
+
 				switch(e.getKeyCode()) {
 					case KeyEvent.VK_F5:
 						MainWindow.refresh(lastTreeNodeOpened);
@@ -648,20 +651,56 @@ public class FolderPanel extends JPanel {
 						break;
 				
 					case KeyEvent.VK_LEFT:
-						System.out.println("Left Arrow");
+						position = WrapLayout.getIndex(lastPanelSelected);
+						
+						clearLastPanelSelection();
+						panel = (JPanel) WrapLayout.getComponent(position - 1);
+						panel.setBackground(new Color(0, 100, 100));
+						panel.setBorder(BorderFactory.createLineBorder(Color.white));
+						panel.requestFocusInWindow();
+						lastPanelSelected = panel;
 						break;
 				
 					case KeyEvent.VK_DOWN:
-						System.out.println("Down Arrow");
+						position = WrapLayout.getIndex(lastPanelSelected);
+
+						panel = (JPanel) WrapLayout.
+									getComponent(position + WrapLayout.getRowLength());
+						if(panel!=null) {
+							clearLastPanelSelection();
+							panel.setBackground(new Color(0, 100, 100));
+							panel.setBorder(BorderFactory.createLineBorder(Color.white));
+							panel.requestFocusInWindow();
+							lastPanelSelected = panel;
+						}
 						break;
 				
 					case KeyEvent.VK_UP:
-						System.out.println("Up Arrow");
+						position = WrapLayout.getIndex(lastPanelSelected);
+
+						panel = (JPanel) WrapLayout.
+									getComponent(position - WrapLayout.getRowLength());
+						if(panel!=null) {
+							clearLastPanelSelection();
+							panel.setBackground(new Color(0, 100, 100));
+							panel.setBorder(BorderFactory.createLineBorder(Color.white));
+							panel.requestFocusInWindow();
+							lastPanelSelected = panel;
+						}					
 						break;
 				
 					case KeyEvent.VK_RIGHT:
-						System.out.println("Right Arrow");
+						position = WrapLayout.getIndex(lastPanelSelected);
+
+						clearLastPanelSelection();
+						panel = (JPanel) WrapLayout.getComponent(position + 1);
+						panel.setBackground(new Color(0, 100, 100));
+						panel.setBorder(BorderFactory.createLineBorder(Color.white));
+						panel.requestFocusInWindow();
+						lastPanelSelected = panel;
+
 						break;
+					default:
 				}
 			}
 			@Override
@@ -683,6 +722,8 @@ public class FolderPanel extends JPanel {
 
 	static private void enterFolder(File file, DefaultMutableTreeNode node) {
 		JTree tree = MainWindow.getTree();
+			
+		MainWindow.getFolder().requestFocusInWindow();
 
 		if(file.isDirectory()) {
 			TreePath path = new TreePath(node.getPath());
@@ -701,6 +742,16 @@ public class FolderPanel extends JPanel {
 			catch(IOException e) {
 
 			}
+		}
+	}
+
+	static private void clearLastPanelSelection() {
+		if(lastPanelSelected!=null) {
+			lastPanelSelected.setBackground(new Color(53, 53, 53));
+			lastPanelSelected.setBorder(BorderFactory.createLineBorder(new Color(53, 53, 53)));
+			lastPanelSelected=null;
+			MainWindow.setLastPanelNode(null);
+			lastPanelName=null;
 		}
 	}
 

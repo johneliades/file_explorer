@@ -4,6 +4,8 @@ import java.awt.*;
 public class WrapLayout extends FlowLayout {
 	private Dimension preferredLayoutSize;
 	public static int initialHGap, initialVGap;
+	static private java.util.List<Component> components=new java.util.ArrayList<Component>();
+	static private int backuprmembers = 0;
 
 	/**
 	* Constructs a new <code>WrapLayout</code> with a left
@@ -108,7 +110,7 @@ public class WrapLayout extends FlowLayout {
 			int rowHeight = 0;
 
 			int nmembers = target.getComponentCount();
-
+			
 			// Number of first row members
 			int rmembers = 0;
 
@@ -116,19 +118,26 @@ public class WrapLayout extends FlowLayout {
 			int currentRowWidth = 0;
 			boolean first = true;
 
-			for (int i = 0; i < nmembers; i++)
-			{
+			components.clear();
+			for (int i = 0; i < nmembers; i++) {
 				Component m = target.getComponent(i);
 
-				if (m.isVisible())
-				{
+				if (m.isVisible()) {
 					Dimension d = preferred ? m.getPreferredSize() : m.getMinimumSize();
+
+					if(i >= components.size()){
+						components.add(i, m);
+					}
+					else{
+						components.set(i, m);
+					}
 
 					//  Can't add the component to current row. Start a new row.
 
 					if (rowWidth + d.width > maxWidth) {
 						if(first) {
 							rmembers = i;
+							backuprmembers = i;
 							currentRowWidth = rowWidth;
 							first = false;			
 						}
@@ -177,6 +186,31 @@ public class WrapLayout extends FlowLayout {
 
 			return dim;
 		}
+	}
+
+	static public Component getComponent(int position) {
+		if(position >= components.size()) {
+			if(position == components.size())
+				return components.get(components.size() - 1);
+			else
+				return null;
+		}
+		else if(position < 0) {
+			if(position == -1)
+				return components.get(0);
+			else
+				return null;
+		}
+		else
+			return components.get(position);
+	}
+
+	static public int getIndex(Component element) {
+		return components.indexOf(element);
+	}
+
+	static public int getRowLength() {
+		return backuprmembers;
 	}
 
 	/*
