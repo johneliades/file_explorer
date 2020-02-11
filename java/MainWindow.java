@@ -282,7 +282,7 @@ public class MainWindow extends JPanel {
 			lastPanelNode = null;
 			FolderPanel.showCurrentDirectory(node);
 		}
-		else {
+		else if(file.isFile()) {
 			try {
 				Desktop.getDesktop().open(file);
 			}
