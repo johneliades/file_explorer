@@ -117,6 +117,7 @@ public class MainWindow extends JPanel {
 		Tree.setLastTreeNodeOpened(node);
 
 		FolderPanel.showCurrentDirectory(node);
+		folder.requestFocusInWindow();
 	}
 
 	static void renameSon(DefaultMutableTreeNode node) {

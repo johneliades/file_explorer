@@ -19,6 +19,9 @@
 #right click at tree
 #button back/forward
 #mouse button back/forward
+#after refresh last selected item is dropped
+#at startup focus folder
+#backspace for back
 
 +=======+
 |_LATER_|
