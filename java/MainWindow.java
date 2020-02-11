@@ -269,6 +269,29 @@ public class MainWindow extends JPanel {
 		FolderPanel.showCurrentDirectory(node);
 	}
 
+	static public void enterOrOpen(File file, DefaultMutableTreeNode node) {
+		JTree tree = MainWindow.getTree();
+
+		if(file.isDirectory()) {
+			TreePath path = new TreePath(node.getPath());
+			tree.setSelectionPath(path);
+			tree.scrollPathToVisible(path);
+			tree.expandPath(path);
+			
+			Tree.setLastTreeNodeOpened(node);
+			lastPanelNode = null;
+			FolderPanel.showCurrentDirectory(node);
+		}
+		else {
+			try {
+				Desktop.getDesktop().open(file);
+			}
+			catch(IOException e) {
+
+			}
+		}
+	}
+
 	static void removeDirectory(File current) {
 		File children[] = current.listFiles();
 		

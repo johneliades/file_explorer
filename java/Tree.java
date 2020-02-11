@@ -191,11 +191,11 @@ public class Tree extends JTree implements TreeSelectionListener {
 				}
 				else if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 					DefaultMutableTreeNode previous;
-					
+
 					previous = MainWindow.historyPop();
 					if(previous!=null) {
 						File file = (File) previous.getUserObject();
-						FolderPanel.enterFolder(file, previous);
+						MainWindow.enterOrOpen(file, previous);
 					}
 				}
 			}

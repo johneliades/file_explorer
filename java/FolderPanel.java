@@ -96,7 +96,7 @@ public class FolderPanel extends JPanel {
 						if(previous==null)
 							break;
 						File file = (File) previous.getUserObject();
-						enterFolder(file, previous);
+						MainWindow.enterOrOpen(file, previous);
 						MainWindow.getFolder().requestFocusInWindow();
 						break;
 					default:
@@ -623,7 +623,7 @@ public class FolderPanel extends JPanel {
 
 				if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
 					MainWindow.historyPush(Tree.getLastTreeNodeOpened());
-					enterFolder(file, node);
+					MainWindow.enterOrOpen(file, node);
 					MainWindow.getFolder().requestFocusInWindow();
 				}
 				else if(event.getButton() == MouseEvent.BUTTON3) {
@@ -661,7 +661,7 @@ public class FolderPanel extends JPanel {
 				
 					case KeyEvent.VK_ENTER:
 						MainWindow.historyPush(Tree.getLastTreeNodeOpened());
-						enterFolder(file, node);
+						MainWindow.enterOrOpen(file, node);
 						MainWindow.getFolder().requestFocusInWindow();
 
 						break;
@@ -689,7 +689,7 @@ public class FolderPanel extends JPanel {
 						if(previous==null || previous.getPath().equals(windowsTopName))
 							break;
 						File file = (File) previous.getUserObject();
-						enterFolder(file, previous);
+						MainWindow.enterOrOpen(file, previous);
 						MainWindow.getFolder().requestFocusInWindow();
 
 						break;
@@ -719,29 +719,6 @@ public class FolderPanel extends JPanel {
 		});
 
 		return panel;
-	}
-
-	static public void enterFolder(File file, DefaultMutableTreeNode node) {
-		JTree tree = MainWindow.getTree();
-
-		if(file.isDirectory()) {
-			TreePath path = new TreePath(node.getPath());
-			tree.setSelectionPath(path);
-			tree.scrollPathToVisible(path);
-			tree.expandPath(path);
-			
-			Tree.setLastTreeNodeOpened(node);
-			MainWindow.setLastPanelNode(null);
-			showCurrentDirectory(node);
-		}
-		else {
-			try {
-				Desktop.getDesktop().open(file);
-			}
-			catch(IOException e) {
-
-			}
-		}
 	}
 
 	static private void clearLastPanelSelection() {
