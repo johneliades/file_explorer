@@ -71,7 +71,8 @@ public class FolderPanel extends JPanel {
 			public void keyTyped(KeyEvent e) {}
 			@Override
 			public void keyPressed(KeyEvent e) {
-				DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
+				DefaultMutableTreeNode previous, 
+						lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
 				JPanel panel;
 
 				switch(e.getKeyCode()) {
@@ -90,6 +91,15 @@ public class FolderPanel extends JPanel {
 						currentPanelSelected=panel;
 
 						break;
+					case KeyEvent.VK_BACK_SPACE:
+						previous = MainWindow.historyPop();
+						if(previous==null)
+							break;
+						File file = (File) previous.getUserObject();
+						System.out.println(file.getName());
+						enterFolder(file, previous);
+						break;
+					default:
 				}
 
 			}
@@ -612,6 +622,7 @@ public class FolderPanel extends JPanel {
 				// /Get node and name of last selected panel
 
 				if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
+					MainWindow.historyPush(Tree.getLastTreeNodeOpened());
 					enterFolder(file, node);
 				}
 				else if(event.getButton() == MouseEvent.BUTTON3) {
@@ -648,6 +659,7 @@ public class FolderPanel extends JPanel {
 						break;
 				
 					case KeyEvent.VK_ENTER:
+						MainWindow.historyPush(Tree.getLastTreeNodeOpened());
 						enterFolder(file, node);
 						break;
 				
@@ -706,7 +718,7 @@ public class FolderPanel extends JPanel {
 			tree.setSelectionPath(path);
 			tree.scrollPathToVisible(path);
 			tree.expandPath(path);
-		
+			
 			Tree.setLastTreeNodeOpened(node);
 			MainWindow.setLastPanelNode(null);
 			showCurrentDirectory(node);

@@ -14,7 +14,9 @@ public class MainWindow extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	private static final boolean showHiddenFiles = FileExplorer.getHiddenFilesOption();
 	private String windowsTopName = Tree.getWindowsTopName();
-	
+		static private java.util.Stack<DefaultMutableTreeNode> history = 
+				new java.util.Stack<DefaultMutableTreeNode>();
+
 	private static DefaultMutableTreeNode lastPanelNode=null;
 
 	private static JPanel folder;
@@ -297,4 +299,15 @@ public class MainWindow extends JPanel {
 		lastPanelNode = node;
 	}
 
+	public static void historyPush(DefaultMutableTreeNode node) {
+		if(history.empty() || (!history.empty() && history.peek()!=node))
+			history.push(Tree.getLastTreeNodeOpened());
+	}
+
+	public static DefaultMutableTreeNode historyPop() {
+		if(!history.empty())
+			return history.pop();
+		else
+			return null;
+	}
 }

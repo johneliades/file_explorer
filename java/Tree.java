@@ -139,6 +139,8 @@ public class Tree extends JTree implements TreeSelectionListener {
 				if(node==null)
 					return;
 				
+				if(lastTreeNodeOpened!=null)	
+					MainWindow.historyPush(lastTreeNodeOpened);
 				lastTreeNodeOpened = node;
 
 				String filePath = ((File) 
@@ -156,7 +158,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 				if (current.isDirectory()) {
 					createNodes(node, 0);
 				}
-
+				
 				FolderPanel.showCurrentDirectory(node);
 			}
 			@Override
@@ -175,7 +177,9 @@ public class Tree extends JTree implements TreeSelectionListener {
 										getLastSelectedPathComponent();
 
 					pressed = true;
-
+				
+					if(lastTreeNodeOpened!=null)	
+						MainWindow.historyPush(lastTreeNodeOpened);
 					lastTreeNodeOpened = node;
 					File current;
 

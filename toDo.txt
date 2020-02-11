@@ -27,6 +27,7 @@
 |_LATER_|
 +=======+
 
+#maybe NodeInfo is no longer necessary
 #consider using jtable instead of gridlayout in search
 #faster rendering of pictures (favourite in chrome)
 #open as
