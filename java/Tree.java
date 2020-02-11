@@ -189,6 +189,15 @@ public class Tree extends JTree implements TreeSelectionListener {
 					}
 					FolderPanel.showCurrentDirectory(node);
 				}
+				else if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+					DefaultMutableTreeNode previous;
+					
+					previous = MainWindow.historyPop();
+					if(previous!=null) {
+						File file = (File) previous.getUserObject();
+						FolderPanel.enterFolder(file, previous);
+					}
+				}
 			}
 			@Override
 			public void keyReleased(KeyEvent e) {
