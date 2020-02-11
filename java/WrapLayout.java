@@ -190,10 +190,7 @@ public class WrapLayout extends FlowLayout {
 
 	static public Component getComponent(int position) {
 		if(position >= components.size()) {
-			if(position == components.size())
-				return components.get(components.size() - 1);
-			else
-				return null;
+			return components.get(components.size() - 1);
 		}
 		else if(position < 0) {
 			if(position == -1)

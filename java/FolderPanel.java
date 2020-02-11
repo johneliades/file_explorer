@@ -630,8 +630,8 @@ public class FolderPanel extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				DefaultMutableTreeNode lastTreeNodeOpened = 
 									Tree.getLastTreeNodeOpened();
-				JPanel panel;
-				int position;
+				JPanel current=null;
+				int position = WrapLayout.getIndex(lastPanelSelected);
 
 				switch(e.getKeyCode()) {
 					case KeyEvent.VK_F5:
@@ -651,56 +651,38 @@ public class FolderPanel extends JPanel {
 						break;
 				
 					case KeyEvent.VK_LEFT:
-						position = WrapLayout.getIndex(lastPanelSelected);
-						
+						current = (JPanel) WrapLayout.getComponent(position - 1);
 						clearLastPanelSelection();
-						panel = (JPanel) WrapLayout.getComponent(position - 1);
-						panel.setBackground(new Color(0, 100, 100));
-						panel.setBorder(BorderFactory.createLineBorder(Color.white));
-						panel.requestFocusInWindow();
-						lastPanelSelected = panel;
 						break;
 				
 					case KeyEvent.VK_DOWN:
-						position = WrapLayout.getIndex(lastPanelSelected);
-
-						panel = (JPanel) WrapLayout.
+						current = (JPanel) WrapLayout.
 									getComponent(position + WrapLayout.getRowLength());
-						if(panel!=null) {
-							clearLastPanelSelection();
-							panel.setBackground(new Color(0, 100, 100));
-							panel.setBorder(BorderFactory.createLineBorder(Color.white));
-							panel.requestFocusInWindow();
-							lastPanelSelected = panel;
-						}
+						clearLastPanelSelection();
+
 						break;
 				
 					case KeyEvent.VK_UP:
-						position = WrapLayout.getIndex(lastPanelSelected);
-
-						panel = (JPanel) WrapLayout.
+						current = (JPanel) WrapLayout.
 									getComponent(position - WrapLayout.getRowLength());
-						if(panel!=null) {
+						if(current!=null) {
 							clearLastPanelSelection();
-							panel.setBackground(new Color(0, 100, 100));
-							panel.setBorder(BorderFactory.createLineBorder(Color.white));
-							panel.requestFocusInWindow();
-							lastPanelSelected = panel;
 						}					
 						break;
 				
 					case KeyEvent.VK_RIGHT:
-						position = WrapLayout.getIndex(lastPanelSelected);
-
+						current = (JPanel) WrapLayout.getComponent(position + 1);
 						clearLastPanelSelection();
-						panel = (JPanel) WrapLayout.getComponent(position + 1);
-						panel.setBackground(new Color(0, 100, 100));
-						panel.setBorder(BorderFactory.createLineBorder(Color.white));
-						panel.requestFocusInWindow();
-						lastPanelSelected = panel;
 
 						break;
 					default:
+				}
+
+				if(current!=null) {
+					current.setBackground(new Color(0, 100, 100));
+					current.setBorder(BorderFactory.createLineBorder(Color.white));
+					current.requestFocusInWindow();
+					lastPanelSelected = current;
 				}
 			}
 			@Override
