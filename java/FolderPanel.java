@@ -93,7 +93,7 @@ public class FolderPanel extends JPanel {
 						break;
 					case KeyEvent.VK_BACK_SPACE:
 						previous = MainWindow.historyPop();
-						if(previous==null || previous.getPath().equals(windowsTopName))
+						if(previous==null)
 							break;
 						File file = (File) previous.getUserObject();
 						enterFolder(file, previous);
