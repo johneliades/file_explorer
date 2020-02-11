@@ -14,7 +14,7 @@ public class FolderPanel extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	private static final boolean showHiddenFiles = FileExplorer.getHiddenFilesOption();
 	static Set<String> iconSet = FileExplorer.addExtensions();
-	private String windowsTopName = Tree.getWindowsTopName();
+	private static String windowsTopName = Tree.getWindowsTopName();
 
 	private static JPanel currentPanelSelected; 
 	private static String currentPanelName="";
@@ -93,10 +93,9 @@ public class FolderPanel extends JPanel {
 						break;
 					case KeyEvent.VK_BACK_SPACE:
 						previous = MainWindow.historyPop();
-						if(previous==null)
+						if(previous==null || previous.getPath().equals(windowsTopName))
 							break;
 						File file = (File) previous.getUserObject();
-						System.out.println(file.getName());
 						enterFolder(file, previous);
 						break;
 					default:
@@ -640,7 +639,7 @@ public class FolderPanel extends JPanel {
 			public void keyTyped(KeyEvent e) {}
 			@Override
 			public void keyPressed(KeyEvent e) {
-				DefaultMutableTreeNode lastTreeNodeOpened = 
+				DefaultMutableTreeNode previous, lastTreeNodeOpened = 
 									Tree.getLastTreeNodeOpened();
 				JPanel current=null;
 				int position = WrapLayout.getIndex(currentPanelSelected);
@@ -680,6 +679,15 @@ public class FolderPanel extends JPanel {
 					case KeyEvent.VK_RIGHT:
 						current = (JPanel) WrapLayout.getComponent(position + 1);
 						break;
+
+					case KeyEvent.VK_BACK_SPACE:
+						previous = MainWindow.historyPop();
+						if(previous==null || previous.getPath().equals(windowsTopName))
+							break;
+						File file = (File) previous.getUserObject();
+						System.out.println(file.getName());
+						enterFolder(file, previous);
+						break;
 					default:
 				}
 
@@ -710,7 +718,7 @@ public class FolderPanel extends JPanel {
 
 	static private void enterFolder(File file, DefaultMutableTreeNode node) {
 		JTree tree = MainWindow.getTree();
-			
+
 		MainWindow.getFolder().requestFocusInWindow();
 
 		if(file.isDirectory()) {

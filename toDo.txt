@@ -3,6 +3,7 @@
 +=======+
 
 #when going lower that scroll with arrows
+#history back on collapsed tree buggy behaviour
 #small bug requires soft refresh?: Node is created then external source makes 
 		folder in it and node is clicked again so createnode is called but doesnt
 		add the new node. Maybe create a garbage cleaner in createnode.
@@ -15,13 +16,12 @@
 |EZ_FAST|
 +=======+
 
+#at startup focus folder
 #objects in navigation bar
 #right click at tree
 #button back/forward
 #mouse button back/forward
 #after refresh last selected item is dropped
-#at startup focus folder
-#backspace for back
 
 +=======+
 |_LATER_|
