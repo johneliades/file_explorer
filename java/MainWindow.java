@@ -13,7 +13,7 @@ import java.util.*;
 public class MainWindow extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	private static final boolean showHiddenFiles = FileExplorer.getHiddenFilesOption();
-	private String windowsTopName = Tree.getWindowsTopName();
+	private static String windowsTopName = Tree.getWindowsTopName();
 		static private java.util.Stack<DefaultMutableTreeNode> history = 
 				new java.util.Stack<DefaultMutableTreeNode>();
 
@@ -38,7 +38,6 @@ public class MainWindow extends JPanel {
 			}
 		}
 
-		historyPush(top);
 		Tree.setLastTreeNodeOpened(top);
 
 		//Create a tree that allows one selection at a time.
@@ -324,17 +323,57 @@ public class MainWindow extends JPanel {
 	}
 
 	public static void historyPush(DefaultMutableTreeNode node) {
+		ImageIcon img;
+		Image pict;
+
 		if(history.empty() || (!history.empty() && history.peek()!=node)) {
 			history.push(node);
+			img = new ImageIcon(FileExplorer.getIconPath() + "other/backarrow.png");
+			pict = img.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT);
+			img = new ImageIcon(pict);
+			TopPanel.getButtonBack().setIcon(img);
 		}
 	}
 
 	public static DefaultMutableTreeNode historyPop() {
-		if(history.size()>1)
+		ImageIcon img;
+		Image pict;
+
+		if(!history.empty()) {
+			if(history.size()==1) {
+				img = new ImageIcon(FileExplorer.getIconPath() + "other/grayedback.png");
+				pict = img.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT);
+				img = new ImageIcon(pict);
+				TopPanel.getButtonBack().setIcon(img);
+			}
 			return history.pop();
-		else if(history.size()==1)
-			return history.peek();
+		}
 
 		return null;
+	}
+
+	public static void historyBack() {
+		DefaultMutableTreeNode previous,
+						lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
+
+		previous = historyPop();
+		if(previous==null)
+			return;
+		File file = (File) previous.getUserObject();
+
+		if(file.getName().equals(windowsTopName) && !file.exists()) {
+			TreePath path = new TreePath(previous.getPath());
+
+			tree.setSelectionPath(path);
+			tree.scrollPathToVisible(path);
+			tree.expandPath(path);
+
+			Tree.setLastTreeNodeOpened(previous);
+			FolderPanel.showCurrentDirectory(previous);
+			getFolder().requestFocusInWindow();
+			return;
+		}
+		enterOrOpen(file, previous);
+		getFolder().requestFocusInWindow();
 	}
 }

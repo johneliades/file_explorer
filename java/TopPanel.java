@@ -14,17 +14,17 @@ public class TopPanel extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	static Set<String> iconSet = FileExplorer.addExtensions();
 	static JPanel folder;
-
+	
+	private static JButton buttonBack, buttonForward;
 	private static JTextField searchField, navigationField;
 	private static String searchQuery = "";
-	
+
 	public TopPanel() {
 		super(new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints();
 		this.setBackground(Color.white);
 
-		JButton button;
 		ImageIcon img;
 		Image pict;
 
@@ -33,30 +33,42 @@ public class TopPanel extends JPanel {
 		c.gridx = 0;
 		c.gridy = 0;
 
-		img = new ImageIcon(FileExplorer.getIconPath() + "other/backarrow.png");
-		pict = img.getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT);
+		img = new ImageIcon(FileExplorer.getIconPath() + "other/grayedback.png");
+		pict = img.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT);
 		img = new ImageIcon(pict);
-
-		button = new JButton(img);
-		button.setBorder(BorderFactory.createEmptyBorder());
-		button.setContentAreaFilled(false);
-		button.setPreferredSize(new Dimension(25, 25));
-		this.add(button, c);
+		
+		buttonBack = new JButton(img);
+		buttonBack.setBorder(BorderFactory.createEmptyBorder());
+		buttonBack.setContentAreaFilled(false);
+		buttonBack.setPreferredSize(new Dimension(23, 23));
+		
+		buttonBack.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e){  
+				MainWindow.historyBack();
+			}
+		});
+		this.add(buttonBack, c);
 
 		c.weightx = 0.005;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
 		c.gridy = 0;
 
-		img = new ImageIcon(FileExplorer.getIconPath() + "other/forwardarrow.png");
-		pict = img.getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT);
+		img = new ImageIcon(FileExplorer.getIconPath() + "other/grayedforward.png");
+		pict = img.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT);
 		img = new ImageIcon(pict);
 
-		button = new JButton(img);
-		button.setBorder(BorderFactory.createEmptyBorder());
-		button.setContentAreaFilled(false);
-		button.setPreferredSize(new Dimension(25, 25));
-		this.add(button, c);
+		buttonForward = new JButton(img);
+		buttonForward.setBorder(BorderFactory.createEmptyBorder());
+		buttonForward.setContentAreaFilled(false);
+		buttonForward.setPreferredSize(new Dimension(23, 23));
+	
+		buttonForward.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				MainWindow.getFolder().requestFocusInWindow();
+			}
+		});
+		this.add(buttonForward, c);
 
 		c.weightx = 0.8;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -274,5 +286,13 @@ public class TopPanel extends JPanel {
 
 	public static JTextField getSearchField() {
 		return searchField;
+	}
+
+	public static JButton getButtonBack() {
+		return buttonBack;
+	}
+
+	public static JButton getButtonForward() {
+		return buttonForward;
 	}
 }

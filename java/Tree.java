@@ -193,26 +193,8 @@ public class Tree extends JTree implements TreeSelectionListener {
 						break;
 	
 					case KeyEvent.VK_BACK_SPACE:
-						DefaultMutableTreeNode previous;
+						MainWindow.historyBack();
 
-						previous = MainWindow.historyPop();
-						File file = (File) previous.getUserObject();
-
-						if(file.getName().equals(windowsTopName) && !file.exists()) {
-							TreePath path = new TreePath(previous.getPath());
-							JTree tree = MainWindow.getTree();
-
-							tree.setSelectionPath(path);
-							tree.scrollPathToVisible(path);
-							tree.expandPath(path);
-
-							Tree.setLastTreeNodeOpened(previous);
-							FolderPanel.showCurrentDirectory(previous);
-							MainWindow.getFolder().requestFocusInWindow();
-							break;
-						}
-						MainWindow.enterOrOpen(file, previous);
-						MainWindow.getFolder().requestFocusInWindow();
 						break;
 					default:
 				}
