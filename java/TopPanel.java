@@ -25,22 +25,42 @@ public class TopPanel extends JPanel {
 		this.setBackground(Color.white);
 
 		JButton button;
+		ImageIcon img;
+		Image pict;
 
-		c.weightx = 0.05;
+		c.weightx = 0.005;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
 
-		button = new JButton("");
-		button.setOpaque(false);
+		img = new ImageIcon(FileExplorer.getIconPath() + "other/backarrow.png");
+		pict = img.getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT);
+		img = new ImageIcon(pict);
+
+		button = new JButton(img);
+		button.setBorder(BorderFactory.createEmptyBorder());
 		button.setContentAreaFilled(false);
-		button.setBorderPainted(false);
-		button.setPreferredSize(new Dimension(button.getPreferredSize().width, 25));
+		button.setPreferredSize(new Dimension(25, 25));
+		this.add(button, c);
+
+		c.weightx = 0.005;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 0;
+
+		img = new ImageIcon(FileExplorer.getIconPath() + "other/forwardarrow.png");
+		pict = img.getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT);
+		img = new ImageIcon(pict);
+
+		button = new JButton(img);
+		button.setBorder(BorderFactory.createEmptyBorder());
+		button.setContentAreaFilled(false);
+		button.setPreferredSize(new Dimension(25, 25));
 		this.add(button, c);
 
 		c.weightx = 0.8;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
+		c.gridx = 2;
 		c.gridy = 0;
 
 		navigationField = new JTextField("");
@@ -106,7 +126,7 @@ public class TopPanel extends JPanel {
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.15;
-		c.gridx = 2;
+		c.gridx = 3;
 		c.gridy = 0;
 
 		this.add(searchField, c);
