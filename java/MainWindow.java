@@ -357,8 +357,10 @@ public class MainWindow extends JPanel {
 						lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
 
 		previous = historyPop();
-		if(previous==null)
+		if(previous==null) {
+			getFolder().requestFocusInWindow();
 			return;
+		}
 		File file = (File) previous.getUserObject();
 
 		if(file.getName().equals(windowsTopName) && !file.exists()) {

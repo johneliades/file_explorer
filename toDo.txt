@@ -21,7 +21,6 @@
 #at startup focus folder
 #objects in navigation bar
 #right click at tree
-#button back
 #mouse button back
 #after refresh last selected item is dropped
 
