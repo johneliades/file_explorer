@@ -38,6 +38,7 @@ public class MainWindow extends JPanel {
 			}
 		}
 
+		historyPush(top);
 		Tree.setLastTreeNodeOpened(top);
 
 		//Create a tree that allows one selection at a time.
@@ -323,14 +324,17 @@ public class MainWindow extends JPanel {
 	}
 
 	public static void historyPush(DefaultMutableTreeNode node) {
-		if(history.empty() || (!history.empty() && history.peek()!=node))
-			history.push(Tree.getLastTreeNodeOpened());
+		if(history.empty() || (!history.empty() && history.peek()!=node)) {
+			history.push(node);
+		}
 	}
 
 	public static DefaultMutableTreeNode historyPop() {
-		if(!history.empty())
+		if(history.size()>1)
 			return history.pop();
-		else
-			return null;
+		else if(history.size()==1)
+			return history.peek();
+
+		return null;
 	}
 }

@@ -172,31 +172,49 @@ public class Tree extends JTree implements TreeSelectionListener {
 			public void keyTyped(KeyEvent e) {}
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER && !pressed) {
-					DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
-										getLastSelectedPathComponent();
+				switch(e.getKeyCode()) {
+					case KeyEvent.VK_ENTER:
 
-					pressed = true;
-				
-					if(lastTreeNodeOpened!=null)	
-						MainWindow.historyPush(lastTreeNodeOpened);
-					lastTreeNodeOpened = node;
-					File current;
+						DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
+											getLastSelectedPathComponent();
 
-					current = (File) node.getUserObject();
-					if (current.isDirectory()) {
-						createNodes(node, 0);
-					}
-					FolderPanel.showCurrentDirectory(node);
-				}
-				else if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-					DefaultMutableTreeNode previous;
+						pressed = true;
+					
+						if(lastTreeNodeOpened!=null)	
+							MainWindow.historyPush(lastTreeNodeOpened);
+						lastTreeNodeOpened = node;
+						File current;
 
-					previous = MainWindow.historyPop();
-					if(previous!=null) {
+						current = (File) node.getUserObject();
+						if (current.isDirectory()) {
+							createNodes(node, 0);
+						}
+						FolderPanel.showCurrentDirectory(node);
+						break;
+	
+					case KeyEvent.VK_BACK_SPACE:
+						DefaultMutableTreeNode previous;
+
+						previous = MainWindow.historyPop();
 						File file = (File) previous.getUserObject();
+
+						if(file.getName().equals(windowsTopName) && !file.exists()) {
+							TreePath path = new TreePath(previous.getPath());
+							JTree tree = MainWindow.getTree();
+
+							tree.setSelectionPath(path);
+							tree.scrollPathToVisible(path);
+							tree.expandPath(path);
+
+							Tree.setLastTreeNodeOpened(previous);
+							FolderPanel.showCurrentDirectory(previous);
+							MainWindow.getFolder().requestFocusInWindow();
+							break;
+						}
 						MainWindow.enterOrOpen(file, previous);
-					}
+						MainWindow.getFolder().requestFocusInWindow();
+						break;
+					default:
 				}
 			}
 			@Override

@@ -22,14 +22,16 @@
 #at startup focus folder
 #objects in navigation bar
 #right click at tree
-#button back/forward
-#mouse button back/forward
+#button back
+#mouse button back
 #after refresh last selected item is dropped
 
 +=======+
 |_LATER_|
 +=======+
 
+#button forward
+#mouse button forward
 #maybe NodeInfo is no longer necessary
 #consider using jtable instead of gridlayout in search
 #faster rendering of pictures (favourite in chrome)

@@ -93,11 +93,24 @@ public class FolderPanel extends JPanel {
 						break;
 					case KeyEvent.VK_BACK_SPACE:
 						previous = MainWindow.historyPop();
-						if(previous==null)
-							break;
 						File file = (File) previous.getUserObject();
+
+						if(file.getName().equals(windowsTopName) && !file.exists()) {
+							TreePath path = new TreePath(previous.getPath());
+							JTree tree = MainWindow.getTree();
+
+							tree.setSelectionPath(path);
+							tree.scrollPathToVisible(path);
+							tree.expandPath(path);
+
+							Tree.setLastTreeNodeOpened(previous);
+							FolderPanel.showCurrentDirectory(previous);
+							MainWindow.getFolder().requestFocusInWindow();
+							break;
+						}
 						MainWindow.enterOrOpen(file, previous);
 						MainWindow.getFolder().requestFocusInWindow();
+
 						break;
 					default:
 				}
@@ -294,7 +307,7 @@ public class FolderPanel extends JPanel {
 				curFile = ((File) lastTreeNodeOpened.getUserObject());
 
 				try {		
-					if(curFile.getName().equals(windowsTopName)) {
+					if(curFile.getName().equals(windowsTopName) && !curFile.exists()) {
 						Runtime.getRuntime().exec("cmd /c start explorer");
 						return;
 					}
@@ -686,9 +699,21 @@ public class FolderPanel extends JPanel {
 
 					case KeyEvent.VK_BACK_SPACE:
 						previous = MainWindow.historyPop();
-						if(previous==null || previous.getPath().equals(windowsTopName))
-							break;
 						File file = (File) previous.getUserObject();
+
+						if(file.getName().equals(windowsTopName) && !file.exists()) {
+							TreePath path = new TreePath(previous.getPath());
+							JTree tree = MainWindow.getTree();
+
+							tree.setSelectionPath(path);
+							tree.scrollPathToVisible(path);
+							tree.expandPath(path);
+
+							Tree.setLastTreeNodeOpened(previous);
+							FolderPanel.showCurrentDirectory(previous);
+							MainWindow.getFolder().requestFocusInWindow();
+							break;
+						}
 						MainWindow.enterOrOpen(file, previous);
 						MainWindow.getFolder().requestFocusInWindow();
 
