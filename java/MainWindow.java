@@ -88,6 +88,24 @@ public class MainWindow extends JPanel {
 		splitPane.setLeftComponent(treeView);
 		splitPane.setRightComponent(folderView);
 
+		// Mouse back and forward
+		if (Toolkit.getDefaultToolkit().areExtraMouseButtonsEnabled() && MouseInfo.getNumberOfButtons() > 3) {
+			Toolkit.getDefaultToolkit().addAWTEventListener(event -> {
+				if (event instanceof MouseEvent) {
+					MouseEvent mouseEvent = (MouseEvent) event;
+					if (mouseEvent.getID() == MouseEvent.MOUSE_RELEASED && mouseEvent.getButton() > 3) {
+						if (mouseEvent.getButton() == 4) {
+							TopPanel.historyBack();
+							MainWindow.getFolder().requestFocusInWindow();
+						} else if (mouseEvent.getButton() == 5) {
+							TopPanel.historyForward();
+							MainWindow.getFolder().requestFocusInWindow();
+						}
+					}
+				}
+			}, AWTEvent.MOUSE_EVENT_MASK);
+		}
+
 		//Add the split pane to this panel.
 		add(splitPane);
 	}
