@@ -326,6 +326,9 @@ public class MainWindow extends JPanel {
 		ImageIcon img;
 		Image pict;
 
+		if(node==null)
+			return;
+
 		if(history.empty() || (!history.empty() && history.peek()!=node)) {
 			history.push(node);
 			img = new ImageIcon(FileExplorer.getIconPath() + "other/backarrow.png");

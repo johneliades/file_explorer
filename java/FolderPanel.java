@@ -365,9 +365,9 @@ public class FolderPanel extends JPanel {
 		File currentFile;
 		
 		String FileName;
-		
+	
 		FileName = ((File) node.getUserObject()).getName();
-		
+
 		if(FileName.isEmpty())
 			FileName = ((File) node.getUserObject()).getPath();
 		

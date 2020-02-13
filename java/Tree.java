@@ -126,6 +126,8 @@ public class Tree extends JTree implements TreeSelectionListener {
 		});
 
 		this.addMouseListener(new MouseListener() {
+			DefaultMutableTreeNode last;
+
 			@Override
 			public void mouseClicked(MouseEvent e) {}
 			@Override
@@ -138,8 +140,8 @@ public class Tree extends JTree implements TreeSelectionListener {
 									getLastSelectedPathComponent();
 				if(node==null)
 					return;
-				
-				if(lastTreeNodeOpened!=null)	
+
+				if(lastTreeNodeOpened!=node)	
 					MainWindow.historyPush(lastTreeNodeOpened);
 				lastTreeNodeOpened = node;
 
@@ -158,7 +160,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 				if (current.isDirectory()) {
 					createNodes(node, 0);
 				}
-				
+		
 				FolderPanel.showCurrentDirectory(node);
 			}
 			@Override
@@ -180,7 +182,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 
 						pressed = true;
 					
-						if(lastTreeNodeOpened!=null)	
+						if(lastTreeNodeOpened!=node)
 							MainWindow.historyPush(lastTreeNodeOpened);
 						lastTreeNodeOpened = node;
 						File current;
