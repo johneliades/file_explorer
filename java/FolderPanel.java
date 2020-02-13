@@ -22,7 +22,7 @@ public class FolderPanel extends JPanel {
 	public FolderPanel() {
 		//Create the folder viewing pane.
 		super(new WrapLayout(FlowLayout.LEFT, 10, 10));
-		this.setBackground(new Color(53, 53, 53));
+		this.setBackground(new Color(49, 49, 49));
 
 		this.addMouseListener(new MouseListener() {
 			@Override
@@ -561,8 +561,8 @@ public class FolderPanel extends JPanel {
 
 		label.setName(name);
 		panel.setName(name);
-		panel.setBorder(BorderFactory.createLineBorder(new Color(53, 53, 53)));
-		panel.setBackground(new Color(53, 53, 53));
+		panel.setBorder(BorderFactory.createLineBorder(new Color(49, 49, 49)));
+		panel.setBackground(new Color(49, 49, 49));
 
 		panel.addMouseListener(new MouseListener() {
 			@Override
@@ -575,7 +575,7 @@ public class FolderPanel extends JPanel {
 			@Override
 			public void mouseExited(MouseEvent event) {
 				if(currentPanelSelected!=panel)
-					panel.setBackground(new Color(53, 53, 53));
+					panel.setBackground(new Color(49, 49, 49));
 			}
 			@Override
 			public void mousePressed(MouseEvent event) {
@@ -726,8 +726,8 @@ public class FolderPanel extends JPanel {
 
 	static public void clearLastPanelSelection() {
 		if(currentPanelSelected!=null) {
-			currentPanelSelected.setBackground(new Color(53, 53, 53));
-			currentPanelSelected.setBorder(BorderFactory.createLineBorder(new Color(53, 53, 53)));
+			currentPanelSelected.setBackground(new Color(49, 49, 49));
+			currentPanelSelected.setBorder(BorderFactory.createLineBorder(new Color(49, 49, 49)));
 			currentPanelSelected=null;
 			MainWindow.setLastPanelNode(null);
 			currentPanelName=null;

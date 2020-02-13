@@ -42,7 +42,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 
 		this.setBorder(new EmptyBorder(0, 15, 15, 0)); //top,left,bottom,right
 		this.putClientProperty("JTree.lineStyle", "None");
-		this.setBackground(new Color(53, 53, 53));
+		this.setBackground(new Color(32, 32, 32));
 		final Font currentFont = this.getFont();
 		final Font bigFont = new Font(currentFont.getName(), 
 					currentFont.getStyle(), currentFont.getSize() + 1);
@@ -67,7 +67,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 				JLabel label = (JLabel) super.getTreeCellRendererComponent(tree, 
 									value, sel, expanded, leaf, row, hasFocus );
 
-				setBackground(new Color(53, 53, 53));
+				setBackground(new Color(32, 32, 32));
 				setTextNonSelectionColor(Color.WHITE);
 				setTextSelectionColor(new Color(0, 255, 255));
 				setOpaque(true);
