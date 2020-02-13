@@ -618,6 +618,7 @@ public class FolderPanel extends JPanel {
 
 				if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
 					MainWindow.historyPush(Tree.getLastTreeNodeOpened());
+					MainWindow.clearFuture();
 					MainWindow.enterOrOpen(file, node);
 					MainWindow.getFolder().requestFocusInWindow();
 				}
@@ -656,6 +657,7 @@ public class FolderPanel extends JPanel {
 				
 					case KeyEvent.VK_ENTER:
 						MainWindow.historyPush(Tree.getLastTreeNodeOpened());
+						MainWindow.clearFuture();
 						MainWindow.enterOrOpen(file, node);
 						MainWindow.getFolder().requestFocusInWindow();
 

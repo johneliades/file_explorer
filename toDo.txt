@@ -4,6 +4,9 @@
 
 #when going lower that scroll with arrows
 
+#last node visited not added in future stack
+#the transition from future to past and vice versa needs 2 function calls
+
 #small bug requires soft refresh?: Node is created then external source makes 
 		folder in it and node is clicked again so createnode is called but doesnt
 		add the new node. Maybe create a garbage cleaner in createnode.
@@ -20,14 +23,13 @@
 #objects in navigation bar
 #right click at tree
 #mouse button back
+#mouse button forward
 #after refresh last selected item is dropped
 
 +=======+
 |_LATER_|
 +=======+
 
-#button forward
-#mouse button forward
 #maybe NodeInfo is no longer necessary
 #consider using jtable instead of gridlayout in search
 #faster rendering of pictures (favourite in chrome)

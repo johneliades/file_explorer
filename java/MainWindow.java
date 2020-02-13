@@ -14,8 +14,11 @@ public class MainWindow extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	private static final boolean showHiddenFiles = FileExplorer.getHiddenFilesOption();
 	private static String windowsTopName = Tree.getWindowsTopName();
-		static private java.util.Stack<DefaultMutableTreeNode> history = 
-				new java.util.Stack<DefaultMutableTreeNode>();
+	static private java.util.Stack<DefaultMutableTreeNode> history = 
+			new java.util.Stack<DefaultMutableTreeNode>();
+
+	static public java.util.Stack<DefaultMutableTreeNode> futureHistory = 
+			new java.util.Stack<DefaultMutableTreeNode>();
 
 	private static DefaultMutableTreeNode lastPanelNode=null;
 
@@ -323,18 +326,12 @@ public class MainWindow extends JPanel {
 	}
 
 	public static void historyPush(DefaultMutableTreeNode node) {
-		ImageIcon img;
-		Image pict;
-
 		if(node==null)
 			return;
 
 		if(history.empty() || (!history.empty() && history.peek()!=node)) {
 			history.push(node);
-			img = new ImageIcon(FileExplorer.getIconPath() + "other/backarrow.png");
-			pict = img.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT);
-			img = new ImageIcon(pict);
-			TopPanel.getButtonBack().setIcon(img);
+			TopPanel.getButtonBack().setIcon(TopPanel.backArrow);
 		}
 	}
 
@@ -344,15 +341,18 @@ public class MainWindow extends JPanel {
 
 		if(!history.empty()) {
 			if(history.size()==1) {
-				img = new ImageIcon(FileExplorer.getIconPath() + "other/grayedback.png");
-				pict = img.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT);
-				img = new ImageIcon(pict);
-				TopPanel.getButtonBack().setIcon(img);
+				TopPanel.getButtonBack().setIcon(TopPanel.grayedBack);
 			}
+
 			return history.pop();
 		}
 
 		return null;
+	}
+
+	public static void clearFuture() {
+		futureHistory.clear();
+		TopPanel.getButtonForward().setIcon(TopPanel.grayedForward);
 	}
 
 	public static void historyBack() {
@@ -364,6 +364,13 @@ public class MainWindow extends JPanel {
 			getFolder().requestFocusInWindow();
 			return;
 		}
+
+		futureHistory.push(previous);
+		System.out.print(Arrays.toString(history.toArray()) + " | ");
+		System.out.println(Arrays.toString(futureHistory.toArray()));
+
+		TopPanel.getButtonForward().setIcon(TopPanel.forwardArrow);
+
 		File file = (File) previous.getUserObject();
 
 		if(file.getName().equals(windowsTopName) && !file.exists()) {
@@ -380,5 +387,40 @@ public class MainWindow extends JPanel {
 		}
 		enterOrOpen(file, previous);
 		getFolder().requestFocusInWindow();
+	}
+
+	public static void historyForward() {
+		DefaultMutableTreeNode next,
+						lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
+
+		if(futureHistory.empty()) {
+			getFolder().requestFocusInWindow();		
+			return;
+		}
+
+		next = futureHistory.pop();
+		if(futureHistory.empty()) {
+			TopPanel.getButtonForward().setIcon(TopPanel.grayedForward);		
+		}
+		historyPush(next);
+		File file = (File) next.getUserObject();
+		
+		System.out.print(Arrays.toString(history.toArray()) + " | ");
+		System.out.println(Arrays.toString(futureHistory.toArray()));
+
+		if(file.getName().equals(windowsTopName) && !file.exists()) {
+			TreePath path = new TreePath(next.getPath());
+
+			tree.setSelectionPath(path);
+			tree.scrollPathToVisible(path);
+			tree.expandPath(path);
+
+			Tree.setLastTreeNodeOpened(next);
+			FolderPanel.showCurrentDirectory(next);
+			getFolder().requestFocusInWindow();
+			return;
+		}
+		enterOrOpen(file, next);
+		getFolder().requestFocusInWindow();		
 	}
 }

@@ -18,6 +18,22 @@ public class TopPanel extends JPanel {
 	private static JButton buttonBack, buttonForward;
 	private static JTextField searchField, navigationField;
 	private static String searchQuery = "";
+		
+	public static final ImageIcon grayedForward = new ImageIcon(
+		(new ImageIcon(FileExplorer.getIconPath() + "other/grayedforward.png"))
+			.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT));
+	
+	public static final ImageIcon backArrow = new ImageIcon(
+		(new ImageIcon(FileExplorer.getIconPath() + "other/backarrow.png"))
+			.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT));
+	
+	public static final ImageIcon grayedBack = new ImageIcon(
+		(new ImageIcon(FileExplorer.getIconPath() + "other/grayedback.png"))
+			.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT));
+
+	public static final ImageIcon forwardArrow = new ImageIcon(
+		(new ImageIcon(FileExplorer.getIconPath() + "other/forwardarrow.png"))
+			.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT));
 
 	public TopPanel() {
 		super(new GridBagLayout());
@@ -65,7 +81,7 @@ public class TopPanel extends JPanel {
 	
 		buttonForward.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				MainWindow.getFolder().requestFocusInWindow();
+				MainWindow.historyForward();
 			}
 		});
 		this.add(buttonForward, c);

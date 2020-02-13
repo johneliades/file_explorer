@@ -141,8 +141,10 @@ public class Tree extends JTree implements TreeSelectionListener {
 				if(node==null)
 					return;
 
-				if(lastTreeNodeOpened!=node)	
+				if(lastTreeNodeOpened!=node) {
 					MainWindow.historyPush(lastTreeNodeOpened);
+					MainWindow.clearFuture();
+				}
 				lastTreeNodeOpened = node;
 
 				String filePath = ((File) 
@@ -182,8 +184,10 @@ public class Tree extends JTree implements TreeSelectionListener {
 
 						pressed = true;
 					
-						if(lastTreeNodeOpened!=node)
+						if(lastTreeNodeOpened!=node) {
 							MainWindow.historyPush(lastTreeNodeOpened);
+							MainWindow.clearFuture();
+						}
 						lastTreeNodeOpened = node;
 						File current;
 
