@@ -170,19 +170,21 @@ public class Tree extends JTree implements TreeSelectionListener {
 		});
 
 		this.addKeyListener(new KeyListener() {
-			boolean pressed = false;
+			boolean alt_pressed = false;
 
 			@Override
 			public void keyTyped(KeyEvent e) {}
 			@Override
 			public void keyPressed(KeyEvent e) {
 				switch(e.getKeyCode()) {
+					case KeyEvent.VK_ALT:
+						alt_pressed = true;
+						break;
+
 					case KeyEvent.VK_ENTER:
 
 						DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
 											getLastSelectedPathComponent();
-
-						pressed = true;
 					
 						if(lastTreeNodeOpened!=node) {
 							MainWindow.historyPush(lastTreeNodeOpened);
@@ -199,16 +201,30 @@ public class Tree extends JTree implements TreeSelectionListener {
 						break;
 	
 					case KeyEvent.VK_BACK_SPACE:
-						MainWindow.historyBack();
+						TopPanel.historyBack();
 
 						break;
+
+					case KeyEvent.VK_LEFT:
+						if(alt_pressed)
+							TopPanel.historyBack();
+
+						break;
+
+					case KeyEvent.VK_RIGHT:
+						if(alt_pressed)
+							TopPanel.historyForward();
+						break;
+
 					default:
 				}
 			}
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					pressed = false;
+				switch(e.getKeyCode()) {
+					case KeyEvent.VK_ALT:
+						alt_pressed = false;
+						break;
 				}
 			}
 		});

@@ -65,7 +65,7 @@ public class FolderPanel extends JPanel {
 		});
 
 		this.addKeyListener(new KeyListener() {
-			boolean pressed = false;
+			boolean alt_pressed = false;
 
 			@Override
 			public void keyTyped(KeyEvent e) {}
@@ -75,12 +75,18 @@ public class FolderPanel extends JPanel {
 				JPanel panel;
 
 				switch(e.getKeyCode()) {
+					case KeyEvent.VK_ALT:
+						alt_pressed = true;
+						break;
 					case KeyEvent.VK_F5:
 						MainWindow.refresh(lastTreeNodeOpened);
 						break;
-					case KeyEvent.VK_LEFT:
+
+					case KeyEvent.VK_LEFT: 
+						if(alt_pressed) {TopPanel.historyBack(); break;}
+					case KeyEvent.VK_RIGHT: 
+						if(alt_pressed) {TopPanel.historyForward(); break;}
 					case KeyEvent.VK_UP:
-					case KeyEvent.VK_RIGHT:
 					case KeyEvent.VK_DOWN:
 						panel = (JPanel) WrapLayout.getComponent(0);
 						panel.setBackground(new Color(0, 100, 100));
@@ -90,8 +96,9 @@ public class FolderPanel extends JPanel {
 						currentPanelSelected=panel;
 
 						break;
+
 					case KeyEvent.VK_BACK_SPACE:
-						MainWindow.historyBack();
+						TopPanel.historyBack();
 
 						break;
 					default:
@@ -100,8 +107,10 @@ public class FolderPanel extends JPanel {
 			}
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_F5) {
-					pressed = false;
+				switch(e.getKeyCode()) {
+					case KeyEvent.VK_ALT:
+						alt_pressed = false;
+						break;
 				}
 			}
 		});
@@ -682,9 +691,11 @@ public class FolderPanel extends JPanel {
 						break;
 
 					case KeyEvent.VK_BACK_SPACE:
-						MainWindow.historyBack();
+						TopPanel.historyBack();
+						MainWindow.getFolder().requestFocusInWindow();
 
 						break;
+
 					default:
 				}
 
@@ -713,7 +724,7 @@ public class FolderPanel extends JPanel {
 		return panel;
 	}
 
-	static private void clearLastPanelSelection() {
+	static public void clearLastPanelSelection() {
 		if(currentPanelSelected!=null) {
 			currentPanelSelected.setBackground(new Color(53, 53, 53));
 			currentPanelSelected.setBorder(BorderFactory.createLineBorder(new Color(53, 53, 53)));

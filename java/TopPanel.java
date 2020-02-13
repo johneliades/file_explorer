@@ -13,7 +13,7 @@ import java.util.*;
 public class TopPanel extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	static Set<String> iconSet = FileExplorer.addExtensions();
-	static JPanel folder;
+	private static String windowsTopName = Tree.getWindowsTopName();
 	
 	private static JButton buttonBack, buttonForward;
 	private static JTextField searchField, navigationField;
@@ -60,7 +60,8 @@ public class TopPanel extends JPanel {
 		
 		buttonBack.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){  
-				MainWindow.historyBack();
+				historyBack();
+				MainWindow.getFolder().requestFocusInWindow();
 			}
 		});
 		this.add(buttonBack, c);
@@ -81,7 +82,8 @@ public class TopPanel extends JPanel {
 	
 		buttonForward.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				MainWindow.historyForward();
+				historyForward();
+				MainWindow.getFolder().requestFocusInWindow();
 			}
 		});
 		this.add(buttonForward, c);
@@ -105,7 +107,7 @@ public class TopPanel extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
 					JTree tree = MainWindow.getTree();
-					folder = MainWindow.getFolder();
+					JPanel folder = MainWindow.getFolder();
 					searchQuery = searchField.getText();
 					
 					tree.requestFocusInWindow();
@@ -257,6 +259,7 @@ public class TopPanel extends JPanel {
 		int numChild=tree.getModel().getChildCount(top);
 		DefaultMutableTreeNode current;
 		File topFile = (File) top.getUserObject();
+		JPanel folder = MainWindow.getFolder();
 
 		if(numChild==0)
 			return; 
@@ -294,6 +297,76 @@ public class TopPanel extends JPanel {
 
 			search(tree, current, searchQuery, gridPanel);
 		}		  
+	}
+
+	public static void historyBack() {
+		JTree tree = MainWindow.getTree();
+		DefaultMutableTreeNode previous,
+						lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
+
+		FolderPanel.clearLastPanelSelection();
+
+		previous = MainWindow.historyPop();
+		if(previous==null) {
+			return;
+		}
+
+		MainWindow.futureHistoryPush(previous);
+		if(previous==lastTreeNodeOpened) {
+			previous = MainWindow.historyPop();
+			if(previous==null) {
+				return;
+			}
+
+			MainWindow.futureHistoryPush(previous);
+		}
+
+		File file = (File) previous.getUserObject();
+
+		if(file.getName().equals(windowsTopName) && !file.exists()) {
+			TreePath path = new TreePath(previous.getPath());
+
+			tree.setSelectionPath(path);
+			tree.scrollPathToVisible(path);
+			tree.expandPath(path);
+
+			Tree.setLastTreeNodeOpened(previous);
+			FolderPanel.showCurrentDirectory(previous);
+			return;
+		}
+		MainWindow.enterOrOpen(file, previous);
+	}
+
+	public static void historyForward() {
+		JTree tree = MainWindow.getTree();
+		DefaultMutableTreeNode next,
+						lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
+
+		next=MainWindow.futureHistoryPop();
+		if(next==null)
+			return;
+		MainWindow.historyPush(next);
+		if(next==lastTreeNodeOpened) {
+			next=MainWindow.futureHistoryPop();
+			if(next==null)
+				return;
+			MainWindow.historyPush(next);	
+		}
+
+		File file = (File) next.getUserObject();
+
+		if(file.getName().equals(windowsTopName) && !file.exists()) {
+			TreePath path = new TreePath(next.getPath());
+
+			tree.setSelectionPath(path);
+			tree.scrollPathToVisible(path);
+			tree.expandPath(path);
+
+			Tree.setLastTreeNodeOpened(next);
+			FolderPanel.showCurrentDirectory(next);
+			return;
+		}
+		MainWindow.enterOrOpen(file, next);
 	}
 
 	public static JTextField getNavigationField() {

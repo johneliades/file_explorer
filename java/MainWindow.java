@@ -336,9 +336,6 @@ public class MainWindow extends JPanel {
 	}
 
 	public static DefaultMutableTreeNode historyPop() {
-		ImageIcon img;
-		Image pict;
-
 		if(!history.empty()) {
 			if(history.size()==1) {
 				TopPanel.getButtonBack().setIcon(TopPanel.grayedBack);
@@ -355,72 +352,30 @@ public class MainWindow extends JPanel {
 		TopPanel.getButtonForward().setIcon(TopPanel.grayedForward);
 	}
 
-	public static void historyBack() {
-		DefaultMutableTreeNode previous,
-						lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
+	public static void futureHistoryPush(DefaultMutableTreeNode node) {
+		DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
 
-		previous = historyPop();
-		if(previous==null) {
-			getFolder().requestFocusInWindow();
-			return;
+		if(futureHistory.size()==0) {
+			futureHistory.push(lastTreeNodeOpened);		
 		}
 
-		futureHistory.push(previous);
-		System.out.print(Arrays.toString(history.toArray()) + " | ");
-		System.out.println(Arrays.toString(futureHistory.toArray()));
-
-		TopPanel.getButtonForward().setIcon(TopPanel.forwardArrow);
-
-		File file = (File) previous.getUserObject();
-
-		if(file.getName().equals(windowsTopName) && !file.exists()) {
-			TreePath path = new TreePath(previous.getPath());
-
-			tree.setSelectionPath(path);
-			tree.scrollPathToVisible(path);
-			tree.expandPath(path);
-
-			Tree.setLastTreeNodeOpened(previous);
-			FolderPanel.showCurrentDirectory(previous);
-			getFolder().requestFocusInWindow();
-			return;
+		if(futureHistory.peek()!=node) {
+			futureHistory.push(node);
+			TopPanel.getButtonForward().setIcon(TopPanel.forwardArrow);
 		}
-		enterOrOpen(file, previous);
-		getFolder().requestFocusInWindow();
 	}
 
-	public static void historyForward() {
-		DefaultMutableTreeNode next,
-						lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
+	public static DefaultMutableTreeNode futureHistoryPop() {
+		DefaultMutableTreeNode node;
 
 		if(futureHistory.empty()) {
-			getFolder().requestFocusInWindow();		
-			return;
+			return null;
 		}
 
-		next = futureHistory.pop();
+		node = futureHistory.pop();
 		if(futureHistory.empty()) {
 			TopPanel.getButtonForward().setIcon(TopPanel.grayedForward);		
 		}
-		historyPush(next);
-		File file = (File) next.getUserObject();
-		
-		System.out.print(Arrays.toString(history.toArray()) + " | ");
-		System.out.println(Arrays.toString(futureHistory.toArray()));
-
-		if(file.getName().equals(windowsTopName) && !file.exists()) {
-			TreePath path = new TreePath(next.getPath());
-
-			tree.setSelectionPath(path);
-			tree.scrollPathToVisible(path);
-			tree.expandPath(path);
-
-			Tree.setLastTreeNodeOpened(next);
-			FolderPanel.showCurrentDirectory(next);
-			getFolder().requestFocusInWindow();
-			return;
-		}
-		enterOrOpen(file, next);
-		getFolder().requestFocusInWindow();		
+		return node;
 	}
 }
