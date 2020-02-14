@@ -16,7 +16,6 @@
 |EZ_FAST|
 +=======+
 
-#probably could improve rendering if images are loaded once
 #at startup focus folder
 #objects in navigation bar
 #right click at tree

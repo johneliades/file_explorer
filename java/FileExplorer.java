@@ -1,3 +1,5 @@
+import java.io.File;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
@@ -76,44 +78,12 @@ public class FileExplorer {
 	public static Set<String> addExtensions() {
 		Set<String> set = new HashSet<>(); 
 	
-		set.add("3gp"); 
-		set.add("audio"); 
-		set.add("avi"); 
-		set.add("bat"); 
-		set.add("bmp"); 
-		set.add("class"); 
-		set.add("css"); 
-		set.add("doc"); 
-		set.add("docx"); 
-		set.add("exe"); 
-		set.add("gz"); 
-		set.add("htm"); 
-		set.add("html"); 
-		set.add("iso"); 
-		set.add("jar"); 
-		set.add("java"); 
-		set.add("json"); 
-		set.add("lnk");
-		set.add("log");
-		set.add("mkv"); 
-		set.add("mp3"); 
-		set.add("mp4"); 
-		set.add("ods"); 
-		set.add("odt"); 
-		set.add("ogg"); 
-		set.add("pdf"); 
-		set.add("ppt"); 
-		set.add("tar"); 
-		set.add("tgz"); 
-		set.add("txt"); 
-		set.add("url"); 
-		set.add("video"); 
-		set.add("wav"); 
-		set.add("wmv"); 
-		set.add("xlsx"); 
-		set.add("xlx"); 
-		set.add("xml"); 
-		set.add("zip"); 
+		File path = new File(ICONPATH + "extensions");
+		File icons[] = path.listFiles();
+		for(File temp : icons) {
+			String name = temp.getName().replace(".png", "");
+			set.add(name);
+		}
 
 		return set;
 	}

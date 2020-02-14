@@ -18,6 +18,19 @@ public class FolderPanel extends JPanel {
 
 	private static JPanel currentPanelSelected; 
 	private static String currentPanelName="";
+	
+	public static final ImageIcon folderIcon = new ImageIcon(
+		(new ImageIcon(FileExplorer.getIconPath() + "other/folder.png"))
+			.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
+	
+	public static final ImageIcon folderEmptyIcon = new ImageIcon(
+		(new ImageIcon(FileExplorer.getIconPath() + "other/folderempty.png"))
+			.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
+	
+	public static final ImageIcon questionIcon = new ImageIcon(
+		(new ImageIcon(FileExplorer.getIconPath() + "other/question.png"))
+			.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
+	
 
 	public FolderPanel() {
 		//Create the folder viewing pane.
@@ -503,25 +516,29 @@ public class FolderPanel extends JPanel {
 		set.add("gif");
 		if(set.contains(extension)) {
 			img = new ImageIcon(file.getPath());
+			folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
+			img = new ImageIcon(folderImg);
 		}
 
 		if(img==null) {
 			if(iconName=="folder.png") {
 				if(file.list()!=null && file.list().length==0)
-					img = new ImageIcon(ICONPATH + "other/" + "folderempty.png");
+					img = folderEmptyIcon;
 				else {
-					img = new ImageIcon(ICONPATH + "other/" + "folder.png");
+					img = folderIcon;
 				}
 			}
 			else if(iconName=="question.png") {
-				img = new ImageIcon(ICONPATH + "other/" + "question.png");
+				img = questionIcon;
 			}
-			else
+			else {
 				img = new ImageIcon(ICONPATH + "extensions/" + iconName);
+				folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
+				img = new ImageIcon(folderImg);
+			}
 		}
 
 		//Image folderImg = img.getImage().getScaledInstance(150, 60, Image.SCALE_DEFAULT);
-		folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
 
 		/* You get small resolution system icons. Waiting for official better way
 		Icon icon;
@@ -531,8 +548,6 @@ public class FolderPanel extends JPanel {
 			folderImg = iconToImage(icon).getScaledInstance(60, 60, Image.SCALE_DEFAULT);
 		}
 		*/
-
-		img = new ImageIcon(folderImg);
 
 		JPanel panel = new JPanel(new BorderLayout());
 		
