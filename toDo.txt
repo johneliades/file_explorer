@@ -27,6 +27,7 @@
 |_LATER_|
 +=======+
 
+#could open all extensions once at startup for even faster load
 #maybe NodeInfo is no longer necessary
 #consider using jtable instead of gridlayout in search
 #faster rendering of pictures (favourite in chrome)
