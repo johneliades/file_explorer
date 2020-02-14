@@ -121,7 +121,7 @@ public class TopPanel extends JPanel {
 
 					searchField.setText("");
 					JPanel gridPanel = new JPanel(new GridLayout(0, 1, 8, 8));
-					gridPanel.setBackground(new Color(53, 53, 53));
+					gridPanel.setBackground(new Color(49, 49, 49));
 					gridPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); //top,left,bottom,right
 					folder.add(gridPanel);
 	

@@ -55,11 +55,11 @@ public class MainWindow extends JPanel {
 
 		//Create a tree that allows one selection at a time.
 		tree = new Tree(top);
+		
 		//Create the scroll pane and add the tree to it. 
 		JScrollPane treeView = new JScrollPane(tree);
 		treeView.getVerticalScrollBar().setPreferredSize(new Dimension(12, 0));
 		treeView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 12));
-		
 		treeView.getVerticalScrollBar().setBackground(new Color(53, 53, 53));
 		treeView.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -74,7 +74,6 @@ public class MainWindow extends JPanel {
 		folderView.getVerticalScrollBar().setUnitIncrement(16);
 		folderView.getVerticalScrollBar().setPreferredSize(new Dimension(12, 0));
 		folderView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 12));
-
 		folderView.getVerticalScrollBar().setBackground(new Color(53, 53, 53));
 		folderView.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
