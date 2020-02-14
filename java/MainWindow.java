@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
+import javax.swing.plaf.basic.BasicTreeUI;
+import javax.swing.plaf.IconUIResource;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -24,6 +26,14 @@ public class MainWindow extends JPanel {
 
 	private static JPanel folder;
 	private static JTree tree;
+		
+	ImageIcon collapsedIcon = new ImageIcon((new ImageIcon(
+					ICONPATH + "other/collapsed.png")).getImage().
+							getScaledInstance(10, 10, Image.SCALE_DEFAULT));
+	
+	ImageIcon expandedIcon = new ImageIcon((new ImageIcon(
+					ICONPATH + "other/expanded.png")).getImage().
+							getScaledInstance(10, 10, Image.SCALE_DEFAULT));
 
 	public MainWindow() {
 		super(new GridLayout(1, 0));
@@ -52,6 +62,12 @@ public class MainWindow extends JPanel {
 		
 		treeView.getVerticalScrollBar().setBackground(new Color(53, 53, 53));
 		treeView.getHorizontalScrollBar().setBackground(new Color(53, 53, 53));
+
+		BasicTreeUI basicTreeUI = (BasicTreeUI) tree.getUI();
+		basicTreeUI.setLeftChildIndent(0);
+		basicTreeUI.setRightChildIndent(12);
+		basicTreeUI.setCollapsedIcon(collapsedIcon);
+		basicTreeUI.setExpandedIcon(expandedIcon);
 
 		folder = new FolderPanel();
 		JScrollPane folderView = new JScrollPane(folder);
