@@ -274,6 +274,21 @@ public class Tree extends JTree implements TreeSelectionListener {
 		}
 	}
 
+	//Added bounds.x = 0 to stop horizontal scrolling
+	@Override
+	public void scrollPathToVisible(TreePath treePath) {
+		if (treePath != null) {
+			this.makeVisible(treePath);
+
+			Rectangle bounds = this.getPathBounds(treePath);
+
+			if (bounds != null) {
+				bounds.x = 0;
+				this.scrollRectToVisible(bounds);
+			}
+		}
+	}
+
  	/* Targets selected node when clicked in tree */
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
