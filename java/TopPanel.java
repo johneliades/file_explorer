@@ -345,6 +345,7 @@ public class TopPanel extends JPanel {
 		next=MainWindow.futureHistoryPop();
 		if(next==null)
 			return;
+
 		MainWindow.historyPush(next);
 		if(next==lastTreeNodeOpened) {
 			next=MainWindow.futureHistoryPop();

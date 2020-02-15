@@ -307,6 +307,11 @@ public class MainWindow extends JPanel {
 
 	static public void enterOrOpen(File file, DefaultMutableTreeNode node) {
 		JTree tree = MainWindow.getTree();
+	
+		if(!file.exists()) {
+			Tree.findExistingParent(file);
+			return;
+		}
 
 		if(file.isDirectory()) {
 			TreePath path = new TreePath(node.getPath());
