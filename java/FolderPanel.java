@@ -502,7 +502,7 @@ public class FolderPanel extends JPanel {
 
 		if(name.trim().length() == 0) {
 			name = "Local Disk (" + file.getPath().replace("\\", "") + ")";
-			img = new ImageIcon(ICONPATH + "other/harddisk.png");
+			img = new ImageIcon(ICONPATH + "other/harddiskfolder.png");
 			folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
 			img = new ImageIcon(folderImg);
 		}
