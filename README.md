@@ -24,6 +24,10 @@ jar -cvmf MANIFEST.MF FileExplorer.jar icons/* -C classes .
 ```
 
 ## Run
+Double click the FileExplorer.jar file.
+
+OR
+
 Open a cmd in the cloned folder and enter:
 
 ```
