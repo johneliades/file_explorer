@@ -17,6 +17,10 @@ Open a cmd in the cloned folder and enter:
 
 ```
 javac java/*.java -d classes
+
+OR
+
+jar -cvmf MANIFEST.MF FileExplorer.jar icons/* -C classes .
 ```
 
 ## Run
@@ -24,6 +28,10 @@ Open a cmd in the cloned folder and enter:
 
 ```
 java -cp classes FileExplorer
+
+OR
+
+java -jar FileExplorer.jar
 ```
 
 ## Notes
