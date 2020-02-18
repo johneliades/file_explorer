@@ -20,11 +20,11 @@ javac java/*.java -d classes
 
 OR
 
-jar -cvmf MANIFEST.MF FileExplorer.jar icons/* -C classes .
+jar -cvmf MANIFEST.MF FileExplorer.jar -C classes .
 ```
 
 ## Run
-Double click the FileExplorer.jar file.
+Double click the FileExplorer.jar file (Note: icons folder must be in the same folder as the jar).
 
 OR
 
