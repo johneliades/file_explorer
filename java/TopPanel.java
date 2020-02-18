@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.border.*;
+import javax.swing.table.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -12,7 +13,6 @@ import java.util.*;
 
 public class TopPanel extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
-	static Set<String> iconSet = FileExplorer.addExtensions();
 	private static String windowsTopName = Tree.getWindowsTopName();
 	
 	private static JButton buttonBack, buttonForward;
@@ -120,14 +120,80 @@ public class TopPanel extends JPanel {
 					folder.revalidate();
 
 					searchField.setText("");
-					JPanel gridPanel = new JPanel(new GridLayout(0, 1, 8, 8));
-					gridPanel.setBackground(new Color(49, 49, 49));
-					gridPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); //top,left,bottom,right
-					folder.add(gridPanel);
+
+					 // create object of table and table model
+					DefaultTableModel model = new DefaultTableModel(0, 1) {};
+					JTable table = new JTable(model);
+
+					// add header of the table
+					String header[] = new String[] { "Name" };
+
+					// add header in table model     
+					model.setColumnIdentifiers(header);
+					//set model into the table object
+					TableColumnModel tcm = table.getColumnModel();
+					tcm.getColumn(0).setCellRenderer(new IconTextCellRenderer());
+
+					table.setBackground(new Color(49, 49, 49));
+					table.setForeground(Color.WHITE);
+					table.setRowHeight(50);
+					table.setShowGrid(false);
+					table.setDefaultEditor(Object.class, null);
+					table.setSelectionModel(new DefaultListSelectionModel() {
+					    @Override
+					    public void clearSelection() {
+					    }
+
+					    @Override
+					    public void removeSelectionInterval(int index0, int index1) {
+					    }
+					});
+					table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+					table.addMouseListener(new MouseAdapter() {
+						public void mouseClicked(MouseEvent e) {
+							JTree tree = MainWindow.getTree();
+							JPanel folder = MainWindow.getFolder();
+										
+							if (e.getClickCount() == 2 && 
+										e.getButton() == MouseEvent.BUTTON1) {
+								JTable target = (JTable) e.getSource();
+								int row = target.getSelectedRow();
+								int column = target.getSelectedColumn();
+
+								DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+										 target.getValueAt(row, column);
+
+								File file = (File) node.getUserObject();
+								if(file.isDirectory()) {
+									TreePath path = new TreePath(node.getPath());
+									tree.setSelectionPath(path);
+									tree.scrollPathToVisible(path);
+									tree.expandPath(path);
+
+									FolderPanel.showCurrentDirectory(node); 
+								}
+								else {
+									try {
+										Desktop.getDesktop().open(file);
+									}
+									catch(IOException exc) {
+
+									}
+								}
+							}
+							else if(e.getButton() == MouseEvent.BUTTON3) {
+								System.out.println("right click");
+							}						
+						}
+					});
+
+					folder.add(table);
+					folder.setLayout(new GridLayout());
 	
 					Thread thread = new Thread() {
 						public void run() {
-							search(tree, node, searchQuery, gridPanel);
+							search(tree, node, searchQuery, model);
 						}
 					};
 					thread.start();
@@ -162,100 +228,7 @@ public class TopPanel extends JPanel {
 		this.add(searchField, c);
 	}
 
-	public static JLabel getSmallIcon(String name, File file, DefaultMutableTreeNode node) {
-		JLabel label = new JLabel();
-		ImageIcon img=null;
-		Image pict;
-		Set<String> set = new HashSet<>(); 
-
-		// Bad check for images
-		set.add("jpeg");
-		set.add("jpg");
-		set.add("png");
-		set.add("gif");
-		if(set.contains(Utility.getExtension(file.getName()))) {
-			img = new ImageIcon(file.getPath());
-		}
-
-		if(img==null) {
-			if(name=="folder.png") {
-				if(file.list()!=null && file.list().length==0)
-					img = new ImageIcon(ICONPATH + "other/" + "folderempty.png");
-				else {
-					img = new ImageIcon(ICONPATH + "other/" + "folder.png");
-				}
-			}
-			else if(name=="question.png") {
-				img = new ImageIcon(ICONPATH + "other/" + "question.png");
-			}
-			else
-				img = new ImageIcon(ICONPATH + "extensions/" + name);
-		}
-
-		pict = img.getImage().getScaledInstance(45, 45, Image.SCALE_DEFAULT);
-		img = new ImageIcon(pict);
-
-		label.setIcon(img);
-		label.setText(file.getPath());
-		label.setBorder(new EmptyBorder(5, 0, 5, 0));
-
-		final Font currentFont = label.getFont();
-		final Font bigFont = new Font(currentFont.getName(), 
-					currentFont.getStyle(), currentFont.getSize() + 1);
-		label.setFont(bigFont);
-		label.setForeground(Color.WHITE);
-		label.addMouseListener(new MouseListener(){
-			@Override
-			public void mouseClicked(MouseEvent arg0) {}
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-			}
-			@Override
-			public void mousePressed(MouseEvent event) {
-				JTree tree = MainWindow.getTree();
-				JPanel folder = MainWindow.getFolder();
-
-				String fullPath = label.getText();
-				File file = new File(fullPath);
-							
-				label.setForeground(Color.RED);		
-
-				if(event.getButton() == MouseEvent.BUTTON1) {
-					if(file.isDirectory()) {
-						TreePath path = new TreePath(node.getPath());
-						tree.setSelectionPath(path);
-						tree.scrollPathToVisible(path);
-						tree.expandPath(path);
-
-						FolderPanel.showCurrentDirectory(node); 
-					}
-					else {
-						try {
-							Desktop.getDesktop().open(file);
-						}
-						catch(IOException e) {
-
-						}
-					}
-				}
-				else if(event.getButton() == MouseEvent.BUTTON3) {
-					System.out.println("right click");
-				}
-			}
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				label.setForeground(Color.WHITE);		
-			}
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				label.setForeground(new Color(0, 255, 255));		
-			}
-		});
-		
-		return label;
-	}
-
-	static void search(JTree tree, DefaultMutableTreeNode top, String searchQuery, JPanel gridPanel) {
+	static void search(JTree tree, DefaultMutableTreeNode top, String searchQuery, DefaultTableModel model) {
 		int numChild=tree.getModel().getChildCount(top);
 		DefaultMutableTreeNode current;
 		File topFile = (File) top.getUserObject();
@@ -275,7 +248,7 @@ public class TopPanel extends JPanel {
 			File element = (File) current.getUserObject();
 
 			if(element.getName().contains(searchQuery)) {
-				gridPanel.add(getSmallIcon("folder.png", element, current));
+				model.addRow(new Object[] { current });
 				folder.repaint();
 				folder.revalidate();
 			}
@@ -285,17 +258,14 @@ public class TopPanel extends JPanel {
 				continue;
 			for(File child : children) {
 				if(child.isFile() && child.getName().contains(searchQuery)) {
-					if(iconSet.contains(Utility.getExtension(child.getName())))
-						gridPanel.add(getSmallIcon(Utility.getExtension(child.getName()) + ".png", child, current));
-					else
-						gridPanel.add(getSmallIcon("question.png", child, current));
+					model.addRow(new Object[] { new DefaultMutableTreeNode(child) });
 				
 					folder.repaint();
 					folder.revalidate();
-				} 
+				}
 			}
 
-			search(tree, current, searchQuery, gridPanel);
+			search(tree, current, searchQuery, model);
 		}		  
 	}
 
@@ -384,5 +354,69 @@ public class TopPanel extends JPanel {
 
 	public static JButton getButtonForward() {
 		return buttonForward;
+	}
+}
+
+class IconTextCellRenderer extends DefaultTableCellRenderer {
+	private static final String ICONPATH = FileExplorer.getIconPath();
+	static Set<String> iconSet = FileExplorer.addExtensions();
+
+	public Component getTableCellRendererComponent(JTable table,
+		Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
+		super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+		File file = (File) node.getUserObject();
+
+		setText(file.getPath());
+		if(file.isDirectory())
+			setIcon(getSmallIcon("folder.png", file));
+		else if(file.isFile() && iconSet.contains(Utility.getExtension(file.getName())))
+			setIcon(getSmallIcon(Utility.
+				getExtension(file.getName()) + ".png", file));
+		else
+			setIcon(getSmallIcon("question.png", file));
+
+		setBorder(new EmptyBorder(0, 10, 0, 0));
+		setIconTextGap(10);
+
+		return this;
+	}
+
+	public static ImageIcon getSmallIcon(String name, File file) {
+		JLabel label = new JLabel();
+		ImageIcon img=null;
+		Image pict;
+		Set<String> set = new HashSet<>(); 
+
+		// Bad check for images
+		set.add("jpeg");
+		set.add("jpg");
+		set.add("png");
+		set.add("gif");
+		if(set.contains(Utility.getExtension(file.getName()))) {
+			img = new ImageIcon(file.getPath());
+		}
+
+		if(img==null) {
+			if(name=="folder.png") {
+				if(file.list()!=null && file.list().length==0)
+					img = new ImageIcon(ICONPATH + "other/" + "folderempty.png");
+				else {
+					img = new ImageIcon(ICONPATH + "other/" + "folder.png");
+				}
+			}
+			else if(name=="question.png") {
+				img = new ImageIcon(ICONPATH + "other/" + "question.png");
+			}
+			else
+				img = new ImageIcon(ICONPATH + "extensions/" + name);
+		}
+
+		pict = img.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT);
+		img = new ImageIcon(pict);
+
+		return img;
 	}
 }

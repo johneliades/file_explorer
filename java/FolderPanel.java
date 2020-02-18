@@ -375,6 +375,8 @@ public class FolderPanel extends JPanel {
 	public static void showCurrentDirectory(DefaultMutableTreeNode node) {
 		JTree tree = MainWindow.getTree();
 		JPanel folder = MainWindow.getFolder();
+		
+		folder.setLayout(new WrapLayout(FlowLayout.LEFT, 10, 10));
 
 		int numChild=tree.getModel().getChildCount(node);
 		SortedSet<File> set2;
