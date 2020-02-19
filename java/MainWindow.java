@@ -167,7 +167,7 @@ public class MainWindow extends JPanel {
 				DefaultMutableTreeNode temp=(DefaultMutableTreeNode) 
 						tree.getModel().getChild(currentTop, i);
 
-				if(((File) temp.getUserObject()).getName().equals(current)) {
+				if(temp.getUserObject().toString().equals(current)) {
 					if(pathComponents.empty()) {
 						//Found path to open
 						selectDirectory(temp);
