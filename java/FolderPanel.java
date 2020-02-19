@@ -348,9 +348,12 @@ public class FolderPanel extends JPanel {
 					command.add(javaBin);
 					command.add("-jar");
 					command.add(currentJar.getPath());
+					
+					if(!((File) lastTreeNodeOpened.getUserObject()).
+							getPath().equals(windowsTopName)) {
+						command.add(((File) lastTreeNodeOpened.getUserObject()).getPath());
+					}
 
-					command.add(((File) lastTreeNodeOpened.getUserObject()).getPath());
-				
 					final ProcessBuilder builder = new ProcessBuilder(command);
 					try {
 						builder.start();
@@ -366,8 +369,11 @@ public class FolderPanel extends JPanel {
 					cmd.append(" -cp ").append(
 						ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
 					cmd.append(FileExplorer.class.getName()).append(" ");
-
-					cmd.append(((File) lastTreeNodeOpened.getUserObject()).getPath());
+					
+					if(!((File) lastTreeNodeOpened.getUserObject()).
+								getPath().equals(windowsTopName)) {
+						cmd.append(((File) lastTreeNodeOpened.getUserObject()).getPath());
+					}
 					try {
 						Runtime.getRuntime().exec(cmd.toString());
 					}
@@ -428,6 +434,71 @@ public class FolderPanel extends JPanel {
 				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red), 
 				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black)));		
 		popupMenu.setBackground(Color.white);
+
+		if(MainWindow.getLastPanelNode()!=null) {
+			menuItem = new JMenuItem(" New Window ");
+			img = new ImageIcon(ICONPATH + "other/folder.png");
+			folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
+			menuItem.setIcon(new ImageIcon(folderImg));
+			menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				File currentJar=null;
+				DefaultMutableTreeNode lastPanelNode =
+					MainWindow.getLastPanelNode();
+
+				final String javaBin = System.getProperty("java.home") + 
+					File.separator + "bin" + File.separator + "java";
+
+				try {
+					currentJar = new File(FileExplorer.class.
+						getProtectionDomain().getCodeSource().getLocation().toURI());
+				}
+				catch(Exception e) {
+				}
+
+				/* is it a jar file? */
+				if(currentJar.getName().endsWith(".jar")) {
+					final ArrayList<String> command = new ArrayList<String>();
+
+					/* Build command: java -jar application.jar */
+					command.add(javaBin);
+					command.add("-jar");
+					command.add(currentJar.getPath());
+
+					command.add(((File) lastPanelNode.getUserObject()).getPath());
+				
+					final ProcessBuilder builder = new ProcessBuilder(command);
+					try {
+						builder.start();
+					}
+					catch(Exception e) {
+
+					}
+				}
+				else {
+					StringBuilder cmd = new StringBuilder();
+
+					cmd.append(javaBin);
+					cmd.append(" -cp ").append(
+						ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
+					cmd.append(FileExplorer.class.getName()).append(" ");
+
+					cmd.append(((File) lastPanelNode.getUserObject()).getPath());
+					try {
+						Runtime.getRuntime().exec(cmd.toString());
+					}
+					catch(Exception e) {
+					}
+
+					return;
+				}
+			}
+		});
+
+		menuItem.setBackground(Color.white);
+		popupMenu.add(menuItem);
+		}
 
 		return popupMenu;
 	}
@@ -683,15 +754,19 @@ public class FolderPanel extends JPanel {
 				for(i=0; i<numChild; i++) { 
 					current=(DefaultMutableTreeNode) tree.getModel().getChild(parent, i);
 					curFile=(File) (current).getUserObject();
-					if(curFile.getName().compareTo(name)==0)
+					if(curFile.getName().compareTo(name)==0) {
 						break;
+					}
 				}
+				if(curFile.getName().compareTo(name)==0)
+					MainWindow.setLastPanelNode(current);
+				else
+					MainWindow.setLastPanelNode(null);
 
 				if(current==null || i==numChild || curFile.exists()==false) {
 				//	JOptionPane.showMessageDialog(null, "Chose file");
 				//	return;
 				}
-				MainWindow.setLastPanelNode(current);
 				// /Get node and name of last selected panel
 
 				if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
