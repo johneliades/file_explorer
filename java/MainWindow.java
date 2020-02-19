@@ -102,7 +102,7 @@ public class MainWindow extends JPanel {
 				fileToOpen = fileToOpen.getParentFile();
 			} 
 			
-			pathComponents.add(fileToOpen.getPath());
+			pathComponents.add(fileToOpen.getPath().replace("\\", ""));
 			//PathComponents now contains the path 
 			//components starting from root
 
@@ -167,7 +167,8 @@ public class MainWindow extends JPanel {
 				DefaultMutableTreeNode temp=(DefaultMutableTreeNode) 
 						tree.getModel().getChild(currentTop, i);
 
-				if(temp.getUserObject().toString().equals(current)) {
+				String nodeName = temp.getUserObject().toString().replace("\\", "");
+				if(nodeName.equals(current)) {
 					if(pathComponents.empty()) {
 						//Found path to open
 						selectDirectory(temp);
