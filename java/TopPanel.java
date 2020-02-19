@@ -95,13 +95,14 @@ public class TopPanel extends JPanel {
 
 		navigationField = new JTextFieldHint(new JTextField(), 
 			new ImageIcon((new ImageIcon(
-				FileExplorer.getIconPath() + "other/thispc.png"))
+				FileExplorer.getIconPath() + "other/pc.png"))
 						.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT)));		
 		
 		navigationField.setCaretColor(Color.WHITE);
 		navigationField.setBackground(new Color(30, 30, 30));
 		navigationField.setForeground(new Color(0, 255, 255));
-		navigationField.setPreferredSize(new Dimension(navigationField.getPreferredSize().width, 25));
+		navigationField.setPreferredSize(new Dimension(navigationField.
+					getPreferredSize().width, 25));
 
 		this.add(navigationField, c);
 
@@ -113,7 +114,8 @@ public class TopPanel extends JPanel {
 		searchField.setCaretColor(Color.WHITE);
 		searchField.setBackground(new Color(30, 30, 30));
 		searchField.setForeground(new Color(0, 255, 255));
-		searchField.setPreferredSize(new Dimension(searchField.getPreferredSize().width, 25));
+		searchField.setPreferredSize(new Dimension(searchField.
+				getPreferredSize().width, 25));
 		searchField.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {}
