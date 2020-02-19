@@ -522,8 +522,8 @@ public class FolderPanel extends JPanel {
 		if(FileName.isEmpty())
 			FileName = ((File) node.getUserObject()).getPath();
 		
-		TopPanel.getNavigationField().setText(" " + ((File) node.getUserObject()).getPath());
-		TopPanel.getSearchField().setText(" Search" + " \"" + FileName + "\"");
+		TopPanel.getNavigationField().setText(((File) node.getUserObject()).getPath());
+		TopPanel.getSearchField().setText("Search" + " \"" + FileName + "\"");
 
 		folder.removeAll();
 

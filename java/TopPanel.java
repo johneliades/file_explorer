@@ -16,7 +16,7 @@ public class TopPanel extends JPanel {
 	private static String windowsTopName = Tree.getWindowsTopName();
 	
 	private static JButton buttonBack, buttonForward;
-	private static JTextField searchField, navigationField;
+	private static JTextFieldHint searchField, navigationField;
 	private static String searchQuery = "";
 		
 	public static final ImageIcon grayedForward = new ImageIcon(
@@ -93,12 +93,26 @@ public class TopPanel extends JPanel {
 		c.gridx = 2;
 		c.gridy = 0;
 
-		navigationField = new JTextField("");
+		navigationField = new JTextFieldHint(new JTextField(), 
+			new ImageIcon((new ImageIcon(
+				FileExplorer.getIconPath() + "other/thispc.png"))
+						.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT)));		
+		
+		navigationField.setCaretColor(Color.WHITE);
+		navigationField.setBackground(new Color(30, 30, 30));
+		navigationField.setForeground(new Color(0, 255, 255));
 		navigationField.setPreferredSize(new Dimension(navigationField.getPreferredSize().width, 25));
 
 		this.add(navigationField, c);
 
-		searchField = new JTextField("");
+		searchField = new JTextFieldHint(new JTextField(), 
+			new ImageIcon((new ImageIcon(
+				FileExplorer.getIconPath() + "other/magnifyingglass.png"))
+						.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT)));		
+
+		searchField.setCaretColor(Color.WHITE);
+		searchField.setBackground(new Color(30, 30, 30));
+		searchField.setForeground(new Color(0, 255, 255));
 		searchField.setPreferredSize(new Dimension(searchField.getPreferredSize().width, 25));
 		searchField.addKeyListener(new KeyListener() {
 			@Override
@@ -211,7 +225,7 @@ public class TopPanel extends JPanel {
 					fileName = ((File) node.getUserObject()).getPath();
 				}
 
-				searchField.setText(" Search" + " \"" + fileName + "\"");
+				searchField.setText("Search" + " \"" + fileName + "\"");
 			}
 		});
 
@@ -323,11 +337,11 @@ public class TopPanel extends JPanel {
 		MainWindow.enterOrOpen(file, next);
 	}
 
-	public static JTextField getNavigationField() {
+	public static JTextFieldHint getNavigationField() {
 		return navigationField;
 	}
 
-	public static JTextField getSearchField() {
+	public static JTextFieldHint getSearchField() {
 		return searchField;
 	}
 
