@@ -166,12 +166,7 @@ public class TopPanel extends JPanel {
 
 								File file = (File) node.getUserObject();
 								if(file.isDirectory()) {
-									TreePath path = new TreePath(node.getPath());
-									tree.setSelectionPath(path);
-									tree.scrollPathToVisible(path);
-									tree.expandPath(path);
-
-									FolderPanel.showCurrentDirectory(node); 
+									MainWindow.selectDirectory(node);
 								}
 								else {
 									try {
@@ -294,14 +289,8 @@ public class TopPanel extends JPanel {
 		File file = (File) previous.getUserObject();
 
 		if(file.getName().equals(windowsTopName) && !file.exists()) {
-			TreePath path = new TreePath(previous.getPath());
+			MainWindow.selectDirectory(previous);
 
-			tree.setSelectionPath(path);
-			tree.scrollPathToVisible(path);
-			tree.expandPath(path);
-
-			Tree.setLastTreeNodeOpened(previous);
-			FolderPanel.showCurrentDirectory(previous);
 			return;
 		}
 		MainWindow.enterOrOpen(file, previous);
@@ -327,14 +316,8 @@ public class TopPanel extends JPanel {
 		File file = (File) next.getUserObject();
 
 		if(file.getName().equals(windowsTopName) && !file.exists()) {
-			TreePath path = new TreePath(next.getPath());
+			MainWindow.selectDirectory(next);
 
-			tree.setSelectionPath(path);
-			tree.scrollPathToVisible(path);
-			tree.expandPath(path);
-
-			Tree.setLastTreeNodeOpened(next);
-			FolderPanel.showCurrentDirectory(next);
 			return;
 		}
 		MainWindow.enterOrOpen(file, next);

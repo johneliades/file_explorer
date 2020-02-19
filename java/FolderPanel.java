@@ -1,5 +1,7 @@
 import java.io.File;
 
+import java.lang.management.ManagementFactory;
+
 import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
@@ -247,12 +249,7 @@ public class FolderPanel extends JPanel {
 				DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
 				defMod1.reload();
 	
-				TreePath path = new TreePath(node.getPath());
-				tree.setSelectionPath(path);
-				tree.scrollPathToVisible(path);
-				tree.expandPath(path);
-				
-				showCurrentDirectory(node);
+				MainWindow.selectDirectory(node);
 			}
 		});
 
@@ -315,6 +312,69 @@ public class FolderPanel extends JPanel {
 				}
 				catch(IOException e) {
 
+				}
+			}
+		});
+
+		menuItem.setBackground(Color.white);
+		popupMenu.add(menuItem);
+
+		menuItem = new JMenuItem(" New Window ");
+		img = new ImageIcon(ICONPATH + "other/folder.png");
+		folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
+		menuItem.setIcon(new ImageIcon(folderImg));
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				File currentJar=null;
+
+				final String javaBin = System.getProperty("java.home") + 
+					File.separator + "bin" + File.separator + "java";
+
+				try {
+					currentJar = new File(FileExplorer.class.
+						getProtectionDomain().getCodeSource().getLocation().toURI());
+				}
+				catch(Exception e) {
+				}
+
+				DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
+
+				/* is it a jar file? */
+				if(currentJar.getName().endsWith(".jar")) {
+					final ArrayList<String> command = new ArrayList<String>();
+
+					/* Build command: java -jar application.jar */
+					command.add(javaBin);
+					command.add("-jar");
+					command.add(currentJar.getPath());
+
+					command.add(((File) lastTreeNodeOpened.getUserObject()).getPath());
+				
+					final ProcessBuilder builder = new ProcessBuilder(command);
+					try {
+						builder.start();
+					}
+					catch(Exception e) {
+
+					}
+				}
+				else {
+					StringBuilder cmd = new StringBuilder();
+
+					cmd.append(javaBin);
+					cmd.append(" -cp ").append(
+						ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
+					cmd.append(FileExplorer.class.getName()).append(" ");
+
+					cmd.append(((File) lastTreeNodeOpened.getUserObject()).getPath());
+					try {
+						Runtime.getRuntime().exec(cmd.toString());
+					}
+					catch(Exception e) {
+					}
+
+					return;
 				}
 			}
 		});

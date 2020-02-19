@@ -9,12 +9,23 @@ public class FileExplorer {
 	private static final boolean useSystemLookAndFeel = false;
 	private static final String ICONPATH="./icons/"; // path-until-src/src/hw4/icons/
 	private static final boolean showHiddenFiles = false;
+	private static File fileToOpen=null;
 
 	public static void main(String[] args) {
+
+		if(args.length>1)
+			return;
+
+		if(args.length==1) {
+			fileToOpen = new File(args[0]);
+			if(!fileToOpen.exists())
+				return;
+		}
+
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				createAndShowGUI();
+				createAndShowGUI(fileToOpen);
 			}
 		});
 	}
@@ -24,7 +35,7 @@ public class FileExplorer {
 	 * this method should be invoked from the
 	 * event dispatch thread.
 	 */
-	private static void createAndShowGUI() {
+	private static void createAndShowGUI(File file) {
 		if (useSystemLookAndFeel) {
 			try {
 				UIManager.setLookAndFeel(
@@ -61,7 +72,7 @@ public class FileExplorer {
 
 		//Add content to the window.
 		frame.add(new TopPanel(), BorderLayout.NORTH);
-		frame.add(new MainWindow(), BorderLayout.CENTER);
+		frame.add(new MainWindow(file), BorderLayout.CENTER);
 	
 		//Display the window.
 		frame.setVisible(true);

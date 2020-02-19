@@ -35,7 +35,7 @@ public class MainWindow extends JPanel {
 					ICONPATH + "other/expanded.png")).getImage().
 							getScaledInstance(10, 10, Image.SCALE_DEFAULT));
 
-	public MainWindow() {
+	public MainWindow(File fileToOpen) {
 		super(new GridLayout(1, 0));
 
 		//Create the nodes.
@@ -82,15 +82,32 @@ public class MainWindow extends JPanel {
 		else {
 			int numChild=tree.getModel().getChildCount(top);
 			for(int i=0; i<numChild; i++) { 
-				DefaultMutableTreeNode current=(DefaultMutableTreeNode) tree.getModel().getChild(top, i);
+				DefaultMutableTreeNode current=(DefaultMutableTreeNode) 
+						tree.getModel().getChild(top, i);
 				Tree.createNodes(current, 0);
 			}
-		}		
-		TreePath path = new TreePath(top.getPath());
-		tree.setSelectionPath(path);
-		tree.expandPath(path);
-		
-		FolderPanel.showCurrentDirectory(top);
+		}
+
+		if(fileToOpen==null) {
+			selectDirectory(top);
+		}
+		else {
+			java.util.Stack<String> pathComponents = 
+				new java.util.Stack<String>();
+
+			while(true) {
+				if(fileToOpen.getParentFile() == null)
+					break;
+				pathComponents.add(fileToOpen.getName());
+				fileToOpen = fileToOpen.getParentFile();
+			} 
+			
+			pathComponents.add(fileToOpen.getPath());
+			//PathComponents now contains the path 
+			//components starting from root
+
+			loadPath(top, pathComponents);
+		}
 
 		folderView.setMinimumSize(new Dimension(400, 50));
 		treeView.setMinimumSize(new Dimension(250, 50));
@@ -123,6 +140,46 @@ public class MainWindow extends JPanel {
 
 		//Add the split pane to this panel.
 		add(splitPane);
+	}
+
+	static void loadPath(DefaultMutableTreeNode top, 
+								java.util.Stack<String> pathComponents) {	
+		
+		String current = pathComponents.pop();
+		if(!((File) top.getUserObject()).getPath().equals(windowsTopName)) {
+			if(!pathComponents.empty()) {
+				current = pathComponents.pop();
+				//If on Unix and path was not the root double pop
+			}
+			else {
+				selectDirectory(top);
+
+				return;
+			}
+		}
+
+		DefaultMutableTreeNode currentTop = top;
+
+		end:
+		while(true) {
+			int numChild=tree.getModel().getChildCount(currentTop);
+			for(int i=0; i<numChild; i++) { 
+				DefaultMutableTreeNode temp=(DefaultMutableTreeNode) 
+						tree.getModel().getChild(currentTop, i);
+
+				if(((File) temp.getUserObject()).getName().equals(current)) {
+					if(pathComponents.empty()) {
+						//Found path to open
+						selectDirectory(temp);
+						break end;
+					}
+					current = pathComponents.pop();
+					currentTop = temp;
+					Tree.createNodes(currentTop, 0);
+					break;
+				}
+			}
+		}
 	}
 
 	static void refresh(DefaultMutableTreeNode node) {
@@ -219,12 +276,7 @@ public class MainWindow extends JPanel {
 		DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
 		defMod1.reload();
 
-		TreePath path = new TreePath(parent.getPath());
-		tree.setSelectionPath(path);
-		tree.scrollPathToVisible(path);
-		tree.expandPath(path);
-
-		FolderPanel.showCurrentDirectory(parent);
+		selectDirectory(parent);
 	}
 
 	static void deleteSon(DefaultMutableTreeNode node) {
@@ -305,6 +357,16 @@ public class MainWindow extends JPanel {
 		FolderPanel.showCurrentDirectory(node);
 	}
 
+	static public void selectDirectory(DefaultMutableTreeNode node) {
+		TreePath path = new TreePath(node.getPath());
+		tree.setSelectionPath(path);
+		tree.scrollPathToVisible(path);
+		tree.expandPath(path);
+		Tree.setLastTreeNodeOpened(node);
+		lastPanelNode = null;
+		FolderPanel.showCurrentDirectory(node);	
+	}
+
 	static public void enterOrOpen(File file, DefaultMutableTreeNode node) {
 		JTree tree = MainWindow.getTree();
 	
@@ -314,14 +376,7 @@ public class MainWindow extends JPanel {
 		}
 
 		if(file.isDirectory()) {
-			TreePath path = new TreePath(node.getPath());
-			tree.setSelectionPath(path);
-			tree.scrollPathToVisible(path);
-			tree.expandPath(path);
-			
-			Tree.setLastTreeNodeOpened(node);
-			lastPanelNode = null;
-			FolderPanel.showCurrentDirectory(node);
+			selectDirectory(node);
 		}
 		else if(file.isFile()) {
 			try {
