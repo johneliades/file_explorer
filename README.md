@@ -17,11 +17,13 @@ Open a cmd in the cloned folder and enter:
 
 ```
 javac java/*.java -d classes
+```
+to compile the java files in classes and
 
-OR
-
+```
 jar -cvmf MANIFEST.MF FileExplorer.jar -C classes .
 ```
+to make a jar executable.
 
 ## Run
 Double click the FileExplorer.jar file (Note: icons folder must be in the same folder as the jar).
