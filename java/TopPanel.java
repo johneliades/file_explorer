@@ -387,10 +387,26 @@ public class TopPanel extends JPanel {
 	public static void addNavButton(DefaultMutableTreeNode node) {
 		GridBagConstraints gbc = new GridBagConstraints();
 		File file = (File) node.getUserObject();
-		
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+
 		String name = node.toString();
 		JButton button = new JButton(name);
 		button.setFocusPainted(false);
+		button.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				MainWindow.selectDirectory(node);
+			}
+			@Override
+			public void mouseEntered(MouseEvent event) {}
+			@Override
+			public void mouseExited(MouseEvent event) {}
+			@Override
+			public void mousePressed(MouseEvent event) {}
+			@Override
+			public void mouseReleased(MouseEvent event) {}
+		});
+
 		buttonField.add(button, gbc);
 	}
 
