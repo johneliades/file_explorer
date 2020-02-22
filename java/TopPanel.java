@@ -39,7 +39,7 @@ public class TopPanel extends JPanel {
 		super(new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints();
-		this.setBackground(Color.white);
+		this.setBackground(Color.WHITE);
 
 		ImageIcon img;
 		Image pict;
@@ -55,9 +55,9 @@ public class TopPanel extends JPanel {
 		
 		buttonBack = new JButton(img);
 		buttonBack.setBorder(BorderFactory.createEmptyBorder());
-		buttonBack.setContentAreaFilled(false);
 		buttonBack.setPreferredSize(new Dimension(23, 23));
-		
+		buttonBack.setFocusPainted(false);
+
 		buttonBack.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){  
 				historyBack();
@@ -77,9 +77,9 @@ public class TopPanel extends JPanel {
 
 		buttonForward = new JButton(img);
 		buttonForward.setBorder(BorderFactory.createEmptyBorder());
-		buttonForward.setContentAreaFilled(false);
 		buttonForward.setPreferredSize(new Dimension(23, 23));
-	
+		buttonForward.setFocusPainted(false);
+
 		buttonForward.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				historyForward();
