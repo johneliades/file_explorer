@@ -3,12 +3,12 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class JTextFieldHint extends JTextField {
+public class JTextFieldIcon extends JTextField {
 	private JTextField jtf;
 	private Icon icon;
 	private Insets dummyInsets;
 
-	public JTextFieldHint(JTextField jtf, ImageIcon icon){
+	public JTextFieldIcon(JTextField jtf, ImageIcon icon){
 		this.jtf = jtf;
 		setIcon(icon);
 

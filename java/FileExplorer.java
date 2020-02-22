@@ -67,9 +67,6 @@ public class FileExplorer {
 		//Set window layout manager
 		frame.setLayout(new BorderLayout());
 
-		//Set Menu Bar
-		frame.setJMenuBar(new MenuBar());
-
 		//Add content to the window.
 		frame.add(new TopPanel(), BorderLayout.NORTH);
 		frame.add(new MainWindow(file), BorderLayout.CENTER);

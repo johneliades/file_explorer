@@ -16,7 +16,7 @@ public class TopPanel extends JPanel {
 	private static String windowsTopName = Tree.getWindowsTopName();
 	
 	private static JButton buttonBack, buttonForward;
-	private static JTextFieldHint searchField, navigationField;
+	private static JTextFieldIcon searchField, navigationField;
 	private static JPanel buttonField;
 	private static String searchQuery = "";
 		
@@ -94,7 +94,7 @@ public class TopPanel extends JPanel {
 		c.gridx = 2;
 		c.gridy = 0;
 
-		navigationField = new JTextFieldHint(new JTextField(), 
+		navigationField = new JTextFieldIcon(new JTextField(), 
 			new ImageIcon((new ImageIcon(
 				FileExplorer.getIconPath() + "other/pc.png"))
 						.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT)));		
@@ -143,7 +143,7 @@ public class TopPanel extends JPanel {
 
 		this.add(buttonField, c);
 
-		searchField = new JTextFieldHint(new JTextField(), 
+		searchField = new JTextFieldIcon(new JTextField(), 
 			new ImageIcon((new ImageIcon(
 				FileExplorer.getIconPath() + "other/magnifyingglass.png"))
 						.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT)));		
@@ -153,6 +153,7 @@ public class TopPanel extends JPanel {
 		searchField.setForeground(new Color(0, 255, 255));
 		searchField.setPreferredSize(new Dimension(searchField.
 				getPreferredSize().width, 25));
+
 		searchField.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {}

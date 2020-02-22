@@ -611,6 +611,7 @@ public class FolderPanel extends JPanel {
 
 		folder.repaint();
 		folder.revalidate();
+		folder.requestFocusInWindow();
 	}
 
 	/*
@@ -741,7 +742,6 @@ public class FolderPanel extends JPanel {
 										MainWindow.getLastPanelNode();
 
 				DefaultMutableTreeNode current = null, parent = lastTreeNodeOpened;
-				String name="";
 				File curFile=null;
 		
 				if(!file.exists()) {
@@ -751,31 +751,19 @@ public class FolderPanel extends JPanel {
 
 				selectPanel(panel);
 
-				// Get node and name of last selected panel
-				Component curComponents[] = currentPanelSelected.getComponents();
-				for(Component comp : curComponents)
-					if(comp.getName()!=null && comp.getName()!="")
-						name = comp.getName();
-
-				currentPanelName = name;
-
+				String name="";
 				int i, numChild=tree.getModel().getChildCount(parent);
 				for(i=0; i<numChild; i++) { 
 					current=(DefaultMutableTreeNode) tree.getModel().getChild(parent, i);
 					curFile=(File) (current).getUserObject();
 					if(curFile.getName().compareTo(name)==0) {
+						MainWindow.setLastPanelNode(current);	
 						break;
 					}
+					else
+						MainWindow.setLastPanelNode(null);
 				}
-				if(curFile.getName().compareTo(name)==0)
-					MainWindow.setLastPanelNode(current);
-				else
-					MainWindow.setLastPanelNode(null);
 
-				if(current==null || i==numChild || curFile.exists()==false) {
-				//	JOptionPane.showMessageDialog(null, "Chose file");
-				//	return;
-				}
 				// /Get node and name of last selected panel
 
 				if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
@@ -879,6 +867,15 @@ public class FolderPanel extends JPanel {
 		panel.setBorder(BorderFactory.createLineBorder(Color.white));
 		panel.requestFocusInWindow();
 		currentPanelSelected = panel;
+
+		// Get node and name of last selected panel
+		String name="";
+		Component curComponents[] = currentPanelSelected.getComponents();
+		for(Component comp : curComponents)
+			if(comp.getName()!=null && comp.getName()!="")
+				name = comp.getName();
+
+		currentPanelName = name;
 	}
 
 	static public void clearLastPanelSelection() {

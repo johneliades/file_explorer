@@ -62,6 +62,7 @@ public class MainWindow extends JPanel {
 		treeView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 12));
 		treeView.getVerticalScrollBar().setBackground(new Color(53, 53, 53));
 		treeView.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		treeView.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		BasicTreeUI basicTreeUI = (BasicTreeUI) tree.getUI();
 		basicTreeUI.setLeftChildIndent(0);
@@ -76,6 +77,7 @@ public class MainWindow extends JPanel {
 		folderView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 12));
 		folderView.getVerticalScrollBar().setBackground(new Color(53, 53, 53));
 		folderView.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		folderView.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		if(roots.length==1)
 			Tree.createNodes(top, 0);
@@ -206,14 +208,7 @@ public class MainWindow extends JPanel {
 				Tree.createNodes(current, 0);
 			}
 		}
-		tree.setSelectionPath(path);
-		tree.scrollPathToVisible(path);
-		tree.expandPath(path);
-
-		Tree.setLastTreeNodeOpened(node);
-
-		FolderPanel.showCurrentDirectory(node);
-		folder.requestFocusInWindow();
+		selectDirectory(node);
 	}
 
 	static void renameSon(DefaultMutableTreeNode node) {
@@ -350,12 +345,7 @@ public class MainWindow extends JPanel {
 			return;
 		}
 
-		TreePath path = new TreePath(node.getPath());
-		tree.setSelectionPath(path);
-		tree.scrollPathToVisible(path);
-		tree.expandPath(path);
-
-		FolderPanel.showCurrentDirectory(node);
+		selectDirectory(node);
 	}
 
 	static public void selectDirectory(DefaultMutableTreeNode node) {
