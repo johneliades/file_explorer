@@ -522,8 +522,17 @@ public class FolderPanel extends JPanel {
 		if(FileName.isEmpty())
 			FileName = ((File) node.getUserObject()).getPath();
 		
-		TopPanel.getNavigationField().setText(((File) node.getUserObject()).getPath());
-		TopPanel.getSearchField().setText("Search" + " \"" + FileName + "\"");
+		TopPanel.setNavigationText(((File) node.getUserObject()).getPath());
+		TopPanel.setSearchText("Search" + " \"" + FileName + "\"");
+		TopPanel.clearNavButtons();
+		
+		TreePath path = new TreePath(node.getPath());
+		for(int i=0; i < path.getPathCount(); i++) {
+			DefaultMutableTreeNode current =  (DefaultMutableTreeNode)
+				path.getPathComponent(i);
+
+			TopPanel.addNavButton(current);
+		}
 
 		folder.removeAll();
 

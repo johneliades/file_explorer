@@ -17,6 +17,7 @@ public class TopPanel extends JPanel {
 	
 	private static JButton buttonBack, buttonForward;
 	private static JTextFieldHint searchField, navigationField;
+	private static JPanel buttonField;
 	private static String searchQuery = "";
 		
 	public static final ImageIcon grayedForward = new ImageIcon(
@@ -103,8 +104,44 @@ public class TopPanel extends JPanel {
 		navigationField.setForeground(new Color(0, 255, 255));
 		navigationField.setPreferredSize(new Dimension(navigationField.
 					getPreferredSize().width, 25));
+		
+		navigationField.setVisible(false);
+
+		navigationField.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+			}
+			public void focusLost(FocusEvent e) {
+				toggleNavigation();
+			}
+		});
 
 		this.add(navigationField, c);
+
+		buttonField = new JPanel();
+		buttonField.setLayout(new GridBagLayout());
+		buttonField.setBackground(new Color(30, 30, 30));
+		buttonField.setForeground(new Color(0, 255, 255));
+		buttonField.setPreferredSize(new Dimension(navigationField.
+					getPreferredSize().width, 25));
+
+		buttonField.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				toggleNavigation();
+				navigationField.requestFocusInWindow();
+			}
+			@Override
+			public void mouseEntered(MouseEvent event) {}
+			@Override
+			public void mouseExited(MouseEvent event) {}
+			@Override
+			public void mousePressed(MouseEvent event) {}
+			@Override
+			public void mouseReleased(MouseEvent event) {}
+		});
+
+		this.add(buttonField, c);
 
 		searchField = new JTextFieldHint(new JTextField(), 
 			new ImageIcon((new ImageIcon(
@@ -339,12 +376,42 @@ public class TopPanel extends JPanel {
 		MainWindow.enterOrOpen(file, next);
 	}
 
-	public static JTextFieldHint getNavigationField() {
-		return navigationField;
+	public static void setNavigationText(String text) {
+		navigationField.setText(text);
 	}
 
-	public static JTextFieldHint getSearchField() {
-		return searchField;
+	public static void setSearchText(String text) {
+		searchField.setText(text);
+	}
+
+	public static void addNavButton(DefaultMutableTreeNode node) {
+		GridBagConstraints gbc = new GridBagConstraints();
+		File file = (File) node.getUserObject();
+		
+		String name = node.toString();
+		JButton button = new JButton(name);
+		button.setFocusPainted(false);
+		buttonField.add(button, gbc);
+	}
+
+	public static void clearNavButtons() {
+		buttonField.removeAll();
+		buttonField.revalidate();
+		buttonField.repaint();
+	}
+
+	public static void toggleNavigation() {
+		boolean navShown = navigationField.isVisible();
+		boolean buttonShown = buttonField.isVisible();
+
+		if(navShown && !buttonShown) {
+			navigationField.setVisible(false);
+			buttonField.setVisible(true);
+		}
+		else if(!navShown && buttonShown){
+			navigationField.setVisible(true);
+			buttonField.setVisible(false);		
+		}
 	}
 
 	public static JButton getButtonBack() {
