@@ -24,6 +24,7 @@ public class MainWindow extends JPanel {
 
 	private static DefaultMutableTreeNode lastPanelNode=null;
 
+	private static DefaultMutableTreeNode top;
 	private static JPanel folder;
 	private static JTree tree;
 		
@@ -41,7 +42,6 @@ public class MainWindow extends JPanel {
 		//Create the nodes.
 		File roots[]=File.listRoots();
 		
-		DefaultMutableTreeNode top;
 		if(roots.length==1)
 			top = new DefaultMutableTreeNode(roots[0]);
 		else {
@@ -391,6 +391,10 @@ public class MainWindow extends JPanel {
 			}
 			element.delete();
 		}
+	}
+
+	public static DefaultMutableTreeNode getTop() {
+		return top;
 	}
 
 	public static JPanel getFolder() {

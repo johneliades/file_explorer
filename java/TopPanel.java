@@ -36,6 +36,10 @@ public class TopPanel extends JPanel {
 		(new ImageIcon(FileExplorer.getIconPath() + "other/forwardarrow.png"))
 			.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT));
 
+	private static final ImageIcon folderIconPC = new ImageIcon(
+		new ImageIcon(ICONPATH + "other/pc.png").getImage().
+						getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+
 	public TopPanel() {
 		super(new GridBagLayout());
 
@@ -102,24 +106,62 @@ public class TopPanel extends JPanel {
 		navigationField.setCaretColor(Color.WHITE);
 		navigationField.setBackground(new Color(30, 30, 30));
 		navigationField.setForeground(new Color(0, 255, 255));
+		navigationField.setSelectionColor(Color.WHITE);
 		navigationField.setPreferredSize(new Dimension(navigationField.
 					getPreferredSize().width, 25));
 		
+		Font font = new Font("SansSerif", Font.BOLD, 13);
+		navigationField.setFont(font);
+
 		navigationField.setVisible(false);
 
 		navigationField.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent e) {
+                navigationField.select(0, navigationField.getText().length());
 			}
 			public void focusLost(FocusEvent e) {
+				DefaultMutableTreeNode node = Tree.getLastTreeNodeOpened();
+				String path = ((File) node.getUserObject()).getPath();
+
+				navigationField.setText(path);
 				toggleNavigation();
 			}
+		});
+
+		navigationField.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					String path = navigationField.getText();
+					File file = new File(path);
+
+					if(file.exists()) {
+						java.util.Stack<String> pathComponents = 
+							new java.util.Stack<String>();
+
+						while(true) {
+							if(file.getParentFile() == null)
+								break;
+							pathComponents.add(file.getName());
+							file = file.getParentFile();
+						} 
+						pathComponents.add(file.getPath().replace("\\", ""));
+					
+						MainWindow.loadPath(MainWindow.getTop(), pathComponents);
+					}
+				}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {}
 		});
 
 		this.add(navigationField, c);
 
 		buttonField = new JPanel();
-		buttonField.setLayout(new GridBagLayout());
+		buttonField.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		buttonField.setBackground(new Color(30, 30, 30));
 		buttonField.setForeground(new Color(0, 255, 255));
 		buttonField.setPreferredSize(new Dimension(navigationField.
@@ -166,7 +208,8 @@ public class TopPanel extends JPanel {
 					
 					tree.requestFocusInWindow();
 
-					DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+					DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
+						tree.getLastSelectedPathComponent();
 					File top = (File) node.getUserObject();
 
 					folder.removeAll();
@@ -385,12 +428,20 @@ public class TopPanel extends JPanel {
 		searchField.setText(text);
 	}
 
+	public static void clearNavButtons() {
+		buttonField.removeAll();
+		buttonField.revalidate();
+		buttonField.repaint();
+
+		JLabel myLabel = new JLabel(folderIconPC);
+		myLabel.setBorder(new EmptyBorder(0, 5, 0, 5));
+		buttonField.add(myLabel);
+	}
+
 	public static void addNavButton(DefaultMutableTreeNode node) {
-		GridBagConstraints gbc = new GridBagConstraints();
 		File file = (File) node.getUserObject();
 
-		String name = node.toString();
-		JButton button = new JButton(name);
+		JButton button = new JButton(node.toString());
 		button.setFocusPainted(false);
 		button.setBackground(new Color(30, 30, 30));
 		button.setForeground(new Color(0, 255, 255));
@@ -409,13 +460,7 @@ public class TopPanel extends JPanel {
 			public void mouseReleased(MouseEvent event) {}
 		});
 
-		buttonField.add(button, gbc);
-	}
-
-	public static void clearNavButtons() {
-		buttonField.removeAll();
-		buttonField.revalidate();
-		buttonField.repaint();
+		buttonField.add(button);
 	}
 
 	public static void toggleNavigation() {
