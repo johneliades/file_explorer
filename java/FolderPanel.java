@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
+import javax.swing.filechooser.FileSystemView;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -654,7 +655,10 @@ public class FolderPanel extends JPanel {
 		String extension = Utility.getExtension(file.getName());
 
 		if(name.trim().length() == 0) {
-			name = "Local Disk (" + file.getPath().replace("\\", "") + ")";
+			FileSystemView fsv = FileSystemView.getFileSystemView();
+
+			String description = fsv.getSystemTypeDescription(file);
+			name = description + " (" + file.getPath().replace("\\", "") + ")";
 			img = new ImageIcon(ICONPATH + "other/harddiskfolder.png");
 			folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
 			img = new ImageIcon(folderImg);

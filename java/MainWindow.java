@@ -170,7 +170,8 @@ public class MainWindow extends JPanel {
 				DefaultMutableTreeNode temp=(DefaultMutableTreeNode) 
 						tree.getModel().getChild(currentTop, i);
 
-				String nodeName = temp.getUserObject().toString().replace("\\", "");
+				String nodeName = temp.getUserObject().
+							toString().replace("\\", "");
 				if(nodeName.equals(current)) {
 					if(pathComponents.empty()) {
 						//Found path to open
@@ -196,7 +197,7 @@ public class MainWindow extends JPanel {
 		defMod1.reload();
 	
 		TreePath path = new TreePath(node.getPath());
-		if(path.toString().equals("[This PC]")) {
+		if(path.toString().equals("[" + windowsTopName + "]")) {
 			//Create root nodes.
 			File roots[]=File.listRoots();
 
