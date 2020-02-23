@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
+import javax.swing.filechooser.FileSystemView;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -27,14 +28,6 @@ public class Tree extends JTree implements TreeSelectionListener {
 
 	private static final ImageIcon folderIconEmpty = new ImageIcon(
 		new ImageIcon(ICONPATH + "other/folderempty.png").getImage().
-						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
-	
-	private static final ImageIcon folderIconDisk = new ImageIcon(
-		new ImageIcon(ICONPATH + "other/harddisk.png").getImage().
-						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
-	
-	private static final ImageIcon folderIconPC = new ImageIcon(
-		new ImageIcon(ICONPATH + "other/pc.png").getImage().
 						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
 
 	public Tree(DefaultMutableTreeNode top) {
@@ -81,11 +74,43 @@ public class Tree extends JTree implements TreeSelectionListener {
 				label.setBorder(new EmptyBorder(0, 0, 0, 0)); //top,left,bottom,right
 
 				if(nodo==root) {
+					ImageIcon folderIconPC = new ImageIcon(
+						ICONPATH + "other/pc.png");
+					Image img = folderIconPC.getImage().
+						getScaledInstance(25, 25, Image.SCALE_DEFAULT);
+					folderIconPC = new ImageIcon(img);
+
 					setIcon(folderIconPC);
 					label.setBorder(new EmptyBorder(15, 0, 0, 0)); //top,left,bottom,right
 				}
 				else if(name.trim().length() == 0 && nodo.getParent()==root) {
-					setText(file.getPath().replace("\\", ""));
+					FileSystemView fsv = FileSystemView.getFileSystemView();
+
+					String description = fsv.getSystemTypeDescription(file);
+					name = description + " (" + 
+								file.getPath().replace("\\", "") + ")";
+					setText(name);
+
+					ImageIcon folderIconDisk = new 
+						ImageIcon(ICONPATH + "other/harddiskfolder.png");
+
+					if(description.equals("CD Drive")) {
+						folderIconDisk = new 
+							ImageIcon(ICONPATH + "other/cd.png");
+					}
+					else if(description.equals("DVD Drive")) {
+						folderIconDisk = new 
+							ImageIcon(ICONPATH + "other/dvd.png");
+					}
+					else if(description.equals("USB Drive")) {
+						folderIconDisk = new 
+							ImageIcon(ICONPATH + "other/usb.png");			
+					}
+
+					Image img = folderIconDisk.getImage().
+						getScaledInstance(25, 25, Image.SCALE_DEFAULT);
+					folderIconDisk = new ImageIcon(img);
+
 					setIcon(folderIconDisk);
 				}
 				else if(file.list()!=null && file.list().length==0) {
