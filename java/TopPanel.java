@@ -441,7 +441,7 @@ public class TopPanel extends JPanel {
 	public static void addNavButton(DefaultMutableTreeNode node) {
 		File file = (File) node.getUserObject();
 
-		JButton button = new JButton(node.toString());
+		JButton button = new JButton(node.toString().replace("\\", ""));
 		button.setFocusPainted(false);
 		button.setBackground(new Color(30, 30, 30));
 		button.setForeground(new Color(0, 255, 255));

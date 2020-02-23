@@ -3,7 +3,6 @@
 +=======+
 
 #paint better empty triangles in photoshop
-#for example c:/ exists but crashes on windows case sensitive
 #disks dont have open in directory
 #when going lower that scroll with arrows
 
