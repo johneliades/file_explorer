@@ -96,20 +96,14 @@ public class Tree extends JTree implements TreeSelectionListener {
 					if(description.equals("CD Drive")) {
 						folderIconDisk = new 
 							ImageIcon(ICONPATH + "other/cd.png");
-						name = description + " (" + 
-								file.getPath().replace("\\", "") + ")";
 					}
 					else if(description.equals("DVD Drive")) {
 						folderIconDisk = new 
 							ImageIcon(ICONPATH + "other/dvd.png");
-						name = description + " (" + 
-								file.getPath().replace("\\", "") + ")";
 					}
 					else if(description.equals("USB Drive")) {
 						folderIconDisk = new 
 							ImageIcon(ICONPATH + "other/usb.png");			
-						name = description + " (" + 
-								file.getPath().replace("\\", "") + ")";
 					}
 
 					Image img = folderIconDisk.getImage().
