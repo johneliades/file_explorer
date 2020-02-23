@@ -2,9 +2,9 @@
 |BUGLIST|
 +=======+
 
-#paint better empty triangles in photoshop
+#better focus order
 #disks dont have open in directory
-#when going lower that scroll with arrows
+#when going lower scroll with arrows
 
 #small bug requires soft refresh?: Node is created then external source makes 
 		folder in it and node is clicked again so createnode is called but doesnt
@@ -16,15 +16,17 @@
 |EZ_FAST|
 +=======+
 
-#load path This PC
-#right click at tree
-#after refresh last selected item is dropped
+#right click open, properties
+#file names wrap 2 lines with border
+#disks free space bar
+#right click at tree, choose focus after that
 
 +=======+
 |_LATER_|
 +=======+
 
-#folders with no permissions shouldnt show options?
+#after refresh last selected item is dropped
+#load path This PC
 #could open all extensions once at startup for even faster load
 #maybe NodeInfo is no longer necessary
 #faster rendering of pictures (favourite in chrome)
