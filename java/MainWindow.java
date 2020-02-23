@@ -164,8 +164,9 @@ public class MainWindow extends JPanel {
 
 		end:
 		while(true) {
+			int i;
 			int numChild=tree.getModel().getChildCount(currentTop);
-			for(int i=0; i<numChild; i++) { 
+			for(i=0; i<numChild; i++) { 
 				DefaultMutableTreeNode temp=(DefaultMutableTreeNode) 
 						tree.getModel().getChild(currentTop, i);
 
@@ -182,6 +183,8 @@ public class MainWindow extends JPanel {
 					break;
 				}
 			}
+			if(i==numChild)
+				break;
 		}
 	}
 
@@ -211,11 +214,11 @@ public class MainWindow extends JPanel {
 		selectDirectory(node);
 	}
 
-	static void renameSon(DefaultMutableTreeNode node) {
+	static void renameSon(DefaultMutableTreeNode parent) {
 		DefaultMutableTreeNode lastPanelNode = MainWindow.getLastPanelNode();
 		JTree tree = MainWindow.getTree();
 
-		DefaultMutableTreeNode current = null, parent = node;
+		DefaultMutableTreeNode current = null;
 		String filePath = ((File) parent.getUserObject()).getPath();
 		String nameNew,	nameOld="";
 

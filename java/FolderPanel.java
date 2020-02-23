@@ -396,7 +396,12 @@ public class FolderPanel extends JPanel {
 	}
 
 	static public JPopupMenu getFilePopupMenu() {
-		File selected = (File) MainWindow.getLastPanelNode().getUserObject();
+		DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
+		String currentFileName = FolderPanel.getCurrentPanelName();
+		String filePath = ((File) lastTreeNodeOpened.
+						getUserObject()).getPath();
+
+		File selected = new File(filePath + "/" + currentFileName);
 
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem menuItem;
@@ -617,7 +622,6 @@ public class FolderPanel extends JPanel {
 
 		folder.repaint();
 		folder.revalidate();
-		folder.requestFocusInWindow();
 	}
 
 	/*
@@ -849,6 +853,9 @@ public class FolderPanel extends JPanel {
 				Tree.getLastTreeNodeOpened();
 		DefaultMutableTreeNode current = null, parent = lastTreeNodeOpened;
 		File curFile=null;
+
+		if(panel==null)
+			return;
 
 		clearLastPanelSelection();
 		panel.setBackground(new Color(0, 100, 100));
