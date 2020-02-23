@@ -659,8 +659,21 @@ public class FolderPanel extends JPanel {
 
 			String description = fsv.getSystemTypeDescription(file);
 			name = description + " (" + file.getPath().replace("\\", "") + ")";
+			
 			img = new ImageIcon(ICONPATH + "other/harddiskfolder.png");
-			folderImg = img.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
+
+			if(description.equals("CD Drive")) {
+				img = new ImageIcon(ICONPATH + "other/cd.png");
+			}
+			else if(description.equals("DVD Drive")) {
+				img = new ImageIcon(ICONPATH + "other/dvd.png");
+			}
+			else if(description.equals("USB Drive")) {
+				img = new ImageIcon(ICONPATH + "other/usb.png");			
+			}
+
+			folderImg = img.getImage().getScaledInstance(
+					60, 60, Image.SCALE_DEFAULT);
 			img = new ImageIcon(folderImg);
 		}
 
