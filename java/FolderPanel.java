@@ -135,6 +135,8 @@ public class FolderPanel extends JPanel {
 	}
 
 	public JPopupMenu getBackgroundPopupMenu() {
+		File selected = (File) Tree.getLastTreeNodeOpened().getUserObject();
+
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem menuItem;
 		JMenu sectionsMenu = new JMenu(" New ");
@@ -261,9 +263,11 @@ public class FolderPanel extends JPanel {
 		folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
 		sectionsMenu.setIcon(new ImageIcon(folderImg));	
 
-		popupMenu.addSeparator();
-		popupMenu.add(sectionsMenu);
-		popupMenu.addSeparator();
+		if(selected.exists() && selected.canWrite()) {
+			popupMenu.addSeparator();
+			popupMenu.add(sectionsMenu);
+			popupMenu.addSeparator();
+		}
 
 		popupMenu.setBorder(new CompoundBorder(
 				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red), 
@@ -392,6 +396,8 @@ public class FolderPanel extends JPanel {
 	}
 
 	static public JPopupMenu getFilePopupMenu() {
+		File selected = (File) MainWindow.getLastPanelNode().getUserObject();
+
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem menuItem;
 		ImageIcon img=null;
@@ -411,8 +417,8 @@ public class FolderPanel extends JPanel {
 		});
 			
 		menuItem.setBackground(Color.white);
-		popupMenu.add(menuItem);
-
+		if(selected.exists() && selected.canWrite())
+			popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem(" Delete ");
 		img = new ImageIcon(ICONPATH + "other/delete.png");
@@ -428,19 +434,19 @@ public class FolderPanel extends JPanel {
 		});
 
 		menuItem.setBackground(Color.white);
-		popupMenu.add(menuItem);
+		if(selected.exists() && selected.canWrite())
+			popupMenu.add(menuItem);
 
 		popupMenu.setBorder(new CompoundBorder(
 				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red), 
 				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black)));		
 		popupMenu.setBackground(Color.white);
 
-		if(MainWindow.getLastPanelNode()!=null) {
-			menuItem = new JMenuItem(" New Window ");
-			img = new ImageIcon(ICONPATH + "other/folder.png");
-			folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
-			menuItem.setIcon(new ImageIcon(folderImg));
-			menuItem.addActionListener(new ActionListener() {
+		menuItem = new JMenuItem(" New Window ");
+		img = new ImageIcon(ICONPATH + "other/folder.png");
+		folderImg = img.getImage().getScaledInstance(17, 17, Image.SCALE_DEFAULT);
+		menuItem.setIcon(new ImageIcon(folderImg));
+		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				File currentJar=null;
@@ -497,9 +503,9 @@ public class FolderPanel extends JPanel {
 		});
 
 		menuItem.setBackground(Color.white);
-		popupMenu.add(menuItem);
-		}
-
+		if(MainWindow.getLastPanelNode()!=null)
+			popupMenu.add(menuItem);
+		
 		return popupMenu;
 	}
 
@@ -735,36 +741,12 @@ public class FolderPanel extends JPanel {
 			}
 			@Override
 			public void mousePressed(MouseEvent event) {
-				DefaultMutableTreeNode lastTreeNodeOpened = 
-										Tree.getLastTreeNodeOpened();
-				JTree tree = MainWindow.getTree();
-				DefaultMutableTreeNode lastPanelNode =
-										MainWindow.getLastPanelNode();
-
-				DefaultMutableTreeNode current = null, parent = lastTreeNodeOpened;
-				File curFile=null;
-		
 				if(!file.exists()) {
 					Tree.findExistingParent(file);
 					return;
 				}
 
 				selectPanel(panel);
-
-				String name="";
-				int i, numChild=tree.getModel().getChildCount(parent);
-				for(i=0; i<numChild; i++) { 
-					current=(DefaultMutableTreeNode) tree.getModel().getChild(parent, i);
-					curFile=(File) (current).getUserObject();
-					if(curFile.getName().compareTo(name)==0) {
-						MainWindow.setLastPanelNode(current);	
-						break;
-					}
-					else
-						MainWindow.setLastPanelNode(null);
-				}
-
-				// /Get node and name of last selected panel
 
 				if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
 					MainWindow.historyPush(Tree.getLastTreeNodeOpened());
@@ -862,6 +844,12 @@ public class FolderPanel extends JPanel {
 	}
 
 	static public void selectPanel(JPanel panel) {
+		JTree tree = MainWindow.getTree();
+		DefaultMutableTreeNode lastTreeNodeOpened = 
+				Tree.getLastTreeNodeOpened();
+		DefaultMutableTreeNode current = null, parent = lastTreeNodeOpened;
+		File curFile=null;
+
 		clearLastPanelSelection();
 		panel.setBackground(new Color(0, 100, 100));
 		panel.setBorder(BorderFactory.createLineBorder(Color.white));
@@ -876,6 +864,20 @@ public class FolderPanel extends JPanel {
 				name = comp.getName();
 
 		currentPanelName = name;
+
+		int i, numChild=tree.getModel().getChildCount(parent);
+		for(i=0; i<numChild; i++) { 
+			current=(DefaultMutableTreeNode) tree.getModel().getChild(parent, i);
+			curFile=(File) (current).getUserObject();
+			if(curFile.getName().compareTo(name)==0) {
+				MainWindow.setLastPanelNode(current);	
+				break;
+			}
+			else
+				MainWindow.setLastPanelNode(null);
+		}
+
+		// /Get node and name of last selected panel
 	}
 
 	static public void clearLastPanelSelection() {

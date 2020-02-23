@@ -2,6 +2,7 @@
 |BUGLIST|
 +=======+
 
+#for example c:/ exists but crashes on windows case sensitive
 #disks dont have open in directory
 #when going lower that scroll with arrows
 
@@ -15,7 +16,7 @@
 |EZ_FAST|
 +=======+
 
-#at startup focus folder
+#load path This PC
 #right click at tree
 #after refresh last selected item is dropped
 
@@ -35,3 +36,4 @@
 #drag n drop
 #zip/unzip
 #ftp
+#at startup focus folder
