@@ -440,8 +440,17 @@ public class TopPanel extends JPanel {
 
 	public static void addNavButton(DefaultMutableTreeNode node) {
 		File file = (File) node.getUserObject();
+		String name;
 
-		JButton button = new JButton(node.toString().replace("\\", ""));
+		name = file.getName();
+		if(name.trim().length() == 0) {
+			if(file.getPath().equals("/"))
+				name = file.getPath();
+			else
+				name = "Local Disk (" + file.getPath().replace("\\", "") + ")";
+		}
+
+		JButton button = new JButton(name);
 		button.setFocusPainted(false);
 		button.setBackground(new Color(30, 30, 30));
 		button.setForeground(new Color(0, 255, 255));
