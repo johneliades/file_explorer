@@ -86,31 +86,37 @@ public class Tree extends JTree implements TreeSelectionListener {
 				else if(name.trim().length() == 0 && nodo.getParent()==root) {
 					FileSystemView fsv = FileSystemView.getFileSystemView();
 
-					String description = fsv.getSystemTypeDescription(file);
-					name = description + " (" + 
-								file.getPath().replace("\\", "") + ")";
-					setText(name);
-
 					ImageIcon folderIconDisk = new 
-						ImageIcon(ICONPATH + "other/harddiskfolder.png");
+						ImageIcon(ICONPATH + "other/harddisk.png");
+					setText(file.getPath().replace("\\", ""));
+					
+					String description = fsv.getSystemTypeDescription(file);
+					name = file.getPath().replace("\\", "");
 
 					if(description.equals("CD Drive")) {
 						folderIconDisk = new 
 							ImageIcon(ICONPATH + "other/cd.png");
+						name = description + " (" + 
+								file.getPath().replace("\\", "") + ")";
 					}
 					else if(description.equals("DVD Drive")) {
 						folderIconDisk = new 
 							ImageIcon(ICONPATH + "other/dvd.png");
+						name = description + " (" + 
+								file.getPath().replace("\\", "") + ")";
 					}
 					else if(description.equals("USB Drive")) {
 						folderIconDisk = new 
 							ImageIcon(ICONPATH + "other/usb.png");			
+						name = description + " (" + 
+								file.getPath().replace("\\", "") + ")";
 					}
 
 					Image img = folderIconDisk.getImage().
 						getScaledInstance(25, 25, Image.SCALE_DEFAULT);
 					folderIconDisk = new ImageIcon(img);
-
+					
+					setText(name);
 					setIcon(folderIconDisk);
 				}
 				else if(file.list()!=null && file.list().length==0) {
