@@ -30,11 +30,11 @@ public class MainWindow extends JPanel {
 		
 	ImageIcon collapsedIcon = new ImageIcon((new ImageIcon(
 					ICONPATH + "other/collapsed.png")).getImage().
-							getScaledInstance(10, 10, Image.SCALE_DEFAULT));
+							getScaledInstance(8, 8, Image.SCALE_DEFAULT));
 	
 	ImageIcon expandedIcon = new ImageIcon((new ImageIcon(
 					ICONPATH + "other/expanded.png")).getImage().
-							getScaledInstance(10, 10, Image.SCALE_DEFAULT));
+							getScaledInstance(8, 8, Image.SCALE_DEFAULT));
 
 	public MainWindow(File fileToOpen) {
 		super(new GridLayout(1, 0));
