@@ -558,12 +558,12 @@ public class FolderPanel extends JPanel {
 				SimpleDateFormat sdf = new SimpleDateFormat(
 												"dd/MM/yyyy HH:mm:ss");
 				String text=
-					"Name:       " + panel.getName()
-					+ "\nSize:          " + size
-					+"\nModified:   " + sdf.format(selected.lastModified())
-					+ "\n\nRead:         " + selected.canRead()
-					+ "\nWrite:        " + selected.canWrite()
-					+ "\nExecute:    " + selected.canExecute();
+					"Name: " + panel.getName()
+					+ "\nSize: " + size
+					+"\nModified: " + sdf.format(selected.lastModified())
+					+ "\n\nRead: " + selected.canRead()
+					+ "\nWrite: " + selected.canWrite()
+					+ "\nExecute: " + selected.canExecute();
 
 
 				JTextArea properties = new JTextArea(text.toString());
