@@ -385,13 +385,8 @@ public class FolderPanel extends JPanel {
 		return popupMenu;
 	}
 
-	static public JPopupMenu getFilePopupMenu() {
-		DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
-		String currentFileName = FolderPanel.getCurrentPanelName();
-		String filePath = ((File) lastTreeNodeOpened.
-						getUserObject()).getPath();
-
-		File selected = new File(filePath + "/" + currentFileName);
+	static public JPopupMenu getFilePopupMenu(File selected, 
+											DefaultMutableTreeNode node) {
 
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem menuItem;
@@ -403,14 +398,15 @@ public class FolderPanel extends JPanel {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				DefaultMutableTreeNode panel = MainWindow.
-												getLastPanelNode();
-
-				MainWindow.enterOrOpen(selected, panel);
+				MainWindow.historyPush(Tree.getLastTreeNodeOpened());
+				MainWindow.clearFuture();
+				MainWindow.enterOrOpen(selected, node);
+				MainWindow.getFolder().requestFocusInWindow();
 			}
 		});
 		menuItem.setBackground(Color.white);
-		popupMenu.add(menuItem);
+		if(selected.exists() && selected.canRead())
+			popupMenu.add(menuItem);
 	
 		menuItem = new JMenuItem("  New Window");
 		menuItem.setIcon(Utility.getImageFast(ICONPATH + 
@@ -491,7 +487,7 @@ public class FolderPanel extends JPanel {
 		});
 			
 		menuItem.setBackground(Color.white);
-		if(selected.exists() && selected.canWrite())
+		if(selected.exists() && selected.canRead())
 			popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem("  Delete");
@@ -797,7 +793,7 @@ public class FolderPanel extends JPanel {
 					MainWindow.getFolder().requestFocusInWindow();
 				}
 				else if(event.getButton() == MouseEvent.BUTTON3) {
-					JPopupMenu menu = getFilePopupMenu();
+					JPopupMenu menu = getFilePopupMenu(file, node);
 
 					menu.show(event.getComponent(), event.getX(), event.getY());
 				}

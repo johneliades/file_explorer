@@ -3,7 +3,6 @@
 +=======+
 
 #better focus order
-#disks dont have open in directory
 #when going lower scroll with arrows
 
 #small bug requires soft refresh?: Node is created then external source makes 
@@ -16,10 +15,11 @@
 |EZ_FAST|
 +=======+
 
-#right click open, properties
+#properties
 #file names wrap 2 lines with border
 #disks free space bar
 #right click at tree, choose focus after that
+#renameson -> rename, deleteson -> delete (arguments exist)
 
 +=======+
 |_LATER_|
