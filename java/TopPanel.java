@@ -19,26 +19,6 @@ public class TopPanel extends JPanel {
 	private static JTextFieldIcon searchField, navigationField;
 	private static JPanel buttonField;
 	private static String searchQuery = "";
-		
-	public static final ImageIcon grayedForward = new ImageIcon(
-		(new ImageIcon(FileExplorer.getIconPath() + "other/grayedforward.png"))
-			.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT));
-	
-	public static final ImageIcon backArrow = new ImageIcon(
-		(new ImageIcon(FileExplorer.getIconPath() + "other/backarrow.png"))
-			.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT));
-	
-	public static final ImageIcon grayedBack = new ImageIcon(
-		(new ImageIcon(FileExplorer.getIconPath() + "other/grayedback.png"))
-			.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT));
-
-	public static final ImageIcon forwardArrow = new ImageIcon(
-		(new ImageIcon(FileExplorer.getIconPath() + "other/forwardarrow.png"))
-			.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT));
-
-	private static final ImageIcon folderIconPC = new ImageIcon(
-		new ImageIcon(ICONPATH + "other/pc.png").getImage().
-						getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 
 	public TopPanel() {
 		super(new GridBagLayout());
@@ -46,19 +26,14 @@ public class TopPanel extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 		this.setBackground(Color.WHITE);
 
-		ImageIcon img;
-		Image pict;
-
 		c.weightx = 0.005;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 0;
 
-		img = new ImageIcon(FileExplorer.getIconPath() + "other/grayedback.png");
-		pict = img.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT);
-		img = new ImageIcon(pict);
-		
-		buttonBack = new JButton(img);
+
+		buttonBack = new JButton(Utility.getImageFast(
+			FileExplorer.getIconPath() + "other/grayedback.png", 23, 23));
 		buttonBack.setBorder(BorderFactory.createEmptyBorder());
 		buttonBack.setPreferredSize(new Dimension(23, 23));
 		buttonBack.setFocusPainted(false);
@@ -76,11 +51,8 @@ public class TopPanel extends JPanel {
 		c.gridx = 1;
 		c.gridy = 0;
 
-		img = new ImageIcon(FileExplorer.getIconPath() + "other/grayedforward.png");
-		pict = img.getImage().getScaledInstance(23, 23, Image.SCALE_DEFAULT);
-		img = new ImageIcon(pict);
-
-		buttonForward = new JButton(img);
+		buttonForward = new JButton(Utility.getImageFast(
+			FileExplorer.getIconPath() + "other/grayedforward.png", 23, 23));
 		buttonForward.setBorder(BorderFactory.createEmptyBorder());
 		buttonForward.setPreferredSize(new Dimension(23, 23));
 		buttonForward.setFocusPainted(false);
@@ -99,10 +71,9 @@ public class TopPanel extends JPanel {
 		c.gridy = 0;
 
 		navigationField = new JTextFieldIcon(new JTextField(), 
-			new ImageIcon((new ImageIcon(
-				FileExplorer.getIconPath() + "other/pc.png"))
-						.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT)));		
-		
+			Utility.getImageFast(FileExplorer.getIconPath() + "other/pc.png", 
+				15, 15));
+
 		navigationField.setCaretColor(Color.WHITE);
 		navigationField.setBackground(new Color(30, 30, 30));
 		navigationField.setForeground(new Color(0, 255, 255));
@@ -186,9 +157,8 @@ public class TopPanel extends JPanel {
 		this.add(buttonField, c);
 
 		searchField = new JTextFieldIcon(new JTextField(), 
-			new ImageIcon((new ImageIcon(
-				FileExplorer.getIconPath() + "other/magnifyingglass.png"))
-						.getImage().getScaledInstance(15, 15, Image.SCALE_DEFAULT)));		
+			Utility.getImageFast(FileExplorer.getIconPath() + 
+				"other/magnifyingglass.png", 15, 15));
 
 		searchField.setCaretColor(Color.WHITE);
 		searchField.setBackground(new Color(30, 30, 30));
@@ -433,7 +403,8 @@ public class TopPanel extends JPanel {
 		buttonField.revalidate();
 		buttonField.repaint();
 
-		JLabel myLabel = new JLabel(folderIconPC);
+		JLabel myLabel = new JLabel(Utility.getImageFast(
+			FileExplorer.getIconPath() + "other/pc.png", 23, 23));
 		myLabel.setBorder(new EmptyBorder(0, 5, 0, 5));
 		buttonField.add(myLabel);
 	}
@@ -456,17 +427,23 @@ public class TopPanel extends JPanel {
 		button.setForeground(new Color(0, 255, 255));
 		button.addMouseListener(new MouseListener() {
 			@Override
-			public void mouseClicked(MouseEvent event) {
-				MainWindow.selectDirectory(node);
+			public void mouseClicked(MouseEvent event) {}
+			@Override
+			public void mouseEntered(MouseEvent event) {
+				button.setForeground(Color.WHITE);
 			}
 			@Override
-			public void mouseEntered(MouseEvent event) {}
+			public void mouseExited(MouseEvent event) {
+				button.setForeground(new Color(0, 255, 255));
+			}
 			@Override
-			public void mouseExited(MouseEvent event) {}
+			public void mousePressed(MouseEvent event) {
+				button.setForeground(Color.BLACK);
+			}
 			@Override
-			public void mousePressed(MouseEvent event) {}
-			@Override
-			public void mouseReleased(MouseEvent event) {}
+			public void mouseReleased(MouseEvent event) {
+				MainWindow.selectDirectory(node);
+			}
 		});
 
 		buttonField.add(button);
@@ -525,8 +502,8 @@ class IconTextCellRenderer extends DefaultTableCellRenderer {
 	public static ImageIcon getSmallIcon(String name, File file) {
 		JLabel label = new JLabel();
 		ImageIcon img=null;
-		Image pict;
 		Set<String> set = new HashSet<>(); 
+		String path = null;
 
 		// Bad check for images
 		set.add("jpeg");
@@ -534,26 +511,25 @@ class IconTextCellRenderer extends DefaultTableCellRenderer {
 		set.add("png");
 		set.add("gif");
 		if(set.contains(Utility.getExtension(file.getName()))) {
-			img = new ImageIcon(file.getPath());
+			path = file.getPath();
 		}
 
-		if(img==null) {
+		if(path==null) {
 			if(name=="folder.png") {
 				if(file.list()!=null && file.list().length==0)
-					img = new ImageIcon(ICONPATH + "other/" + "folderempty.png");
+					path = ICONPATH + "other/" + "folderempty.png";
 				else {
-					img = new ImageIcon(ICONPATH + "other/" + "folder.png");
+					path = ICONPATH + "other/" + "folder.png";
 				}
 			}
 			else if(name=="question.png") {
-				img = new ImageIcon(ICONPATH + "other/" + "question.png");
+				path = ICONPATH + "other/" + "question.png";
 			}
 			else
-				img = new ImageIcon(ICONPATH + "extensions/" + name);
+				path = ICONPATH + "extensions/" + name;
 		}
 
-		pict = img.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT);
-		img = new ImageIcon(pict);
+		img = Utility.getImageFast(path, 35, 35);
 
 		return img;
 	}

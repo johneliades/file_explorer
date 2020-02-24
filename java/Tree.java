@@ -18,17 +18,14 @@ public class Tree extends JTree implements TreeSelectionListener {
 	private static final boolean showHiddenFiles = 
 									FileExplorer.getHiddenFilesOption();
 
-	private static final ImageIcon folderIcon = new ImageIcon(
-		new ImageIcon(ICONPATH + "other/folder.png").getImage().
-						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
+	private static final ImageIcon folderIcon = Utility.getImageFast(
+		ICONPATH + "other/folder.png", 25, 25);
 
-	private static final ImageIcon folderIconOpen = new ImageIcon(
-		new ImageIcon(ICONPATH + "other/folderopen.png").getImage().
-						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
+	private static final ImageIcon folderIconOpen = Utility.getImageFast(
+		ICONPATH + "other/folderopen.png", 25, 25);
 
-	private static final ImageIcon folderIconEmpty = new ImageIcon(
-		new ImageIcon(ICONPATH + "other/folderempty.png").getImage().
-						getScaledInstance(25, 25, Image.SCALE_DEFAULT));
+	private static final ImageIcon folderIconEmpty = Utility.getImageFast(
+		ICONPATH + "other/folderempty.png", 25, 25);
 
 	public Tree(DefaultMutableTreeNode top) {
 		super(top);
@@ -71,47 +68,36 @@ public class Tree extends JTree implements TreeSelectionListener {
 
 				TreeModel tmodel = tree.getModel();
 				Object root = tmodel.getRoot();
-				label.setBorder(new EmptyBorder(0, 0, 0, 0)); //top,left,bottom,right
+				label.setBorder(new EmptyBorder(0, 0, 0, 0)); 
+				//top,left,bottom,right
 
 				if(nodo==root) {
-					ImageIcon folderIconPC = new ImageIcon(
-						ICONPATH + "other/pc.png");
-					Image img = folderIconPC.getImage().
-						getScaledInstance(25, 25, Image.SCALE_DEFAULT);
-					folderIconPC = new ImageIcon(img);
-
-					setIcon(folderIconPC);
-					label.setBorder(new EmptyBorder(15, 0, 0, 0)); //top,left,bottom,right
+					setIcon(Utility.getImageFast(ICONPATH + 
+								"other/pc.png", 25, 25));
+					label.setBorder(new EmptyBorder(15, 0, 0, 0)); 
+					//top,left,bottom,right
 				}
 				else if(name.trim().length() == 0 && nodo.getParent()==root) {
 					FileSystemView fsv = FileSystemView.getFileSystemView();
 
-					ImageIcon folderIconDisk = new 
-						ImageIcon(ICONPATH + "other/harddisk.png");
+					String path = ICONPATH + "other/harddisk.png";
 					setText(file.getPath().replace("\\", ""));
 					
 					String description = fsv.getSystemTypeDescription(file);
 					name = file.getPath().replace("\\", "");
 
 					if(description.equals("CD Drive")) {
-						folderIconDisk = new 
-							ImageIcon(ICONPATH + "other/cd.png");
+						path = ICONPATH + "other/cd.png";
 					}
 					else if(description.equals("DVD Drive")) {
-						folderIconDisk = new 
-							ImageIcon(ICONPATH + "other/dvd.png");
+						path = ICONPATH + "other/dvd.png";
 					}
 					else if(description.equals("USB Drive")) {
-						folderIconDisk = new 
-							ImageIcon(ICONPATH + "other/usb.png");			
+						path = ICONPATH + "other/usb.png";			
 					}
-
-					Image img = folderIconDisk.getImage().
-						getScaledInstance(25, 25, Image.SCALE_DEFAULT);
-					folderIconDisk = new ImageIcon(img);
 					
 					setText(name);
-					setIcon(folderIconDisk);
+					setIcon(Utility.getImageFast(path, 25, 25));
 				}
 				else if(file.list()!=null && file.list().length==0) {
 					setIcon(folderIconEmpty);
@@ -282,9 +268,11 @@ public class Tree extends JTree implements TreeSelectionListener {
 			File element = (File) it.next();
 
 			for(i=0; i<numChild; i++) { 
-				current=(File) ((DefaultMutableTreeNode) MainWindow.getTree().getModel().getChild(top, i)).getUserObject();
+				current=(File) ((DefaultMutableTreeNode) MainWindow.getTree().
+						getModel().getChild(top, i)).getUserObject();
 				if(current.getName().compareTo(element.getName())==0) {
-					file=(DefaultMutableTreeNode) MainWindow.getTree().getModel().getChild(top, i);
+					file=(DefaultMutableTreeNode) MainWindow.getTree().
+							getModel().getChild(top, i);
 					break;
 				}
 			}
