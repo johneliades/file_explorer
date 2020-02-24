@@ -31,8 +31,8 @@ public class FolderPanel extends JPanel {
 		super(new WrapLayout(FlowLayout.LEFT, 10, 10));
 		this.setBackground(new Color(49, 49, 49));
 		UIManager UI=new UIManager();
-		UI.put("OptionPane.background",new ColorUIResource(50, 50, 50));
-		UI.put("Panel.background",new ColorUIResource(50, 50, 50));
+		UI.put("OptionPane.background",new ColorUIResource(32, 32, 32));
+		UI.put("Panel.background",new ColorUIResource(32, 32, 32));
 		UI.put("OptionPane.messageForeground", Color.WHITE);
 
 		this.addMouseListener(new MouseListener() {
@@ -568,7 +568,7 @@ public class FolderPanel extends JPanel {
 
 				JTextArea properties = new JTextArea(text.toString());
 				properties.setEditable(false);
-				properties.setBackground(new Color(50, 50, 50));
+				properties.setBackground(new Color(32, 32, 32));
 				properties.setForeground(Color.WHITE);
 				
 				Font currentFont = properties.getFont();
