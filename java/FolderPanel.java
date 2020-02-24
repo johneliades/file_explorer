@@ -415,8 +415,6 @@ public class FolderPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				File currentJar=null;
-				DefaultMutableTreeNode lastPanelNode =
-					MainWindow.getLastPanelNode();
 
 				final String javaBin = System.getProperty("java.home") + 
 					File.separator + "bin" + File.separator + "java";
@@ -437,7 +435,7 @@ public class FolderPanel extends JPanel {
 					command.add("-jar");
 					command.add(currentJar.getPath());
 
-					command.add(((File) lastPanelNode.getUserObject()).getPath());
+					command.add(((File) node.getUserObject()).getPath());
 				
 					final ProcessBuilder builder = new ProcessBuilder(command);
 					try {
@@ -455,7 +453,7 @@ public class FolderPanel extends JPanel {
 						ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
 					cmd.append(FileExplorer.class.getName()).append(" ");
 
-					cmd.append(((File) lastPanelNode.getUserObject()).getPath());
+					cmd.append(((File) node.getUserObject()).getPath());
 					try {
 						Runtime.getRuntime().exec(cmd.toString());
 					}
