@@ -15,7 +15,6 @@
 |EZ_FAST|
 +=======+
 
-#properties
 #file names wrap 2 lines with border
 #disks free space bar
 #right click at tree, choose focus after that

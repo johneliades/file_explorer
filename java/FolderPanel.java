@@ -526,7 +526,7 @@ public class FolderPanel extends JPanel {
 					fileSizeInGB = fileSizeInMB / 1024;
 				}
 
-				String size="No calculation";
+				String size="No calculation (Folder)";
 				if(fileSizeInBytes!=0) {
 					size = fileSizeInBytes + " B";
 				}
@@ -806,6 +806,7 @@ public class FolderPanel extends JPanel {
 		label = new JLabel(name, JLabel.CENTER);
 		label.setPreferredSize(new Dimension(150, 30));
 		label.setForeground (Color.white);
+		label.setBorder(new EmptyBorder(0, 10, 0, 10));
 		panel.add(label, BorderLayout.SOUTH);
 
 		panel.setName(name);
