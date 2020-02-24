@@ -8,6 +8,8 @@ import javax.swing.tree.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.JTextArea;
+import javax.swing.plaf.ColorUIResource;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -28,6 +30,10 @@ public class FolderPanel extends JPanel {
 		//Create the folder viewing pane.
 		super(new WrapLayout(FlowLayout.LEFT, 10, 10));
 		this.setBackground(new Color(49, 49, 49));
+		UIManager UI=new UIManager();
+		UI.put("OptionPane.background",new ColorUIResource(50, 50, 50));
+		UI.put("Panel.background",new ColorUIResource(50, 50, 50));
+		UI.put("OptionPane.messageForeground", Color.WHITE);
 
 		this.addMouseListener(new MouseListener() {
 			@Override
@@ -387,7 +393,7 @@ public class FolderPanel extends JPanel {
 	}
 
 	static public JPopupMenu getFilePopupMenu(File selected, 
-											DefaultMutableTreeNode node) {
+								DefaultMutableTreeNode node, JPanel panel) {
 
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem menuItem;
@@ -551,13 +557,24 @@ public class FolderPanel extends JPanel {
 
 				SimpleDateFormat sdf = new SimpleDateFormat(
 												"dd/MM/yyyy HH:mm:ss");
+				String text=
+					"Name:       " + panel.getName()
+					+ "\nSize:          " + size
+					+"\nModified:   " + sdf.format(selected.lastModified())
+					+ "\n\nRead:         " + selected.canRead()
+					+ "\nWrite:        " + selected.canWrite()
+					+ "\nExecute:    " + selected.canExecute();
 
 
-				String properties="Size: " + size
-				+"\nModified: " + sdf.format(selected.lastModified())
-				+ "\n\nRead: " + selected.canRead()
-				+ "\nWrite: " + selected.canWrite()
-				+ "\nExecute: " + selected.canExecute();
+				JTextArea properties = new JTextArea(text.toString());
+				properties.setEditable(false);
+				properties.setBackground(new Color(50, 50, 50));
+				properties.setForeground(Color.WHITE);
+				
+				Font currentFont = properties.getFont();
+				Font bigFont = new Font(currentFont.getName(), 
+						currentFont.getStyle(), currentFont.getSize() + 5);
+				properties.setFont(bigFont);
 
 				JOptionPane.showMessageDialog(null, 
 					properties, "Properties", 
@@ -842,7 +859,7 @@ public class FolderPanel extends JPanel {
 					MainWindow.getFolder().requestFocusInWindow();
 				}
 				else if(event.getButton() == MouseEvent.BUTTON3) {
-					JPopupMenu menu = getFilePopupMenu(file, node);
+					JPopupMenu menu = getFilePopupMenu(file, node, panel);
 
 					menu.show(event.getComponent(), event.getX(), event.getY());
 				}
