@@ -468,7 +468,7 @@ public class FolderPanel extends JPanel {
 		});
 
 		menuItem.setBackground(Color.white);
-		if(MainWindow.getLastPanelNode()!=null)
+		if(selected.exists() && selected.canRead())
 			popupMenu.add(menuItem);
 
 		popupMenu.addSeparator();
