@@ -15,7 +15,7 @@
 |EZ_FAST|
 +=======+
 
-#file names wrap 2 lines with border
+#file names wrap 2 lines
 #disks free space bar
 #right click at tree, choose focus after that
 #renameson -> rename, deleteson -> delete (arguments exist)
@@ -26,7 +26,6 @@
 
 #after refresh last selected item is dropped
 #load path This PC
-#could open all extensions once at startup for even faster load
 #maybe NodeInfo is no longer necessary
 #faster rendering of pictures (favourite in chrome)
 #open as
