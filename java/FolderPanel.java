@@ -492,7 +492,7 @@ public class FolderPanel extends JPanel {
 		});
 			
 		menuItem.setBackground(Color.white);
-		if(selected.exists() && selected.canRead())
+		if(selected.exists() && selected.canWrite())
 			popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem("  Delete");
