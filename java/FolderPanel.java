@@ -509,10 +509,8 @@ public class FolderPanel extends JPanel {
 		});
 
 		menuItem.setBackground(Color.white);
-		if(selected.exists() && selected.canWrite()) {
-			System.out.println(selected.getPath());
+		if(selected.exists() && selected.canWrite())
 			popupMenu.add(menuItem);
-		}
 
 		menuItem = new JMenuItem("  Properties");
 		menuItem.setIcon(
