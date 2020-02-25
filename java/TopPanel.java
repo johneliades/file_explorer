@@ -28,7 +28,7 @@ public class TopPanel extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 		this.setBackground(Color.WHITE);
 		this.setBorder(
-			BorderFactory.createMatteBorder(3, 3, 3, 3, topColor));
+			BorderFactory.createMatteBorder(6, 3, 6, 3, topColor));
 
 		c.weightx = 0.005;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -449,6 +449,7 @@ public class TopPanel extends JPanel {
 			@Override
 			public void mouseReleased(MouseEvent event) {
 				MainWindow.selectDirectory(node);
+				MainWindow.getFolder().requestFocusInWindow();
 			}
 		});
 
