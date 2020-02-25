@@ -23,6 +23,8 @@
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.*;
+
 import javax.swing.JSplitPane;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -39,7 +41,7 @@ public class JSplitPaneWithZeroSizeDivider
 	/**
 	 * The size of the transparent drag area.
 	 */
-	private int dividerDragSize = 9;
+	private int dividerDragSize = 19;
 
 	/**
 	 * The offset of the transparent drag area relative to the visible divider line.
@@ -57,7 +59,7 @@ public class JSplitPaneWithZeroSizeDivider
 	public JSplitPaneWithZeroSizeDivider( int orientation ) {
 		super( orientation );
 		setContinuousLayout( true );
-		setDividerSize( 1 );
+		setDividerSize( 0 );
 	}
 
 	public int getDividerDragSize() {
@@ -131,7 +133,7 @@ public class JSplitPaneWithZeroSizeDivider
 
 		@Override
 		public void paint( Graphics g ) {
-			g.setColor( getBackground() );
+			g.setColor( Color.BLACK );
 			if( orientation == HORIZONTAL_SPLIT )
 				g.drawLine( dividerDragOffset, 0, dividerDragOffset, getHeight() - 1 );
 			else

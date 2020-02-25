@@ -15,9 +15,11 @@
 |EZ_FAST|
 +=======+
 
+#change scrollbar appearance
 #disks free space bar
 #right click at tree, choose focus after that
 #load path This PC
+#better utility search of icons
 
 +=======+
 |_LATER_|
