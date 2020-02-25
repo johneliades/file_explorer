@@ -428,6 +428,8 @@ public class TopPanel extends JPanel {
 		button.setFocusPainted(false);
 		button.setBackground(topColor);
 		button.setForeground(new Color(0, 255, 255));
+		button.setPreferredSize(new Dimension(button.
+					getPreferredSize().width, 25));
 		button.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent event) {}
