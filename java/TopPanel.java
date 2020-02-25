@@ -27,7 +27,7 @@ public class TopPanel extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 		this.setBackground(Color.WHITE);
 		this.setBorder(
-			BorderFactory.createMatteBorder(4, 4, 4, 4, topColor));
+			BorderFactory.createMatteBorder(3, 3, 3, 3, topColor));
 
 		c.weightx = 0.005;
 		c.fill = GridBagConstraints.HORIZONTAL;

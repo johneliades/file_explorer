@@ -114,7 +114,7 @@ public class MainWindow extends JPanel {
 		splitPane.setLeftComponent(treeView);
 		splitPane.setRightComponent(folderView);
 		splitPane.setBorder(
-			BorderFactory.createMatteBorder(4, 4, 4, 4, Color.BLACK));
+			BorderFactory.createMatteBorder(0, 3, 3, 3, Color.BLACK));
 
 		// Mouse back and forward
 		if (Toolkit.getDefaultToolkit().areExtraMouseButtonsEnabled() && MouseInfo.getNumberOfButtons() > 3) {
