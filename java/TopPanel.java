@@ -15,6 +15,7 @@ public class TopPanel extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	private static String windowsTopName = Tree.getWindowsTopName();
 	private static final Color topColor = new Color(25, 25, 25);
+	private static final int navHeight = 26;
 
 	private static JButton buttonBack, buttonForward;
 	private static JTextFieldIcon searchField, navigationField;
@@ -36,9 +37,9 @@ public class TopPanel extends JPanel {
 
 
 		buttonBack = new JButton(Utility.getImageFast(
-			FileExplorer.getIconPath() + "other/grayedback.png", 23, 23));
+			FileExplorer.getIconPath() + "other/grayedback.png", navHeight, navHeight));
 		buttonBack.setBorder(BorderFactory.createEmptyBorder());
-		buttonBack.setPreferredSize(new Dimension(23, 23));
+		buttonBack.setPreferredSize(new Dimension(navHeight, navHeight));
 		buttonBack.setFocusPainted(false);
 
 		buttonBack.addActionListener(new ActionListener(){  
@@ -55,9 +56,9 @@ public class TopPanel extends JPanel {
 		c.gridy = 0;
 
 		buttonForward = new JButton(Utility.getImageFast(
-			FileExplorer.getIconPath() + "other/grayedforward.png", 23, 23));
+			FileExplorer.getIconPath() + "other/grayedforward.png", navHeight, navHeight));
 		buttonForward.setBorder(BorderFactory.createEmptyBorder());
-		buttonForward.setPreferredSize(new Dimension(23, 23));
+		buttonForward.setPreferredSize(new Dimension(navHeight, navHeight));
 		buttonForward.setFocusPainted(false);
 
 		buttonForward.addActionListener(new ActionListener(){
@@ -82,7 +83,7 @@ public class TopPanel extends JPanel {
 		navigationField.setForeground(new Color(0, 255, 255));
 		navigationField.setSelectionColor(Color.WHITE);
 		navigationField.setPreferredSize(new Dimension(navigationField.
-					getPreferredSize().width, 25));
+					getPreferredSize().width, navHeight));
 		
 		Font font = new Font("SansSerif", Font.BOLD, 13);
 		navigationField.setFont(font);
@@ -139,7 +140,7 @@ public class TopPanel extends JPanel {
 		buttonField.setBackground(topColor);
 		buttonField.setForeground(new Color(0, 255, 255));
 		buttonField.setPreferredSize(new Dimension(navigationField.
-					getPreferredSize().width, 25));
+					getPreferredSize().width, navHeight));
 
 		buttonField.addMouseListener(new MouseListener() {
 			@Override
@@ -167,7 +168,7 @@ public class TopPanel extends JPanel {
 		searchField.setBackground(topColor);
 		searchField.setForeground(new Color(0, 255, 255));
 		searchField.setPreferredSize(new Dimension(searchField.
-				getPreferredSize().width, 25));
+				getPreferredSize().width, navHeight));
 
 		searchField.addKeyListener(new KeyListener() {
 			@Override
@@ -407,7 +408,7 @@ public class TopPanel extends JPanel {
 		buttonField.repaint();
 
 		JLabel myLabel = new JLabel(Utility.getImageFast(
-			FileExplorer.getIconPath() + "other/pc.png", 23, 23));
+			FileExplorer.getIconPath() + "other/pc.png", navHeight, navHeight));
 		myLabel.setBorder(new EmptyBorder(0, 5, 0, 5));
 		buttonField.add(myLabel);
 	}
@@ -429,7 +430,7 @@ public class TopPanel extends JPanel {
 		button.setBackground(topColor);
 		button.setForeground(new Color(0, 255, 255));
 		button.setPreferredSize(new Dimension(button.
-					getPreferredSize().width, 25));
+					getPreferredSize().width, navHeight));
 		button.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent event) {}
