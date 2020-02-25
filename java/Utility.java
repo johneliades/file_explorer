@@ -31,7 +31,7 @@ public class Utility {
 		ImageIcon icon = new ImageIcon(path);
 
 		Image img = icon.getImage().getScaledInstance(x, y, 
-					Image.SCALE_DEFAULT);
+					Image.SCALE_SMOOTH);
 
 		icon = new ImageIcon(img);
 		ScaledIcon scaled = new ScaledIcon(path, icon, x, y);
