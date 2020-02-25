@@ -41,7 +41,7 @@ public class JSplitPaneWithZeroSizeDivider
 	/**
 	 * The size of the transparent drag area.
 	 */
-	private int dividerDragSize = 19;
+	private int dividerDragSize = 15;
 
 	/**
 	 * The offset of the transparent drag area relative to the visible divider line.
