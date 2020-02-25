@@ -22,8 +22,6 @@ public class MainWindow extends JPanel {
 	static public java.util.Stack<DefaultMutableTreeNode> futureHistory = 
 			new java.util.Stack<DefaultMutableTreeNode>();
 
-	private static DefaultMutableTreeNode lastPanelNode=null;
-
 	private static DefaultMutableTreeNode top;
 	private static JPanel folder;
 	private static JTree tree;
@@ -209,19 +207,18 @@ public class MainWindow extends JPanel {
 		selectDirectory(node);
 	}
 
-	static void renameSon(DefaultMutableTreeNode parent) {
-		DefaultMutableTreeNode lastPanelNode = MainWindow.getLastPanelNode();
-		JTree tree = MainWindow.getTree();
+	static void renameSon(DefaultMutableTreeNode panelNode, JPanel panel) {
 
-		DefaultMutableTreeNode current = null;
-		String filePath = ((File) parent.getUserObject()).getPath();
+		JTree tree = MainWindow.getTree();
+		DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
+		String filePath = ((File) lastTreeNodeOpened.getUserObject()).getPath();
 		String nameNew,	nameOld="";
 
 		ImageIcon img=null;
 		Image folderImg;
 		int i;
 
-		nameOld = FolderPanel.getCurrentPanelName();
+		nameOld = panel.getName();
 
 		File f = new File(filePath + "/" + nameOld);
 
@@ -243,9 +240,7 @@ public class MainWindow extends JPanel {
 			}
 
 			if(f.isDirectory()) {
-				current = lastPanelNode;
-
-				current.removeFromParent();
+				panelNode.removeFromParent();
 			}
 
 			boolean success = f.renameTo(file2);
@@ -268,22 +263,17 @@ public class MainWindow extends JPanel {
 		DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
 		defMod1.reload();
 
-		selectDirectory(parent);
+		selectDirectory(lastTreeNodeOpened);
 	}
 
-	static void deleteSon(DefaultMutableTreeNode node) {
-		JTree tree = MainWindow.getTree();
-
-		String filePath = ((File) node.getUserObject()).getPath();
-		DefaultMutableTreeNode current=null;
-		String name="";
-		String lastPanelName = FolderPanel.getCurrentPanelName();
-		JPanel lastPanelSelected = FolderPanel.getCurrentPanelSelected();
+	static void deleteSon(DefaultMutableTreeNode panelNode, JPanel panel) {
+		DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
+		String filePath = ((File) lastTreeNodeOpened.getUserObject()).getPath();
 
 		ImageIcon img=null;
 		int i;
 
-		name = lastPanelName;
+		String name = panel.getName();
 		if(name==null) {
 			return;
 		}
@@ -318,21 +308,21 @@ public class MainWindow extends JPanel {
 				return;
 			}
 
-			current = MainWindow.getLastPanelNode();
-			current.removeAllChildren();
-			current.removeFromParent();
+			panelNode.removeAllChildren();
+			panelNode.removeFromParent();
 			removeDirectory(f);
 			f.delete(); 
 
+			JTree tree = MainWindow.getTree();
 			DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
 			defMod1.reload();
 		}
 		else {
 			if(!f.canWrite()) {
 				JOptionPane.showMessageDialog(null, "Not enough permissions!");
-				if(lastPanelSelected!=null) {
-					lastPanelSelected.setBackground(new Color(0x3fa9ff));
-					lastPanelSelected.setBorder(BorderFactory.createLineBorder(Color.black));
+				if(panel!=null) {
+					panel.setBackground(new Color(0x3fa9ff));
+					panel.setBorder(BorderFactory.createLineBorder(Color.black));
 				}
 				return;
 			}
@@ -341,7 +331,7 @@ public class MainWindow extends JPanel {
 			return;
 		}
 
-		selectDirectory(node);
+		selectDirectory(lastTreeNodeOpened);
 	}
 
 	static public void selectDirectory(DefaultMutableTreeNode node) {
@@ -350,7 +340,6 @@ public class MainWindow extends JPanel {
 		tree.scrollPathToVisible(path);
 		tree.expandPath(path);
 		Tree.setLastTreeNodeOpened(node);
-		lastPanelNode = null;
 		FolderPanel.showCurrentDirectory(node);	
 	}
 
@@ -399,14 +388,6 @@ public class MainWindow extends JPanel {
 
 	public static JTree getTree() {
 		return tree;
-	}
-
-	public static DefaultMutableTreeNode getLastPanelNode() {
-		return lastPanelNode;
-	}
-
-	public static void setLastPanelNode(DefaultMutableTreeNode node) {
-		lastPanelNode = node;
 	}
 
 	public static void historyPush(DefaultMutableTreeNode node) {
