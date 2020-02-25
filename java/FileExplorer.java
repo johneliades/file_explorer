@@ -48,6 +48,8 @@ public class FileExplorer {
 		//Create and set up the window.
 		JFrame frame = new JFrame("File Explorer");
 		frame.setBackground(new Color(53, 53, 53));
+		frame.getRootPane().setBorder(
+			BorderFactory.createMatteBorder(0, 2, 2, 2, Color.BLACK));
 
 		frame.setIconImage(new ImageIcon(ICONPATH + "other/folder.png").getImage());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,7 +64,8 @@ public class FileExplorer {
 		frame.setSize(windowWidth, windowHeight);
 
 		//Set Window's location
-		frame.setLocation((screenSize.width-windowWidth)/2, (screenSize.height-windowHeight)/2);
+		frame.setLocation((screenSize.width-windowWidth)/2, 
+					(screenSize.height-windowHeight)/2);
 
 		//Set window layout manager
 		frame.setLayout(new BorderLayout());

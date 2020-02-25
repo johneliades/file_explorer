@@ -113,6 +113,8 @@ public class MainWindow extends JPanel {
 						JSplitPaneWithZeroSizeDivider.HORIZONTAL_SPLIT);
 		splitPane.setLeftComponent(treeView);
 		splitPane.setRightComponent(folderView);
+		splitPane.setBorder(
+			BorderFactory.createMatteBorder(0, 0, 0, 0, Color.BLACK));
 
 		// Mouse back and forward
 		if (Toolkit.getDefaultToolkit().areExtraMouseButtonsEnabled() && MouseInfo.getNumberOfButtons() > 3) {
@@ -207,16 +209,15 @@ public class MainWindow extends JPanel {
 		selectDirectory(node);
 
 		JPanel folder = getFolder();
+		JPanel current = FolderPanel.getCurrentPanelSelected();
 
-		for(Component comp : folder.getComponents()) {
-			JPanel current = FolderPanel.getCurrentPanelSelected();
-			if(current.getName().equals(comp.getName())) {
-				FolderPanel.selectPanel((JPanel) comp);
-				break;
+		if(current!=null)
+			for(Component comp : folder.getComponents()) {
+				if(current.getName().equals(comp.getName())) {
+					FolderPanel.selectPanel((JPanel) comp);
+					break;
+				}
 			}
-		}
-
-		
 	}
 
 	static void rename(DefaultMutableTreeNode panelNode, JPanel panel) {

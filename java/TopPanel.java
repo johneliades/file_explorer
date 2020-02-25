@@ -14,7 +14,8 @@ import java.util.*;
 public class TopPanel extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	private static String windowsTopName = Tree.getWindowsTopName();
-	
+	private static final Color topColor = new Color(25, 25, 25);
+
 	private static JButton buttonBack, buttonForward;
 	private static JTextFieldIcon searchField, navigationField;
 	private static JPanel buttonField;
@@ -25,6 +26,8 @@ public class TopPanel extends JPanel {
 
 		GridBagConstraints c = new GridBagConstraints();
 		this.setBackground(Color.WHITE);
+		this.setBorder(
+			BorderFactory.createMatteBorder(5, 5, 5, 5, topColor));
 
 		c.weightx = 0.005;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -75,7 +78,7 @@ public class TopPanel extends JPanel {
 				15, 15));
 
 		navigationField.setCaretColor(Color.WHITE);
-		navigationField.setBackground(new Color(30, 30, 30));
+		navigationField.setBackground(topColor);
 		navigationField.setForeground(new Color(0, 255, 255));
 		navigationField.setSelectionColor(Color.WHITE);
 		navigationField.setPreferredSize(new Dimension(navigationField.
@@ -133,7 +136,7 @@ public class TopPanel extends JPanel {
 
 		buttonField = new JPanel();
 		buttonField.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		buttonField.setBackground(new Color(30, 30, 30));
+		buttonField.setBackground(topColor);
 		buttonField.setForeground(new Color(0, 255, 255));
 		buttonField.setPreferredSize(new Dimension(navigationField.
 					getPreferredSize().width, 25));
@@ -161,7 +164,7 @@ public class TopPanel extends JPanel {
 				"other/magnifyingglass.png", 15, 15));
 
 		searchField.setCaretColor(Color.WHITE);
-		searchField.setBackground(new Color(30, 30, 30));
+		searchField.setBackground(topColor);
 		searchField.setForeground(new Color(0, 255, 255));
 		searchField.setPreferredSize(new Dimension(searchField.
 				getPreferredSize().width, 25));
@@ -423,7 +426,7 @@ public class TopPanel extends JPanel {
 
 		JButton button = new JButton(name);
 		button.setFocusPainted(false);
-		button.setBackground(new Color(30, 30, 30));
+		button.setBackground(topColor);
 		button.setForeground(new Color(0, 255, 255));
 		button.addMouseListener(new MouseListener() {
 			@Override
