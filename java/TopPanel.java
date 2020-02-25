@@ -32,7 +32,6 @@ public class TopPanel extends JPanel {
 		c.gridx = 0;
 		c.gridy = 0;
 
-
 		buttonBack = new JButton(Utility.getImageFast(
 			FileExplorer.getIconPath() + "other/grayedback.png", 23, 23));
 		buttonBack.setBorder(BorderFactory.createEmptyBorder());
