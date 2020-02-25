@@ -242,15 +242,11 @@ public class Tree extends JTree implements TreeSelectionListener {
 	}
 
 	static public void createNodes(DefaultMutableTreeNode top, int setting) {
-		DefaultMutableTreeNode file = null;
-		int i, numChild;
 		SortedSet<File> set = new TreeSet<>();
 		Iterator it;
 
 		File curDir = (File) top.getUserObject();
-		File current, children[] = curDir.listFiles(); 
-
-		numChild= MainWindow.getTree().getModel().getChildCount(top);
+		File children[] = curDir.listFiles(); 
 
 		if(children==null)
 			return;
@@ -266,24 +262,29 @@ public class Tree extends JTree implements TreeSelectionListener {
 		it=set.iterator();
 		while (it.hasNext()) {
 			File element = (File) it.next();
+			DefaultMutableTreeNode currentNode = null;
 
+			int i, numChild= MainWindow.getTree().getModel().getChildCount(top);
 			for(i=0; i<numChild; i++) { 
-				current=(File) ((DefaultMutableTreeNode) MainWindow.getTree().
-						getModel().getChild(top, i)).getUserObject();
-				if(current.getName().compareTo(element.getName())==0) {
-					file=(DefaultMutableTreeNode) MainWindow.getTree().
-							getModel().getChild(top, i);
+				File currentFile;
+
+				currentNode = (DefaultMutableTreeNode) MainWindow.getTree().
+						getModel().getChild(top, i);
+
+				currentFile=(File) currentNode.getUserObject();
+				if(currentFile.getName().compareTo(element.getName())==0) {
 					break;
 				}
 			}
 
 			if(i==numChild) {
-				file=new DefaultMutableTreeNode(new MyFile(element.getPath()));
-				top.add(file);
+				currentNode = new DefaultMutableTreeNode(new MyFile(
+					element.getPath()));
+				top.add(currentNode);
 			}
 
 			if(setting==0)
-				createNodes(file, 1);
+				createNodes(currentNode, 1);
 		}
 	}
 

@@ -481,7 +481,7 @@ public class FolderPanel extends JPanel {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				MainWindow.renameSon(panelNode, panel);
+				MainWindow.rename(panelNode, panel);
 			}
 		});
 			
@@ -495,7 +495,7 @@ public class FolderPanel extends JPanel {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				MainWindow.deleteSon(panelNode, panel);
+				MainWindow.delete(panelNode, panel);
 			}
 		});
 
@@ -872,7 +872,7 @@ public class FolderPanel extends JPanel {
 
 				switch(e.getKeyCode()) {
 					case KeyEvent.VK_F2:
-						MainWindow.renameSon(panelNode, panel);		
+						MainWindow.rename(panelNode, panel);		
 						break;
 
 					case KeyEvent.VK_F5:
@@ -880,7 +880,7 @@ public class FolderPanel extends JPanel {
 						break;
 
 					case KeyEvent.VK_DELETE:
-						MainWindow.deleteSon(panelNode, panel);		
+						MainWindow.delete(panelNode, panel);		
 						break;
 				
 					case KeyEvent.VK_ENTER:

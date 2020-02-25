@@ -205,9 +205,21 @@ public class MainWindow extends JPanel {
 			}
 		}
 		selectDirectory(node);
+
+		JPanel folder = getFolder();
+
+		for(Component comp : folder.getComponents()) {
+			JPanel current = FolderPanel.getCurrentPanelSelected();
+			if(current.getName().equals(comp.getName())) {
+				FolderPanel.selectPanel((JPanel) comp);
+				break;
+			}
+		}
+
+		
 	}
 
-	static void renameSon(DefaultMutableTreeNode panelNode, JPanel panel) {
+	static void rename(DefaultMutableTreeNode panelNode, JPanel panel) {
 
 		JTree tree = MainWindow.getTree();
 		DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
@@ -266,7 +278,7 @@ public class MainWindow extends JPanel {
 		selectDirectory(lastTreeNodeOpened);
 	}
 
-	static void deleteSon(DefaultMutableTreeNode panelNode, JPanel panel) {
+	static void delete(DefaultMutableTreeNode panelNode, JPanel panel) {
 		DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
 		String filePath = ((File) lastTreeNodeOpened.getUserObject()).getPath();
 
