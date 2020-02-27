@@ -5,6 +5,7 @@ import java.util.*;
 public class Utility {
 	static HashSet<ScaledIcon> small = new HashSet<>();
 	static HashSet<ScaledIcon> big = new HashSet<>();
+	static ScaledIcon last=null;
 
 	static String getExtension(String fileName) {
 		String extension = "";
@@ -20,6 +21,10 @@ public class Utility {
 	}
 
 	static ImageIcon getImageFast(String path, int x, int y, boolean important) {
+		if(last!=null && last.getPath().equals(path) 
+				&& last.getX()==x & last.getY()==y)
+			return last.getIcon();
+
 		Iterator it = small.iterator();
 		while (it.hasNext()) {
 			ScaledIcon element = (ScaledIcon) it.next();
@@ -49,6 +54,8 @@ public class Utility {
 			small.add(scaled);
 		else
 			big.add(scaled);
+		
+		last = scaled;
 
 		return icon;
 	}
