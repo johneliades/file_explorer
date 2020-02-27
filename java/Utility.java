@@ -3,7 +3,8 @@ import java.awt.Image;
 import java.util.*;
 
 public class Utility {
-	static SortedSet<ScaledIcon> set = new TreeSet<>();
+	static HashSet<ScaledIcon> small = new HashSet<>();
+	static HashSet<ScaledIcon> big = new HashSet<>();
 
 	static String getExtension(String fileName) {
 		String extension = "";
@@ -18,8 +19,17 @@ public class Utility {
 		return extension;
 	}
 
-	static ImageIcon getImageFast(String path, int x, int y) {
-		Iterator it = set.iterator();
+	static ImageIcon getImageFast(String path, int x, int y, boolean important) {
+		Iterator it = small.iterator();
+		while (it.hasNext()) {
+			ScaledIcon element = (ScaledIcon) it.next();
+
+			if(element.getPath().equals(path) && element.getX()==x 
+													&& element.getY()==y)
+				return element.getIcon();
+		}
+
+		it = big.iterator();
 		while (it.hasNext()) {
 			ScaledIcon element = (ScaledIcon) it.next();
 
@@ -35,14 +45,17 @@ public class Utility {
 
 		icon = new ImageIcon(img);
 		ScaledIcon scaled = new ScaledIcon(path, icon, x, y);
-		set.add(scaled);
+		if(important)
+			small.add(scaled);
+		else
+			big.add(scaled);
 
 		return icon;
 	}
 
 }
 
-class ScaledIcon implements Comparable {
+class ScaledIcon {
 	private String path;
 	private ImageIcon icon;
 	private int x, y;
@@ -52,13 +65,6 @@ class ScaledIcon implements Comparable {
 		this.icon = icon;
 		this.x = x;
 		this.y = y;
-	}
-
-	@Override
-	public int compareTo(Object obj) {
-		ScaledIcon emp = (ScaledIcon) obj;
-
-		return path.compareTo(emp.getPath());
 	}
 
 	String getPath() {

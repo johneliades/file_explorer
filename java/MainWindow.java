@@ -58,9 +58,9 @@ public class MainWindow extends JPanel {
 		basicTreeUI.setLeftChildIndent(0);
 		basicTreeUI.setRightChildIndent(12);
 		basicTreeUI.setCollapsedIcon(Utility.getImageFast(ICONPATH + 
-								"other/collapsed.png", 8, 8));
+								"other/collapsed.png", 8, 8, true));
 		basicTreeUI.setExpandedIcon(Utility.getImageFast(ICONPATH + 
-			"other/expanded.png", 8, 8));
+			"other/expanded.png", 8, 8, true));
 
 		folder = new FolderPanel();
 		JScrollPane folderView = new JScrollPane(folder);
@@ -236,7 +236,7 @@ public class MainWindow extends JPanel {
 		File f = new File(filePath + "/" + nameOld);
 
 		if(f.exists() && f.canWrite()) {
-			img = Utility.getImageFast(ICONPATH + "other/rename.png", 50, 50);
+			img = Utility.getImageFast(ICONPATH + "other/rename.png", 50, 50, false);
 
 			nameNew=(String) JOptionPane.showInputDialog(null, "Enter New Name",
 									"Rename", JOptionPane.INFORMATION_MESSAGE,
@@ -292,7 +292,7 @@ public class MainWindow extends JPanel {
 		}
 		File f = new File(filePath + "/" + name);
 
-		img = Utility.getImageFast(ICONPATH + "other/delete.png", 50, 50);
+		img = Utility.getImageFast(ICONPATH + "other/delete.png", 50, 50, false);
 
 		if(f.exists() && f.isFile() && f.canWrite()){
 			int input = JOptionPane.showConfirmDialog(null, "Deleting file \"" + 
@@ -410,7 +410,8 @@ public class MainWindow extends JPanel {
 		if(history.empty() || (!history.empty() && history.peek()!=node)) {
 			history.push(node);
 			TopPanel.getButtonBack().setIcon(Utility.getImageFast(
-				FileExplorer.getIconPath() + "other/backarrow.png", 23, 23));
+				FileExplorer.getIconPath() + 
+					"other/backarrow.png", 23, 23, false));
 		}
 	}
 
@@ -418,7 +419,8 @@ public class MainWindow extends JPanel {
 		if(!history.empty()) {
 			if(history.size()==1) {
 				TopPanel.getButtonBack().setIcon(Utility.getImageFast(
-					FileExplorer.getIconPath() + "other/grayedback.png", 23, 23));
+					FileExplorer.getIconPath() + 
+						"other/grayedback.png", 23, 23, false));
 			}
 
 			return history.pop();
@@ -430,7 +432,8 @@ public class MainWindow extends JPanel {
 	public static void clearFuture() {
 		futureHistory.clear();
 		TopPanel.getButtonForward().setIcon(Utility.getImageFast(
-			FileExplorer.getIconPath() + "other/grayedforward.png", 23, 23));
+			FileExplorer.getIconPath() + 
+				"other/grayedforward.png", 23, 23, false));
 	}
 
 	public static void futureHistoryPush(DefaultMutableTreeNode node) {
@@ -443,7 +446,8 @@ public class MainWindow extends JPanel {
 		if(futureHistory.peek()!=node) {
 			futureHistory.push(node);
 			TopPanel.getButtonForward().setIcon(Utility.getImageFast(
-				FileExplorer.getIconPath() + "other/forwardarrow.png", 23, 23));
+				FileExplorer.getIconPath() + 
+					"other/forwardarrow.png", 23, 23, false));
 		}
 	}
 
@@ -457,7 +461,8 @@ public class MainWindow extends JPanel {
 		node = futureHistory.pop();
 		if(futureHistory.empty()) {
 			TopPanel.getButtonForward().setIcon(Utility.getImageFast(
-				FileExplorer.getIconPath() + "other/grayedforward.png", 23, 23));		
+				FileExplorer.getIconPath() + 
+					"other/grayedforward.png", 23, 23, false));		
 		}
 		return node;
 	}

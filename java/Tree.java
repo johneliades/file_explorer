@@ -18,15 +18,6 @@ public class Tree extends JTree implements TreeSelectionListener {
 	private static final boolean showHiddenFiles = 
 									FileExplorer.getHiddenFilesOption();
 
-	private static final ImageIcon folderIcon = Utility.getImageFast(
-		ICONPATH + "other/folder.png", 25, 25);
-
-	private static final ImageIcon folderIconOpen = Utility.getImageFast(
-		ICONPATH + "other/folderopen.png", 25, 25);
-
-	private static final ImageIcon folderIconEmpty = Utility.getImageFast(
-		ICONPATH + "other/folderempty.png", 25, 25);
-
 	public Tree(DefaultMutableTreeNode top) {
 		super(top);
 
@@ -73,7 +64,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 
 				if(nodo==root) {
 					setIcon(Utility.getImageFast(ICONPATH + 
-								"other/pc.png", 25, 25));
+								"other/pc.png", 25, 25, true));
 					label.setBorder(new EmptyBorder(15, 0, 0, 0)); 
 					//top,left,bottom,right
 				}
@@ -97,16 +88,19 @@ public class Tree extends JTree implements TreeSelectionListener {
 					}
 					
 					setText(name);
-					setIcon(Utility.getImageFast(path, 25, 25));
+					setIcon(Utility.getImageFast(path, 25, 25, true));
 				}
 				else if(file.list()!=null && file.list().length==0) {
-					setIcon(folderIconEmpty);
+					setIcon(Utility.getImageFast(
+						ICONPATH + "other/folderempty.png", 25, 25, true));
 				}
 				else if(expanded) {
-					setIcon(folderIconOpen);
+					setIcon(Utility.getImageFast(
+						ICONPATH + "other/folderopen.png", 25, 25, true));
 				}
 				else {
-					setIcon(folderIcon);
+					setIcon(Utility.getImageFast(
+						ICONPATH + "other/folder.png", 25, 25, true));
 				}
 
 				return label;

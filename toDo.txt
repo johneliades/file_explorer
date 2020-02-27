@@ -15,7 +15,7 @@
 |EZ_FAST|
 +=======+
 
-#try selection color aqua on navigation
+#consider hashmap for icons search
 #change scrollbar appearance
 #disks free space bar
 #right click at tree, choose focus after that

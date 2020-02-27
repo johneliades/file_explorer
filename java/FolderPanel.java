@@ -143,7 +143,7 @@ public class FolderPanel extends JPanel {
 
 		menuItem = new JMenuItem("  Text Document");
 		menuItem.setIcon(
-			Utility.getImageFast(ICONPATH + "extensions/txt.png", 17, 17));
+			Utility.getImageFast(ICONPATH + "extensions/txt.png", 17, 17, false));
 
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -166,7 +166,7 @@ public class FolderPanel extends JPanel {
  				}
 
 				img = Utility.getImageFast(ICONPATH + "extensions/txt.png", 
-											50, 50);
+											50, 50, false);
 				name = (String) JOptionPane.showInputDialog(null, 
 					"Enter File Name", "New Text Document", 
 					JOptionPane.INFORMATION_MESSAGE, img, null, "File");
@@ -202,7 +202,7 @@ public class FolderPanel extends JPanel {
 
 		menuItem = new JMenuItem("  Folder");
 		menuItem.setIcon(Utility.getImageFast(
-			ICONPATH + "other/folder.png", 17, 17));
+			ICONPATH + "other/folder.png", 17, 17, false));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -223,7 +223,7 @@ public class FolderPanel extends JPanel {
  				}
 
 				img = Utility.getImageFast(
-					ICONPATH + "other/folder.png", 50, 50);
+					ICONPATH + "other/folder.png", 50, 50, false);
 				name = (String) JOptionPane.showInputDialog(null, 
 					"Enter Folder Name", "New Folder", 
 					JOptionPane.INFORMATION_MESSAGE, img, null, "Folder");
@@ -258,7 +258,7 @@ public class FolderPanel extends JPanel {
 	
 
 		sectionsMenu.setIcon(Utility.getImageFast(
-					ICONPATH + "other/plus.png", 17, 17));	
+					ICONPATH + "other/plus.png", 17, 17, false));	
 
 		if(selected.exists() && selected.canWrite()) {
 			popupMenu.addSeparator();
@@ -275,7 +275,7 @@ public class FolderPanel extends JPanel {
 
 		menuItem = new JMenuItem("  Refresh");
 		menuItem.setIcon(Utility.getImageFast(
-			ICONPATH + "other/refresh.png", 17, 17));
+			ICONPATH + "other/refresh.png", 17, 17, false));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -291,7 +291,7 @@ public class FolderPanel extends JPanel {
 
 		menuItem = new JMenuItem("  OS Explorer");
 		menuItem.setIcon(Utility.getImageFast(ICONPATH + 
-								"other/osexplorer.png", 17, 17));
+								"other/osexplorer.png", 17, 17, false));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -320,7 +320,7 @@ public class FolderPanel extends JPanel {
 
 		menuItem = new JMenuItem("  New Window");
 		menuItem.setIcon(Utility.
-				getImageFast(ICONPATH + "other/folder.png", 17, 17));
+				getImageFast(ICONPATH + "other/folder.png", 17, 17, false));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -397,7 +397,7 @@ public class FolderPanel extends JPanel {
 		ImageIcon img=null;
 
 		menuItem = new JMenuItem("  Open");
-		img = Utility.getImageFast(ICONPATH + "other/open.png", 17, 17);
+		img = Utility.getImageFast(ICONPATH + "other/open.png", 17, 17, false);
 		menuItem.setIcon(img);
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -414,7 +414,7 @@ public class FolderPanel extends JPanel {
 	
 		menuItem = new JMenuItem("  New Window");
 		menuItem.setIcon(Utility.getImageFast(ICONPATH + 
-			"other/folder.png", 17, 17));
+			"other/folder.png", 17, 17, false));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -477,7 +477,7 @@ public class FolderPanel extends JPanel {
 
 		menuItem = new JMenuItem("  Rename");
 		menuItem.setIcon(Utility.getImageFast(
-			ICONPATH + "other/rename.png", 17, 17));
+			ICONPATH + "other/rename.png", 17, 17, false));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -491,7 +491,7 @@ public class FolderPanel extends JPanel {
 
 		menuItem = new JMenuItem("  Delete");
 		menuItem.setIcon(Utility.getImageFast(
-			ICONPATH + "other/delete.png", 17, 17));
+			ICONPATH + "other/delete.png", 17, 17, false));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -505,12 +505,12 @@ public class FolderPanel extends JPanel {
 
 		menuItem = new JMenuItem("  Properties");
 		menuItem.setIcon(
-			Utility.getImageFast(ICONPATH + "other/properties.png", 17, 17));
+			Utility.getImageFast(ICONPATH + "other/properties.png", 17, 17, false));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				ImageIcon img = Utility.getImageFast(ICONPATH + 
-							"other/info.png", 50, 50);
+							"other/info.png", 50, 50, false);
 
 
 				long fileSizeInBytes = panelFile.length();
@@ -747,7 +747,7 @@ public class FolderPanel extends JPanel {
 				path = ICONPATH + "other/usb.png";			
 			}
 
-			img = Utility.getImageFast(path, 60, 60);
+			img = Utility.getImageFast(path, 60, 60, false);
 		}
 
 		// Bad check for images
@@ -756,26 +756,26 @@ public class FolderPanel extends JPanel {
 		set.add("png");
 		set.add("gif");
 		if(set.contains(extension)) {
-			img = Utility.getImageFast(panelFile.getPath(), 60, 60);
+			img = Utility.getImageFast(panelFile.getPath(), 60, 60, false);
 		}
 
 		if(img==null) {
 			if(iconName=="folder.png") {
 				if(panelFile.list()!=null && panelFile.list().length==0)
 					img = Utility.getImageFast(FileExplorer.getIconPath() 
-						+ "other/folderempty.png", 60, 60);
+						+ "other/folderempty.png", 60, 60, true);
 				else {
 					img = Utility.getImageFast(FileExplorer.getIconPath() 
-						+ "other/folder.png", 60, 60);
+						+ "other/folder.png", 60, 60, true);
 				}
 			}
 			else if(iconName=="question.png") {
 				img = Utility.getImageFast(FileExplorer.getIconPath() 
-					+ "other/question.png", 60, 60);
+					+ "other/question.png", 60, 60, true);
 			}
 			else {
 				img = Utility.getImageFast(ICONPATH + "extensions/" + iconName, 
-					60, 60);
+					60, 60, true);
 			}
 		}
 
