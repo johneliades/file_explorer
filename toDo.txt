@@ -15,6 +15,7 @@
 |EZ_FAST|
 +=======+
 
+#on refresh remove icons from set
 #consider hashmap for icons search
 #change scrollbar appearance
 #disks free space bar
