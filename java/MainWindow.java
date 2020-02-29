@@ -58,9 +58,9 @@ public class MainWindow extends JPanel {
 		basicTreeUI.setLeftChildIndent(0);
 		basicTreeUI.setRightChildIndent(12);
 		basicTreeUI.setCollapsedIcon(Utility.getImageFast(ICONPATH + 
-								"other/collapsed.png", 8, 8, true));
+								"other/collapsed.png", 9, 9, true));
 		basicTreeUI.setExpandedIcon(Utility.getImageFast(ICONPATH + 
-			"other/expanded.png", 8, 8, true));
+			"other/expanded.png", 9, 9, true));
 
 		folder = new FolderPanel();
 		JScrollPane folderView = new JScrollPane(folder);
@@ -236,7 +236,7 @@ public class MainWindow extends JPanel {
 		File f = new File(filePath + "/" + nameOld);
 
 		if(f.exists() && f.canWrite()) {
-			img = Utility.getImageFast(ICONPATH + "other/rename.png", 50, 50, false);
+			img = Utility.getImageFast(ICONPATH + "other/rename.png", 50, 50, true);
 
 			nameNew=(String) JOptionPane.showInputDialog(null, "Enter New Name",
 									"Rename", JOptionPane.INFORMATION_MESSAGE,
@@ -292,7 +292,7 @@ public class MainWindow extends JPanel {
 		}
 		File f = new File(filePath + "/" + name);
 
-		img = Utility.getImageFast(ICONPATH + "other/delete.png", 50, 50, false);
+		img = Utility.getImageFast(ICONPATH + "other/delete.png", 50, 50, true);
 
 		if(f.exists() && f.isFile() && f.canWrite()){
 			int input = JOptionPane.showConfirmDialog(null, "Deleting file \"" + 

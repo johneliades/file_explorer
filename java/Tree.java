@@ -233,26 +233,22 @@ public class Tree extends JTree implements TreeSelectionListener {
 	}
 
 	static public void createNodes(DefaultMutableTreeNode top, int setting) {
-		SortedSet<File> set = new TreeSet<>();
-		Iterator it;
-
 		File curDir = (File) top.getUserObject();
 		File children[] = curDir.listFiles(); 
 
 		if(children==null)
 			return;
 
+		Arrays.sort(children);
+
 		for(File element : children) {
-			if(!showHiddenFiles && (element.isHidden() || element.getName().startsWith(".")))
+			if(!showHiddenFiles && (element.isHidden() || 
+									element.getName().startsWith(".")))
 				continue;
 
-			if(element.isDirectory())
-				set.add(element);
-		}
+			if(!element.isDirectory())
+				continue;
 
-		it=set.iterator();
-		while (it.hasNext()) {
-			File element = (File) it.next();
 			DefaultMutableTreeNode currentNode = null;
 
 			int i, numChild= MainWindow.getTree().getModel().getChildCount(top);

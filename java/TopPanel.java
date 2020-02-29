@@ -38,7 +38,7 @@ public class TopPanel extends JPanel {
 
 		buttonBack = new JButton(Utility.getImageFast(
 			FileExplorer.getIconPath() + 
-				"other/grayedback.png", navHeight, navHeight, false));
+				"other/grayedback.png", navHeight, navHeight, true));
 		buttonBack.setBorder(BorderFactory.createEmptyBorder());
 		buttonBack.setPreferredSize(new Dimension(navHeight, navHeight));
 		buttonBack.setFocusPainted(false);
@@ -58,7 +58,7 @@ public class TopPanel extends JPanel {
 
 		buttonForward = new JButton(Utility.getImageFast(
 			FileExplorer.getIconPath() + 
-				"other/grayedforward.png", navHeight, navHeight, false));
+				"other/grayedforward.png", navHeight, navHeight, true));
 		buttonForward.setBorder(BorderFactory.createEmptyBorder());
 		buttonForward.setPreferredSize(new Dimension(navHeight, navHeight));
 		buttonForward.setFocusPainted(false);
@@ -78,7 +78,7 @@ public class TopPanel extends JPanel {
 
 		navigationField = new JTextFieldIcon(new JTextField(), 
 			Utility.getImageFast(FileExplorer.getIconPath() + "other/pc.png", 
-				15, 15, false));
+				15, 15, true));
 
 		navigationField.setCaretColor(Color.WHITE);
 		navigationField.setBackground(topColor);
@@ -164,7 +164,7 @@ public class TopPanel extends JPanel {
 
 		searchField = new JTextFieldIcon(new JTextField(), 
 			Utility.getImageFast(FileExplorer.getIconPath() + 
-				"other/magnifyingglass.png", 15, 15, false));
+				"other/magnifyingglass.png", 15, 15, true));
 
 		searchField.setCaretColor(Color.WHITE);
 		searchField.setBackground(topColor);
@@ -411,7 +411,7 @@ public class TopPanel extends JPanel {
 
 		JLabel myLabel = new JLabel(Utility.getImageFast(
 			FileExplorer.getIconPath() + "other/pc.png", 
-				navHeight, navHeight, false));
+				navHeight, navHeight, true));
 		myLabel.setBorder(new EmptyBorder(0, 5, 0, 5));
 		buttonField.add(myLabel);
 	}
@@ -539,7 +539,7 @@ class IconTextCellRenderer extends DefaultTableCellRenderer {
 				path = ICONPATH + "extensions/" + name;
 		}
 
-		img = Utility.getImageFast(path, 35, 35, false);
+		img = Utility.getImageFast(path, 35, 35, true);
 
 		return img;
 	}

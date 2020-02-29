@@ -3,8 +3,8 @@ import java.awt.Image;
 import java.util.*;
 
 public class Utility {
-	static HashSet<ScaledIcon> small = new HashSet<>();
-	static HashSet<ScaledIcon> big = new HashSet<>();
+	static HashSet<ScaledIcon> explorer_icons = new HashSet<>();
+	static HashSet<ScaledIcon> images = new HashSet<>();
 	static ScaledIcon last=null;
 
 	static String getExtension(String fileName) {
@@ -20,21 +20,18 @@ public class Utility {
 		return extension;
 	}
 
-	static ImageIcon getImageFast(String path, int x, int y, boolean important) {
+	static ImageIcon getImageFast(String path, int x, int y, boolean explorer) {
 		if(last!=null && last.getPath().equals(path) 
 				&& last.getX()==x & last.getY()==y)
 			return last.getIcon();
 
-		Iterator it = small.iterator();
-		while (it.hasNext()) {
-			ScaledIcon element = (ScaledIcon) it.next();
+		Iterator it;
 
-			if(element.getPath().equals(path) && element.getX()==x 
-													&& element.getY()==y)
-				return element.getIcon();
-		}
-
-		it = big.iterator();
+		if(explorer)
+			it = explorer_icons.iterator();
+		else
+			it = images.iterator();
+		
 		while (it.hasNext()) {
 			ScaledIcon element = (ScaledIcon) it.next();
 
@@ -50,10 +47,10 @@ public class Utility {
 
 		icon = new ImageIcon(img);
 		ScaledIcon scaled = new ScaledIcon(path, icon, x, y);
-		if(important)
-			small.add(scaled);
+		if(explorer)
+			explorer_icons.add(scaled);
 		else
-			big.add(scaled);
+			images.add(scaled);
 		
 		last = scaled;
 
