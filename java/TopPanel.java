@@ -309,7 +309,7 @@ public class TopPanel extends JPanel {
 		if(isSymbolicLink)
 			return;
 
-		Tree.createNodes(top, 0);
+		Tree.createNodes(top);
 
 		for(int i=0; i<numChild; i++) {	  
 			current=(DefaultMutableTreeNode) tree.getModel().getChild(top, i);

@@ -125,7 +125,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 				File current;
 				current = (File) node.getUserObject();
 				if (current.isDirectory()) {
-					createNodes(node, 0);
+					createNodes(node);
 				}
 			}
 		});
@@ -161,7 +161,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 					File current = (File) node.getUserObject();
 
 					if (current.exists()) {
-						createNodes(node, 0);
+						createNodes(node);
 					}
 					lastTreeNodeOpened = node;
 					FolderPanel.showCurrentDirectory(node);
@@ -197,7 +197,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 
 						current = (File) node.getUserObject();
 						if (current.isDirectory()) {
-							createNodes(node, 0);
+							createNodes(node);
 						}
 						FolderPanel.showCurrentDirectory(node);
 						break;
@@ -232,7 +232,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 		});
 	}
 
-	static public void createNodes(DefaultMutableTreeNode top, int setting) {
+	static public void createNodes(DefaultMutableTreeNode top) {
 		File curDir = (File) top.getUserObject();
 		File children[] = curDir.listFiles(); 
 
@@ -248,31 +248,64 @@ public class Tree extends JTree implements TreeSelectionListener {
 
 			if(!element.isDirectory())
 				continue;
-
-			DefaultMutableTreeNode currentNode = null;
-
-			int i, numChild= MainWindow.getTree().getModel().getChildCount(top);
-			for(i=0; i<numChild; i++) { 
-				File currentFile;
-
-				currentNode = (DefaultMutableTreeNode) MainWindow.getTree().
-						getModel().getChild(top, i);
-
-				currentFile=(File) currentNode.getUserObject();
-				if(currentFile.getName().compareTo(element.getName())==0) {
-					break;
-				}
-			}
-
-			if(i==numChild) {
+			
+			DefaultMutableTreeNode currentNode=null;
+			if(!isNodeInSubtree(top, element)) {
 				currentNode = new DefaultMutableTreeNode(new MyFile(
 					element.getPath()));
 				top.add(currentNode);
 			}
 
-			if(setting==0)
-				createNodes(currentNode, 1);
+			File[] new_children = element.listFiles();
+			if(new_children==null)
+				continue;
+
+			if(currentNode==null) {
+				int numChild= MainWindow.getTree().getModel().getChildCount(top);
+				for(int i=0; i<numChild; i++) { 
+					File currentFile;
+
+					currentNode = (DefaultMutableTreeNode) MainWindow.getTree().
+							getModel().getChild(top, i);
+
+					currentFile=(File) currentNode.getUserObject();
+					if(currentFile.getName().compareTo(element.getName())==0) {
+						break;
+					}
+				}
+			}
+
+			for(File current : new_children) {
+				if(current.isDirectory()) {
+					DefaultMutableTreeNode firstChild;
+					if(!isNodeInSubtree(currentNode, current)) {
+						firstChild = new DefaultMutableTreeNode(new MyFile(
+							current.getPath()));
+						currentNode.add(firstChild);
+					}
+					break;
+				}
+			}
 		}
+	}
+
+	private static boolean isNodeInSubtree(DefaultMutableTreeNode top, 
+															File element) {
+		DefaultMutableTreeNode currentNode = null;
+		int i, numChild= MainWindow.getTree().getModel().getChildCount(top);
+		for(i=0; i<numChild; i++) { 
+			File currentFile;
+
+			currentNode = (DefaultMutableTreeNode) MainWindow.getTree().
+					getModel().getChild(top, i);
+
+			currentFile=(File) currentNode.getUserObject();
+			if(currentFile.getName().compareTo(element.getName())==0) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	//Added bounds.x = 0 to stop horizontal scrolling
@@ -302,7 +335,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 
 		current = (File) node.getUserObject();
 		if (current.isDirectory()) {
-			createNodes(node, 0);
+			createNodes(node);
 		}
 	}
 

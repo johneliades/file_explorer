@@ -72,13 +72,13 @@ public class MainWindow extends JPanel {
 		folderView.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		if(roots.length==1)
-			Tree.createNodes(top, 0);
+			Tree.createNodes(top);
 		else {
 			int numChild=tree.getModel().getChildCount(top);
 			for(int i=0; i<numChild; i++) { 
 				DefaultMutableTreeNode current=(DefaultMutableTreeNode) 
 						tree.getModel().getChild(top, i);
-				Tree.createNodes(current, 0);
+				Tree.createNodes(current);
 			}
 		}
 
@@ -174,7 +174,7 @@ public class MainWindow extends JPanel {
 					}
 					current = pathComponents.pop();
 					currentTop = temp;
-					Tree.createNodes(currentTop, 0);
+					Tree.createNodes(currentTop);
 					break;
 				}
 			}
@@ -203,7 +203,7 @@ public class MainWindow extends JPanel {
 			for(int i=0; i<numChild; i++) { 
 				DefaultMutableTreeNode current=(DefaultMutableTreeNode) 
 												defMod1.getChild(node, i);
-				Tree.createNodes(current, 0);
+				Tree.createNodes(current);
 			}
 		}
 		selectDirectory(node);
