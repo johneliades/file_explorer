@@ -411,7 +411,7 @@ public class MainWindow extends JPanel {
 			history.push(node);
 			TopPanel.getButtonBack().setIcon(Utility.getImageFast(
 				FileExplorer.getIconPath() + 
-					"other/backarrow.png", 23, 23, false));
+					"other/backarrow.png", 23, 23, true));
 		}
 	}
 
@@ -420,7 +420,7 @@ public class MainWindow extends JPanel {
 			if(history.size()==1) {
 				TopPanel.getButtonBack().setIcon(Utility.getImageFast(
 					FileExplorer.getIconPath() + 
-						"other/grayedback.png", 23, 23, false));
+						"other/grayedback.png", 23, 23, true));
 			}
 
 			return history.pop();
@@ -433,7 +433,7 @@ public class MainWindow extends JPanel {
 		futureHistory.clear();
 		TopPanel.getButtonForward().setIcon(Utility.getImageFast(
 			FileExplorer.getIconPath() + 
-				"other/grayedforward.png", 23, 23, false));
+				"other/grayedforward.png", 23, 23, true));
 	}
 
 	public static void futureHistoryPush(DefaultMutableTreeNode node) {
@@ -447,7 +447,7 @@ public class MainWindow extends JPanel {
 			futureHistory.push(node);
 			TopPanel.getButtonForward().setIcon(Utility.getImageFast(
 				FileExplorer.getIconPath() + 
-					"other/forwardarrow.png", 23, 23, false));
+					"other/forwardarrow.png", 23, 23, true));
 		}
 	}
 
@@ -462,7 +462,7 @@ public class MainWindow extends JPanel {
 		if(futureHistory.empty()) {
 			TopPanel.getButtonForward().setIcon(Utility.getImageFast(
 				FileExplorer.getIconPath() + 
-					"other/grayedforward.png", 23, 23, false));		
+					"other/grayedforward.png", 23, 23, true));		
 		}
 		return node;
 	}

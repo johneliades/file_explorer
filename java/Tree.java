@@ -149,23 +149,24 @@ public class Tree extends JTree implements TreeSelectionListener {
 				if(lastTreeNodeOpened!=node) {
 					MainWindow.historyPush(lastTreeNodeOpened);
 					MainWindow.clearFuture();
-					String filePath = ((File) 
-						lastTreeNodeOpened.getUserObject()).getPath();
+				}
 
-					File f = new File(filePath + "/");
-					if(!f.getName().equals(windowsTopName) && !f.exists()) {
-						findExistingParent(f);
-						return;
-					}
+				String filePath = ((File) 
+					lastTreeNodeOpened.getUserObject()).getPath();
 
-					File current = (File) node.getUserObject();
+				File f = new File(filePath + "/");
+				if(!f.getName().equals(windowsTopName) && !f.exists()) {
+					findExistingParent(f);
+					return;
+				}
 
-					if (current.exists()) {
-						createNodes(node);
-					}
-					lastTreeNodeOpened = node;
-					FolderPanel.showCurrentDirectory(node);
-				}		
+				File current = (File) node.getUserObject();
+
+				if (current.exists()) {
+					createNodes(node);
+				}
+				lastTreeNodeOpened = node;
+				FolderPanel.showCurrentDirectory(node);
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {}

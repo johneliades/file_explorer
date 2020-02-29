@@ -29,8 +29,9 @@ public class Utility {
 
 		if(explorer)
 			it = explorer_icons.iterator();
-		else
+		else {
 			it = images.iterator();
+		}
 		
 		while (it.hasNext()) {
 			ScaledIcon element = (ScaledIcon) it.next();
