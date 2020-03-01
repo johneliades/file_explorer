@@ -585,84 +585,88 @@ public class FolderPanel extends JPanel {
 	}
 
 	public static void showCurrentDirectory(DefaultMutableTreeNode node) {
-		JTree tree = MainWindow.getTree();
-		JPanel folder = MainWindow.getFolder();
-		
-		folder.setLayout(new WrapLayout(FlowLayout.LEFT, 10, 10));
 
-		int numChild=tree.getModel().getChildCount(node);
-		DefaultMutableTreeNode currentNode;
-		File currentFile;
-		
-		String FileName;
-	
-		FileName = ((File) node.getUserObject()).getName();
+		Thread thread = new Thread() {
+			public void run() {
+				JTree tree = MainWindow.getTree();
+				JPanel folder = MainWindow.getFolder();
+				
+				folder.setLayout(new WrapLayout(FlowLayout.LEFT, 10, 10));
 
-		if(FileName.isEmpty())
-			FileName = ((File) node.getUserObject()).getPath();
-		
-		TopPanel.setNavigationText(((File) node.getUserObject()).getPath());
-		TopPanel.setSearchText("Search" + " \"" + FileName + "\"");
-		TopPanel.clearNavButtons();
-		
-		TreePath path = new TreePath(node.getPath());
-		for(int i=0; i < path.getPathCount(); i++) {
-			DefaultMutableTreeNode current =  (DefaultMutableTreeNode)
-				path.getPathComponent(i);
+				int numChild=tree.getModel().getChildCount(node);
+				DefaultMutableTreeNode currentNode;
+				File currentFile;
+				
+				String FileName;
+			
+				FileName = ((File) node.getUserObject()).getName();
 
-			TopPanel.addNavButton(current);
-		}
+				if(FileName.isEmpty())
+					FileName = ((File) node.getUserObject()).getPath();
+				
+				TopPanel.setNavigationText(((File) node.getUserObject()).getPath());
+				TopPanel.setSearchText("Search" + " \"" + FileName + "\"");
+				TopPanel.clearNavButtons();
+				
+				TreePath path = new TreePath(node.getPath());
+				for(int i=0; i < path.getPathCount(); i++) {
+					DefaultMutableTreeNode current =  (DefaultMutableTreeNode)
+						path.getPathComponent(i);
 
-		folder.removeAll();
-
-		for(int i=0; i<numChild; i++) { 
-			currentNode = (DefaultMutableTreeNode) tree.getModel().getChild(node, i);
-			currentFile =(File) currentNode.getUserObject();
-
-			if(showHiddenFiles ?  true : !currentFile.isHidden() || 
-								!currentFile.getName().startsWith(".")) {
-				if(currentFile.isDirectory())
-					folder.add(getPanel("folder.png", currentFile, currentNode));
-				else if(iconSet.contains(Utility.getExtension(currentFile.getName())))
-					folder.add(getPanel(Utility.getExtension(
-						currentFile.getName()) + ".png", currentFile, currentNode));
-				else
-					folder.add(getPanel("question.png", currentFile, currentNode));
-			}
-		}
-		
-		folder.repaint();
-		folder.revalidate();
-
-		currentFile=(File) node.getUserObject();
-		File children[] = currentFile.listFiles();
-
-		if(children==null)
-			return;
-
-		Arrays.sort(children);
-
-		for(File element : children) {
-  
-			if(!element.isFile())
-				continue;
-
-			if(showHiddenFiles ? true : !element.isHidden() || 
-								!element.getName().startsWith(".")) {
-				if (element.isDirectory())
-					folder.add(getPanel("folder.png", element, null));
-				else if(iconSet.contains(Utility.getExtension(
-										element.getName()))) {
-					folder.add(getPanel(Utility.getExtension(
-						element.getName()) + ".png", element, null));
+					TopPanel.addNavButton(current);
 				}
-				else
-					folder.add(getPanel("question.png", element, null));
-			}
-		}
 
-		folder.repaint();
-		folder.revalidate();
+				folder.removeAll();
+				for(int i=0; i<numChild; i++) { 
+					currentNode = (DefaultMutableTreeNode) tree.getModel().getChild(node, i);
+					currentFile =(File) currentNode.getUserObject();
+
+					if(showHiddenFiles ?  true : !currentFile.isHidden() || 
+										!currentFile.getName().startsWith(".")) {
+						if(currentFile.isDirectory())
+							folder.add(getPanel("folder.png", currentFile, currentNode));
+						else if(iconSet.contains(Utility.getExtension(currentFile.getName())))
+							folder.add(getPanel(Utility.getExtension(
+								currentFile.getName()) + ".png", currentFile, currentNode));
+						else
+							folder.add(getPanel("question.png", currentFile, currentNode));
+					}
+					folder.repaint();
+					folder.revalidate();
+				}
+				
+
+				currentFile=(File) node.getUserObject();
+				File children[] = currentFile.listFiles();
+
+				if(children==null)
+					return;
+
+				Arrays.sort(children);
+
+				for(File element : children) {
+		  
+					if(!element.isFile())
+						continue;
+
+					if(showHiddenFiles ? true : !element.isHidden() || 
+										!element.getName().startsWith(".")) {
+						if (element.isDirectory())
+							folder.add(getPanel("folder.png", element, null));
+						else if(iconSet.contains(Utility.getExtension(
+												element.getName()))) {
+							folder.add(getPanel(Utility.getExtension(
+								element.getName()) + ".png", element, null));
+						}
+						else
+							folder.add(getPanel("question.png", element, null));
+					}
+					folder.repaint();
+					folder.revalidate();
+				}
+			}
+		};
+		thread.start();
 	}
 
 	/*

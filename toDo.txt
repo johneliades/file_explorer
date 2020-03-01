@@ -4,12 +4,11 @@
 
 #better focus order
 #when going lower scroll with arrows
+#search broken cause of non recursive create?
 
 #small bug requires soft refresh?: Node is created then external source makes 
 		folder in it and node is clicked again so createnode is called but doesnt
 		add the new node. Maybe create a garbage cleaner in createnode.
-
-#threaded search stops only when finished
 
 +=======+
 |EZ_FAST|

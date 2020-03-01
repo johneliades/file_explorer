@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.*;
 
 public class TopPanel extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
@@ -259,12 +260,13 @@ public class TopPanel extends JPanel {
 					folder.add(table);
 					folder.setLayout(new GridLayout());
 	
-					Thread thread = new Thread() {
-						public void run() {
+					Executor executor = Executors.newSingleThreadExecutor();
+
+					executor.execute(new Runnable() {
+						public void run() { 
 							search(tree, node, searchQuery, model);
 						}
-					};
-					thread.start();
+					});
 				}
 			}
 			@Override
@@ -457,6 +459,8 @@ public class TopPanel extends JPanel {
 		});
 
 		buttonField.add(button);
+		buttonField.revalidate();
+		buttonField.repaint();
 	}
 
 	public static void toggleNavigation() {
