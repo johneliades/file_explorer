@@ -15,6 +15,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.*;
 
 public class FolderPanel extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
@@ -585,9 +586,10 @@ public class FolderPanel extends JPanel {
 	}
 
 	public static void showCurrentDirectory(DefaultMutableTreeNode node) {
+		Executor executor = Executors.newSingleThreadExecutor();
 
-		Thread thread = new Thread() {
-			public void run() {
+		executor.execute(new Runnable() {
+			public void run() { 
 				JTree tree = MainWindow.getTree();
 				JPanel folder = MainWindow.getFolder();
 				
@@ -665,8 +667,7 @@ public class FolderPanel extends JPanel {
 					folder.revalidate();
 				}
 			}
-		};
-		thread.start();
+		});
 	}
 
 	/*
