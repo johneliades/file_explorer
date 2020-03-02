@@ -276,15 +276,20 @@ public class Tree extends JTree implements TreeSelectionListener {
 				continue;
 
 			for(File current : new_children) {
-				if(current.isDirectory()) {
-					DefaultMutableTreeNode firstChild;
-					if(!isNodeInSubtree(currentNode, current)) {
-						firstChild = new DefaultMutableTreeNode(new MyFile(
-							current.getPath()));
-						currentNode.add(firstChild);
-					}
-					break;
+				if(!showHiddenFiles && (element.isHidden() || 
+									element.getName().startsWith(".")))
+					continue;
+
+				if(!current.isDirectory())
+					continue;
+
+				DefaultMutableTreeNode firstChild;
+				if(!isNodeInSubtree(currentNode, current)) {
+					firstChild = new DefaultMutableTreeNode(new MyFile(
+						current.getPath()));
+					currentNode.add(firstChild);
 				}
+				break;
 			}
 		}
 	}
