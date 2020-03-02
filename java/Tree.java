@@ -256,12 +256,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 					element.getPath()));
 				top.add(currentNode);
 			}
-
-			File[] new_children = element.listFiles();
-			if(new_children==null)
-				continue;
-
-			if(currentNode==null) {
+			else {
 				int numChild= MainWindow.getTree().getModel().getChildCount(top);
 				for(int i=0; i<numChild; i++) { 
 					File currentFile;
@@ -275,6 +270,10 @@ public class Tree extends JTree implements TreeSelectionListener {
 					}
 				}
 			}
+
+			File[] new_children = element.listFiles();
+			if(new_children==null)
+				continue;
 
 			for(File current : new_children) {
 				if(current.isDirectory()) {
