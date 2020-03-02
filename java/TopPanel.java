@@ -299,6 +299,8 @@ public class TopPanel extends JPanel {
 	}
 
 	static void search(JTree tree, DefaultMutableTreeNode top, String searchQuery, DefaultTableModel model) {
+		Tree.createNodes(top);
+
 		int numChild=tree.getModel().getChildCount(top);
 		DefaultMutableTreeNode current;
 		File topFile = (File) top.getUserObject();
@@ -310,8 +312,6 @@ public class TopPanel extends JPanel {
 		boolean isSymbolicLink = Files.isSymbolicLink(topFile.toPath());
 		if(isSymbolicLink)
 			return;
-
-		Tree.createNodes(top);
 
 		for(int i=0; i<numChild; i++) {	  
 			current=(DefaultMutableTreeNode) tree.getModel().getChild(top, i);
