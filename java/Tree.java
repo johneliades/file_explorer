@@ -276,8 +276,8 @@ public class Tree extends JTree implements TreeSelectionListener {
 				continue;
 
 			for(File current : new_children) {
-				if(!showHiddenFiles && (element.isHidden() || 
-									element.getName().startsWith(".")))
+				if(!showHiddenFiles && (current.isHidden() || 
+									current.getName().startsWith(".")))
 					continue;
 
 				if(!current.isDirectory())
