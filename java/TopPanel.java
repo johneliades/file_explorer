@@ -262,14 +262,13 @@ public class TopPanel extends JPanel {
 		
 					if(FolderPanel.getFuture()!=null)
 						FolderPanel.getFuture().cancel(true);
-					
+
 					ExecutorService single = Executors.newSingleThreadExecutor();
-					Future<?> future = single.submit(new Runnable() {
+					FolderPanel.setFuture(single.submit(new Runnable() {
 						public void run() { 
 							search(tree, node, searchQuery, model);
 						}
-					});
-					FolderPanel.setFuture(future); 
+					}));
 				}
 			}
 			@Override
