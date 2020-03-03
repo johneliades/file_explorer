@@ -260,15 +260,15 @@ public class TopPanel extends JPanel {
 					folder.add(table);
 					folder.setLayout(new GridLayout());
 		
-					if(FolderPanel.getFuture()!=null)
-						FolderPanel.getFuture().cancel(true);
-
 					ExecutorService single = FolderPanel.getExecutor();
-					FolderPanel.setFuture(single.submit(new Runnable() {
+					if(single!=null)
+						single.shutdownNow();
+					single = Executors.newSingleThreadExecutor();
+					single.submit(new Runnable() {
 						public void run() { 
 							search(tree, node, searchQuery, model);
 						}
-					}));
+					});
 				}
 			}
 			@Override
