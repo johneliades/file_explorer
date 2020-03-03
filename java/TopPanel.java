@@ -259,12 +259,9 @@ public class TopPanel extends JPanel {
 
 					folder.add(table);
 					folder.setLayout(new GridLayout());
-		
-					ExecutorService single = FolderPanel.getExecutor();
-					if(single!=null)
-						single.shutdownNow();
-					single = Executors.newSingleThreadExecutor();
-					single.submit(new Runnable() {
+	
+					Executor executor = Executors.newSingleThreadExecutor();
+					executor.execute(new Runnable() {
 						public void run() { 
 							search(tree, node, searchQuery, model);
 						}
