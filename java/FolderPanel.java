@@ -24,7 +24,8 @@ public class FolderPanel extends JPanel {
 	static Set<String> iconSet = FileExplorer.addExtensions();
 	private static String windowsTopName = Tree.getWindowsTopName();
 	
-	private static Future<?> future;
+	private static ExecutorService single = Executors.newSingleThreadExecutor();
+	private static Future<?> future=null;
 
 	private static JPanel currentPanelSelected; 
 
@@ -588,7 +589,6 @@ public class FolderPanel extends JPanel {
 	}
 	
 	public static void showCurrentDirectory(DefaultMutableTreeNode node) {
-		ExecutorService single = Executors.newSingleThreadExecutor();
 		if(future!=null)
 			future.cancel(true);
 		future = single.submit(new Runnable() {
@@ -948,5 +948,9 @@ public class FolderPanel extends JPanel {
 
 	public static void setFuture(Future<?> newFuture) {
 		future = newFuture;
+	}
+
+	public static ExecutorService getExecutor() {
+		return single;
 	}
 }
