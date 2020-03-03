@@ -23,6 +23,8 @@ public class FolderPanel extends JPanel {
 													getHiddenFilesOption();
 	static Set<String> iconSet = FileExplorer.addExtensions();
 	private static String windowsTopName = Tree.getWindowsTopName();
+	
+	private static Future<?> future;
 
 	private static JPanel currentPanelSelected; 
 
@@ -584,11 +586,12 @@ public class FolderPanel extends JPanel {
 		
 		return popupMenu;
 	}
-
+	
 	public static void showCurrentDirectory(DefaultMutableTreeNode node) {
-		Executor executor = Executors.newSingleThreadExecutor();
-
-		executor.execute(new Runnable() {
+		ExecutorService single = Executors.newSingleThreadExecutor();
+		if(future!=null)
+			future.cancel(true);
+		future = single.submit(new Runnable() {
 			public void run() { 
 				JTree tree = MainWindow.getTree();
 				JPanel folder = MainWindow.getFolder();
@@ -939,4 +942,11 @@ public class FolderPanel extends JPanel {
 		return currentPanelSelected;
 	}
 
+	public static Future<?> getFuture() {
+		return future;
+	}	
+
+	public static void setFuture(Future<?> newFuture) {
+		future = newFuture;
+	}
 }
