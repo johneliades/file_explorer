@@ -619,6 +619,8 @@ public class FolderPanel extends JPanel {
 				}
 
 				folder.removeAll();
+				folder.repaint();
+				folder.revalidate();
 				for(int i=0; i<numChild; i++) { 
 					currentNode = (DefaultMutableTreeNode) tree.getModel().getChild(node, i);
 					currentFile =(File) currentNode.getUserObject();
