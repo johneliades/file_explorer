@@ -2,6 +2,7 @@
 |BUGLIST|
 +=======+
 
+#on refresh remove icons from set
 #create cancellable runnable
 #better focus order
 #when going lower scroll with arrows
@@ -14,10 +15,9 @@
 |EZ_FAST|
 +=======+
 
-#on refresh remove icons from set
 #consider hashmap for icons search
 #change scrollbar appearance
-#disks free space bar
+#disks free space bar, and properties
 #right click at tree, choose focus after that
 #load path This PC
 
@@ -25,7 +25,6 @@
 |_LATER_|
 +=======+
 
-#file names wrap 2 lines
 #faster rendering of pictures (favourite in chrome)
 #open as
 #cut ctrl+X
