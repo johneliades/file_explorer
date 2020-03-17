@@ -387,8 +387,13 @@ public class MainWindow extends JPanel {
 
 		SimpleDateFormat sdf = new SimpleDateFormat(
 										"dd/MM/yyyy HH:mm:ss");
+		
+		String fileName = file.getName();
+		if(fileName==null || fileName=="")
+			fileName = file.getPath();
+	
 		String text=
-			"Name: " + file.toString()
+			"Name: " + fileName
 			+ "\nSize: " + size
 			+"\nModified: " + sdf.format(file.lastModified())
 			+ "\n\nRead: " + file.canRead()
