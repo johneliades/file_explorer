@@ -243,9 +243,9 @@ public class Tree extends JTree implements TreeSelectionListener {
 			for (int j = i + 1; j < n; j++) {
 				min_node = (DefaultMutableTreeNode) parent.getChildAt(min);
 				j_node = (DefaultMutableTreeNode) parent.getChildAt(j);
-				if (((File) min_node.getUserObject()).getName().
+				if (((File) min_node.getUserObject()).getName().toLowerCase().
 						compareTo(((File) j_node.getUserObject()).
-							getName())>0) {
+							getName().toLowerCase())>0) {
 					min = j;
 				}
 			}
