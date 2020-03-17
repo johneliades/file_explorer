@@ -144,9 +144,9 @@ public class Tree extends JTree implements TreeSelectionListener {
 			public void mouseExited(MouseEvent e) {}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				JTree tree = MainWindow.getTree();
-				int row = tree.getClosestRowForLocation(e.getX(), e.getY());
-				tree.setSelectionRow(row);
+//				JTree tree = MainWindow.getTree();
+//				int row = tree.getClosestRowForLocation(e.getX(), e.getY());
+//				tree.setSelectionRow(row);
 
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
 									getLastSelectedPathComponent();
@@ -169,17 +169,17 @@ public class Tree extends JTree implements TreeSelectionListener {
 
 				File current = (File) node.getUserObject();
 
-				if (current.exists()) {
+				if(current.exists()) {
 					createNodes(node);
 				}
 				lastTreeNodeOpened = node;
 				FolderPanel.showCurrentDirectory(node);
 				
-				if(e.getButton() == MouseEvent.BUTTON3) {
-					JPopupMenu menu = getFolderPopupMenu(node);
+//				if(e.getButton() == MouseEvent.BUTTON3) {
+//					JPopupMenu menu = getFolderPopupMenu(node);
 
-					menu.show(e.getComponent(), e.getX(), e.getY());
-				}
+//					menu.show(e.getComponent(), e.getX(), e.getY());
+//				}
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {}
