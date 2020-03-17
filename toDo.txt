@@ -2,20 +2,15 @@
 |BUGLIST|
 +=======+
 
-#on refresh remove icons from set
+#refresh doesn't show changed image thumbnails
 #create cancellable runnable
-#better focus order
+#better focus order, at startup focus folder
 #when going lower scroll with arrows
-
-#small bug requires soft refresh?: Node is created then external source makes 
-		folder in it and node is clicked again so createnode is called but doesnt
-		add the new node. Maybe create a garbage cleaner in createnode.
 
 +=======+
 |EZ_FAST|
 +=======+
 
-#consider hashmap for icons search
 #change scrollbar appearance
 #disks free space bar, and properties
 #right click at tree, choose focus after that
@@ -25,8 +20,6 @@
 |_LATER_|
 +=======+
 
-#faster rendering of pictures (favourite in chrome)
-#open as
 #cut ctrl+X
 #copy ctrl+C
 #paste ctrl+V
@@ -34,4 +27,4 @@
 #drag n drop
 #zip/unzip
 #ftp
-#at startup focus folder
+#open as

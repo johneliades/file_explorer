@@ -585,8 +585,9 @@ public class FolderPanel extends JPanel {
 		return popupMenu;
 	}
 
+	private static Executor executor = Executors.newSingleThreadExecutor();
+
 	public static void showCurrentDirectory(DefaultMutableTreeNode node) {
-		Executor executor = Executors.newSingleThreadExecutor();
 
 		executor.execute(new Runnable() {
 			public void run() { 
@@ -622,23 +623,28 @@ public class FolderPanel extends JPanel {
 				folder.repaint();
 				folder.revalidate();
 				for(int i=0; i<numChild; i++) { 
-					currentNode = (DefaultMutableTreeNode) tree.getModel().getChild(node, i);
+					currentNode = (DefaultMutableTreeNode) tree.getModel().
+						getChild(node, i);
 					currentFile =(File) currentNode.getUserObject();
 
 					if(showHiddenFiles ?  true : !currentFile.isHidden() || 
-										!currentFile.getName().startsWith(".")) {
+									!currentFile.getName().startsWith(".")) {
 						if(currentFile.isDirectory())
-							folder.add(getPanel("folder.png", currentFile, currentNode));
-						else if(iconSet.contains(Utility.getExtension(currentFile.getName())))
+							folder.add(getPanel("folder.png", currentFile, 
+								currentNode));
+						else if(iconSet.contains(Utility.getExtension(
+								currentFile.getName())))
 							folder.add(getPanel(Utility.getExtension(
-								currentFile.getName()) + ".png", currentFile, currentNode));
+								currentFile.getName()) + ".png", currentFile, 
+									currentNode));
 						else
-							folder.add(getPanel("question.png", currentFile, currentNode));
+							folder.add(getPanel("question.png", currentFile, 
+								currentNode));
 					}
 					folder.repaint();
 					folder.revalidate();
 				}
-				
+
 
 				currentFile=(File) node.getUserObject();
 				File children[] = currentFile.listFiles();
@@ -941,4 +947,7 @@ public class FolderPanel extends JPanel {
 		return currentPanelSelected;
 	}
 
+	public static Executor getExecutor() {
+		return executor;
+	}
 }

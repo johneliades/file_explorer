@@ -3,9 +3,9 @@ import java.awt.Image;
 import java.util.*;
 
 public class Utility {
-	static HashSet<ScaledIcon> explorer_icons = new HashSet<>();
-	static HashSet<ScaledIcon> images = new HashSet<>();
-	static ScaledIcon last=null;
+	private static HashSet<ScaledIcon> explorer_icons = new HashSet<>();
+	private static HashSet<ScaledIcon> images = new HashSet<>();
+	private static ScaledIcon last=null;
 
 	static String getExtension(String fileName) {
 		String extension = "";
@@ -57,7 +57,6 @@ public class Utility {
 
 		return icon;
 	}
-
 }
 
 class ScaledIcon {

@@ -260,7 +260,7 @@ public class TopPanel extends JPanel {
 					folder.add(table);
 					folder.setLayout(new GridLayout());
 	
-					Executor executor = Executors.newSingleThreadExecutor();
+					Executor executor = FolderPanel.getExecutor();
 					executor.execute(new Runnable() {
 						public void run() { 
 							search(tree, node, searchQuery, model);

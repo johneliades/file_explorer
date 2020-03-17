@@ -233,7 +233,35 @@ public class Tree extends JTree implements TreeSelectionListener {
 		});
 	}
 
+	private static void sortNode(DefaultMutableTreeNode parent) {
+		DefaultMutableTreeNode min_node;
+		DefaultMutableTreeNode j_node;
+
+		int n = parent.getChildCount();
+		for (int i = 0; i < n - 1; i++) {
+			int min = i;
+			for (int j = i + 1; j < n; j++) {
+				min_node = (DefaultMutableTreeNode) parent.getChildAt(min);
+				j_node = (DefaultMutableTreeNode) parent.getChildAt(j);
+				if (((File) min_node.getUserObject()).getName().
+						compareTo(((File) j_node.getUserObject()).
+							getName())>0) {
+					min = j;
+				}
+			}
+			if (i != min) {
+				MutableTreeNode a = (MutableTreeNode) parent.getChildAt(i);
+				MutableTreeNode b = (MutableTreeNode) parent.getChildAt(min);
+				parent.insert(b, i);
+				parent.insert(a, min);
+			}
+		}
+	}
+
 	static public void createNodes(DefaultMutableTreeNode top) {
+		JTree tree = MainWindow.getTree();
+		DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+
 		File curDir = (File) top.getUserObject();
 		File children[] = curDir.listFiles(); 
 
@@ -254,7 +282,9 @@ public class Tree extends JTree implements TreeSelectionListener {
 			if(!isNodeInSubtree(top, element)) {
 				currentNode = new DefaultMutableTreeNode(new MyFile(
 					element.getPath()));
-				top.add(currentNode);
+				
+				model.insertNodeInto(currentNode, top, top.getChildCount());
+				sortNode(top);
 			}
 			else {
 				int numChild= MainWindow.getTree().getModel().getChildCount(top);
@@ -287,7 +317,10 @@ public class Tree extends JTree implements TreeSelectionListener {
 				if(!isNodeInSubtree(currentNode, current)) {
 					firstChild = new DefaultMutableTreeNode(new MyFile(
 						current.getPath()));
-					currentNode.add(firstChild);
+
+					model.insertNodeInto(firstChild, currentNode, 
+						currentNode.getChildCount());
+					sortNode(currentNode);
 				}
 				break;
 			}
