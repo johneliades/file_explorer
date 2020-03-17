@@ -389,7 +389,7 @@ public class MainWindow extends JPanel {
 										"dd/MM/yyyy HH:mm:ss");
 		
 		String fileName = file.getName();
-		if(fileName==null || fileName=="")
+		if(fileName==null || fileName.compareTo("")==0)
 			fileName = file.getPath();
 	
 		String text=
