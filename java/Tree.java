@@ -159,7 +159,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 				}
 
 				String filePath = ((File) 
-					lastTreeNodeOpened.getUserObject()).getPath();
+					node.getUserObject()).getPath();
 
 				File f = new File(filePath + "/");
 				if(!f.getName().equals(windowsTopName) && !f.exists()) {
