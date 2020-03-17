@@ -7,6 +7,8 @@ import javax.swing.border.*;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.plaf.IconUIResource;
 
+import java.text.SimpleDateFormat;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -221,7 +223,6 @@ public class MainWindow extends JPanel {
 	}
 
 	static void rename(DefaultMutableTreeNode panelNode, JPanel panel) {
-
 		JTree tree = MainWindow.getTree();
 		DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
 		String filePath = ((File) lastTreeNodeOpened.getUserObject()).getPath();
@@ -345,6 +346,70 @@ public class MainWindow extends JPanel {
 		}
 
 		selectDirectory(lastTreeNodeOpened);
+	}
+
+
+	static void properties(File file) {
+		ImageIcon img = Utility.getImageFast(ICONPATH + 
+					"other/info.png", 50, 50, true);
+
+		long fileSizeInBytes = file.length();
+		if(file.isDirectory())
+			fileSizeInBytes=0;
+		long fileSizeInKB=0, fileSizeInMB=0, fileSizeInGB=0;
+		if(fileSizeInBytes!=0) {
+			fileSizeInKB = fileSizeInBytes / 1024;
+			fileSizeInMB = fileSizeInKB / 1024;
+			fileSizeInGB = fileSizeInMB / 1024;
+		}
+
+		String size="No calculation (Folder)";
+		if(fileSizeInBytes!=0) {
+			size = fileSizeInBytes + " B";
+		}
+
+		if(fileSizeInKB!=0) {
+			double tempSize = (double)file.length()/1024;
+			size = String.format("%.2f", tempSize) + " KB "
+				+ " ( " + fileSizeInBytes + " B )";
+		}
+		
+		if(fileSizeInMB!=0) {
+			double tempSize = (double)file.length()/1024/1024;
+			size = String.format("%.2f", tempSize) + " MB "
+				+ " ( " + fileSizeInBytes + " B )";
+		}
+
+		if(fileSizeInGB!=0) {
+			double tempSize = (double)file.length()/1024/1024/1024;
+			size = String.format("%.2f", tempSize) + " GB "
+				+ " ( " + fileSizeInBytes + " B )";
+		}
+
+		SimpleDateFormat sdf = new SimpleDateFormat(
+										"dd/MM/yyyy HH:mm:ss");
+		String text=
+			"Name: " + file.getName()
+			+ "\nSize: " + size
+			+"\nModified: " + sdf.format(file.lastModified())
+			+ "\n\nRead: " + file.canRead()
+			+ "\nWrite: " + file.canWrite()
+			+ "\nExecute: " + file.canExecute();
+
+
+		JTextArea properties = new JTextArea(text.toString());
+		properties.setEditable(false);
+		properties.setBackground(new Color(32, 32, 32));
+		properties.setForeground(Color.WHITE);
+		
+		Font currentFont = properties.getFont();
+		Font bigFont = new Font(currentFont.getName(), 
+				currentFont.getStyle(), currentFont.getSize() + 5);
+		properties.setFont(bigFont);
+
+		JOptionPane.showMessageDialog(null, 
+			properties, "Properties", 
+			JOptionPane.INFORMATION_MESSAGE, img);			
 	}
 
 	static public void selectDirectory(DefaultMutableTreeNode node) {

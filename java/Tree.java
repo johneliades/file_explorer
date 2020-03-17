@@ -6,6 +6,9 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.filechooser.FileSystemView;
 
+import java.lang.management.ManagementFactory;
+import java.text.SimpleDateFormat;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -141,6 +144,10 @@ public class Tree extends JTree implements TreeSelectionListener {
 			public void mouseExited(MouseEvent e) {}
 			@Override
 			public void mousePressed(MouseEvent e) {
+				JTree tree = MainWindow.getTree();
+				int row = tree.getClosestRowForLocation(e.getX(), e.getY());
+				tree.setSelectionRow(row);
+
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
 									getLastSelectedPathComponent();
 				if(node==null)
@@ -167,6 +174,12 @@ public class Tree extends JTree implements TreeSelectionListener {
 				}
 				lastTreeNodeOpened = node;
 				FolderPanel.showCurrentDirectory(node);
+				
+				if(e.getButton() == MouseEvent.BUTTON3) {
+					JPopupMenu menu = getFolderPopupMenu(node);
+
+					menu.show(e.getComponent(), e.getX(), e.getY());
+				}
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {}
@@ -231,6 +244,125 @@ public class Tree extends JTree implements TreeSelectionListener {
 				}
 			}
 		});
+	}
+
+	static private JPopupMenu getFolderPopupMenu(DefaultMutableTreeNode node) {
+		File fileNode = (File) node.getUserObject();
+
+		JPopupMenu popupMenu = new JPopupMenu();
+		JMenuItem menuItem;
+		ImageIcon img=null;
+
+		menuItem = new JMenuItem("  New Window");
+		menuItem.setIcon(Utility.getImageFast(ICONPATH + 
+			"other/folder.png", 17, 17, true));
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				File currentJar=null;
+
+				final String javaBin = System.getProperty("java.home") + 
+					File.separator + "bin" + File.separator + "java";
+
+				try {
+					currentJar = new File(FileExplorer.class.
+						getProtectionDomain().getCodeSource().getLocation().toURI());
+				}
+				catch(Exception e) {
+				}
+
+				/* is it a jar file? */
+				if(currentJar.getName().endsWith(".jar")) {
+					final ArrayList<String> command = new ArrayList<String>();
+
+					/* Build command: java -jar application.jar */
+					command.add(javaBin);
+					command.add("-jar");
+					command.add(currentJar.getPath());
+
+					command.add(((File) node.getUserObject()).getPath());
+				
+					final ProcessBuilder builder = new ProcessBuilder(command);
+					try {
+						builder.start();
+					}
+					catch(Exception e) {
+
+					}
+				}
+				else {
+					StringBuilder cmd = new StringBuilder();
+
+					cmd.append(javaBin);
+					cmd.append(" -cp ").append(
+						ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
+					cmd.append(FileExplorer.class.getName()).append(" ");
+
+					cmd.append(((File) node.getUserObject()).getPath());
+					try {
+						Runtime.getRuntime().exec(cmd.toString());
+					}
+					catch(Exception e) {
+					}
+
+					return;
+				}
+			}
+		});
+
+		menuItem.setBackground(Color.white);
+		if(fileNode.isDirectory() && fileNode.exists() && fileNode.canRead())
+			popupMenu.add(menuItem);
+
+		popupMenu.addSeparator();
+
+		menuItem = new JMenuItem("  Rename");
+		menuItem.setIcon(Utility.getImageFast(
+			ICONPATH + "other/rename.png", 17, 17, true));
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+
+			}
+		});
+			
+		menuItem.setBackground(Color.white);
+		if(fileNode.exists() && fileNode.canWrite())
+			popupMenu.add(menuItem);
+
+		menuItem = new JMenuItem("  Delete");
+		menuItem.setIcon(Utility.getImageFast(
+			ICONPATH + "other/delete.png", 17, 17, true));
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+
+			}
+		});
+
+		menuItem.setBackground(Color.white);
+		if(fileNode.exists() && fileNode.canWrite())
+			popupMenu.add(menuItem);
+
+		menuItem = new JMenuItem("  Properties");
+		menuItem.setIcon(
+			Utility.getImageFast(ICONPATH + "other/properties.png", 17, 17, true));
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				MainWindow.properties((File) node.getUserObject());
+			}
+		});
+
+		menuItem.setBackground(Color.white);
+		popupMenu.add(menuItem);
+
+		popupMenu.setBorder(new CompoundBorder(
+				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red), 
+				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black)));		
+		popupMenu.setBackground(Color.white);
+		
+		return popupMenu;
 	}
 
 	private static void sortNode(DefaultMutableTreeNode parent) {

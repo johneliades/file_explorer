@@ -1,7 +1,6 @@
 import java.io.File;
 
 import java.lang.management.ManagementFactory;
-import java.text.SimpleDateFormat;
 
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -510,67 +509,7 @@ public class FolderPanel extends JPanel {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				ImageIcon img = Utility.getImageFast(ICONPATH + 
-							"other/info.png", 50, 50, true);
-
-
-				long fileSizeInBytes = panelFile.length();
-				if(panelFile.isDirectory())
-					fileSizeInBytes=0;
-				long fileSizeInKB=0, fileSizeInMB=0, fileSizeInGB=0;
-				if(fileSizeInBytes!=0) {
-					fileSizeInKB = fileSizeInBytes / 1024;
-					fileSizeInMB = fileSizeInKB / 1024;
-					fileSizeInGB = fileSizeInMB / 1024;
-				}
-
-				String size="No calculation (Folder)";
-				if(fileSizeInBytes!=0) {
-					size = fileSizeInBytes + " B";
-				}
-
-				if(fileSizeInKB!=0) {
-					double tempSize = (double)panelFile.length()/1024;
-					size = String.format("%.2f", tempSize) + " KB "
-						+ " ( " + fileSizeInBytes + " B )";
-				}
-				
-				if(fileSizeInMB!=0) {
-					double tempSize = (double)panelFile.length()/1024/1024;
-					size = String.format("%.2f", tempSize) + " MB "
-						+ " ( " + fileSizeInBytes + " B )";
-				}
-
-				if(fileSizeInGB!=0) {
-					double tempSize = (double)panelFile.length()/1024/1024/1024;
-					size = String.format("%.2f", tempSize) + " GB "
-						+ " ( " + fileSizeInBytes + " B )";
-				}
-
-				SimpleDateFormat sdf = new SimpleDateFormat(
-												"dd/MM/yyyy HH:mm:ss");
-				String text=
-					"Name: " + panel.getName()
-					+ "\nSize: " + size
-					+"\nModified: " + sdf.format(panelFile.lastModified())
-					+ "\n\nRead: " + panelFile.canRead()
-					+ "\nWrite: " + panelFile.canWrite()
-					+ "\nExecute: " + panelFile.canExecute();
-
-
-				JTextArea properties = new JTextArea(text.toString());
-				properties.setEditable(false);
-				properties.setBackground(new Color(32, 32, 32));
-				properties.setForeground(Color.WHITE);
-				
-				Font currentFont = properties.getFont();
-				Font bigFont = new Font(currentFont.getName(), 
-						currentFont.getStyle(), currentFont.getSize() + 5);
-				properties.setFont(bigFont);
-
-				JOptionPane.showMessageDialog(null, 
-					properties, "Properties", 
-					JOptionPane.INFORMATION_MESSAGE, img);			
+				MainWindow.properties(panelFile);
 			}
 		});
 

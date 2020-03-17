@@ -13,7 +13,8 @@
 
 #change scrollbar appearance
 #disks free space bar, and properties
-#right click at tree, choose focus after that
+#right click at tree rename and delete code, choose focus after that
+#better properties and calculate folders
 #load path This PC
 
 +=======+
