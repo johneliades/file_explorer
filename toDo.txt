@@ -2,6 +2,7 @@
 |BUGLIST|
 +=======+
 
+#concurrency exception on utilies hashmap
 #refresh doesn't show changed image thumbnails
 #create cancellable runnable
 #better focus order, at startup focus folder
@@ -14,7 +15,7 @@
 #change scrollbar appearance
 #disks free space bar, and properties
 #right click at tree rename and delete code, choose focus after that
-#better properties and calculate folders
+#better property visuals and close when click outisde and calculate folders
 #load path This PC
 
 +=======+

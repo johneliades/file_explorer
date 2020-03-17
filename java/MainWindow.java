@@ -348,8 +348,7 @@ public class MainWindow extends JPanel {
 		selectDirectory(lastTreeNodeOpened);
 	}
 
-
-	static void properties(File file) {
+	public static void properties(File file) {
 		ImageIcon img = Utility.getImageFast(ICONPATH + 
 					"other/info.png", 50, 50, true);
 
