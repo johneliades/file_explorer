@@ -9,9 +9,13 @@ import javax.swing.plaf.IconUIResource;
 
 import java.text.SimpleDateFormat;
 
+import java.security.MessageDigest;
+import java.nio.charset.StandardCharsets;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
+import java.io.*;
+
 import java.util.*;
 
 public class MainWindow extends JPanel {
@@ -352,6 +356,40 @@ public class MainWindow extends JPanel {
 		selectDirectory(lastTreeNodeOpened);
 	}
 
+	public static String sha256(File file) {
+		byte[] buffer= new byte[8192];
+		int count;
+		
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			BufferedInputStream bis = new BufferedInputStream(new 
+				FileInputStream(file));
+			
+			while ((count = bis.read(buffer)) > 0) {
+				digest.update(buffer, 0, count);
+			}
+			bis.close();
+
+			byte[] hash = digest.digest();
+	
+			// Conver hash to hex string
+			char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+
+			char[] hexChars = new char[hash.length * 2];
+			for (int j = 0; j < hash.length; j++) {
+				int v = hash[j] & 0xFF;
+				hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+				hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+			}
+			return new String(hexChars);
+		}
+		catch(Exception exc) {
+
+		}
+
+		return null;
+	}
+
 	public static void properties(File file) {
 		ImageIcon img = Utility.getImageFast(ICONPATH + 
 					"other/info.png", 50, 50, true);
@@ -395,15 +433,19 @@ public class MainWindow extends JPanel {
 		String fileName = file.getName();
 		if(fileName==null || fileName.compareTo("")==0)
 			fileName = file.getPath();
-	
+		
+		String sha256=sha256(file);
+		if(sha256==null)
+			sha256="No calculation (Folder)";
+
 		String text=
-			"Name: " + fileName
+			"Name: " + fileName 
 			+ "\nSize: " + size
 			+"\nModified: " + sdf.format(file.lastModified())
 			+ "\n\nRead: " + file.canRead()
 			+ "\nWrite: " + file.canWrite()
-			+ "\nExecute: " + file.canExecute();
-
+			+ "\nExecute: " + file.canExecute()
+			+ "\n\nSHA256: " + sha256;
 
 		JTextArea properties = new JTextArea(text.toString());
 		properties.setEditable(false);

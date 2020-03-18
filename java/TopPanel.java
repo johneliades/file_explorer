@@ -129,6 +129,7 @@ public class TopPanel extends JPanel {
 						pathComponents.add(file.getPath().replace("\\", ""));
 					
 						MainWindow.loadPath(MainWindow.getTop(), pathComponents);
+						MainWindow.focusLast();
 					}
 				}
 			}
