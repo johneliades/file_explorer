@@ -14,7 +14,7 @@
 
 #change scrollbar appearance
 #disks free space bar, and properties
-#fix right click at tree, rename, delete, choose focus after that
+#tree rename, delete, choose focus after that
 #better property visuals and close when click outisde and calculate folders
 #load path This PC
 

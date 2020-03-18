@@ -119,17 +119,21 @@ public class MainWindow extends JPanel {
 			BorderFactory.createMatteBorder(0, 3, 3, 3, Color.BLACK));
 
 		// Mouse back and forward
-		if (Toolkit.getDefaultToolkit().areExtraMouseButtonsEnabled() && MouseInfo.getNumberOfButtons() > 3) {
+		if (Toolkit.getDefaultToolkit().areExtraMouseButtonsEnabled() && 
+				MouseInfo.getNumberOfButtons() > 3) {
+			
 			Toolkit.getDefaultToolkit().addAWTEventListener(event -> {
 				if (event instanceof MouseEvent) {
 					MouseEvent mouseEvent = (MouseEvent) event;
-					if (mouseEvent.getID() == MouseEvent.MOUSE_RELEASED && mouseEvent.getButton() > 3) {
+					if (mouseEvent.getID() == MouseEvent.MOUSE_RELEASED &&
+						mouseEvent.getButton() > 3) {
+						
 						if (mouseEvent.getButton() == 4) {
 							TopPanel.historyBack();
-							MainWindow.getFolder().requestFocusInWindow();
+							MainWindow.focusLast();
 						} else if (mouseEvent.getButton() == 5) {
 							TopPanel.historyForward();
-							MainWindow.getFolder().requestFocusInWindow();
+							MainWindow.focusLast();
 						}
 					}
 				}
@@ -413,7 +417,7 @@ public class MainWindow extends JPanel {
 
 		JOptionPane.showMessageDialog(null, 
 			properties, "Properties", 
-			JOptionPane.INFORMATION_MESSAGE, img);			
+			JOptionPane.INFORMATION_MESSAGE, img);	
 	}
 
 	static public void selectDirectory(DefaultMutableTreeNode node) {
@@ -470,6 +474,23 @@ public class MainWindow extends JPanel {
 
 	public static JTree getTree() {
 		return tree;
+	}
+
+	private static boolean isLastExplorer=true;
+
+	public static void setFocusExplorer() {
+		isLastExplorer=true;
+	}
+
+	public static void setFocusTree() {
+		isLastExplorer=false;
+	}
+
+	public static void focusLast() {
+		if(isLastExplorer)
+			folder.requestFocusInWindow();
+		else
+			tree.requestFocusInWindow();
 	}
 
 	public static void historyPush(DefaultMutableTreeNode node) {

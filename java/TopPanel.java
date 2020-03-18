@@ -47,7 +47,7 @@ public class TopPanel extends JPanel {
 		buttonBack.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){  
 				historyBack();
-				MainWindow.getFolder().requestFocusInWindow();
+				MainWindow.focusLast();
 			}
 		});
 		this.add(buttonBack, c);
@@ -67,7 +67,7 @@ public class TopPanel extends JPanel {
 		buttonForward.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				historyForward();
-				MainWindow.getFolder().requestFocusInWindow();
+				MainWindow.focusLast();
 			}
 		});
 		this.add(buttonForward, c);
@@ -179,14 +179,13 @@ public class TopPanel extends JPanel {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-					JTree tree = MainWindow.getTree();
 					JPanel folder = MainWindow.getFolder();
 					searchQuery = searchField.getText();
 					
-					tree.requestFocusInWindow();
+					MainWindow.focusLast();
 
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
-						tree.getLastSelectedPathComponent();
+						Tree.getLastTreeNodeOpened();
 					File top = (File) node.getUserObject();
 
 					folder.removeAll();
@@ -219,7 +218,8 @@ public class TopPanel extends JPanel {
 					    }
 
 					    @Override
-					    public void removeSelectionInterval(int index0, int index1) {
+					    public void removeSelectionInterval(
+					    	int index0, int index1) {
 					    }
 					});
 					table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -235,7 +235,8 @@ public class TopPanel extends JPanel {
 								int row = target.getSelectedRow();
 								int column = target.getSelectedColumn();
 
-								DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+								DefaultMutableTreeNode node = 
+									(DefaultMutableTreeNode)
 										 target.getValueAt(row, column);
 
 								File file = (File) node.getUserObject();
@@ -260,6 +261,7 @@ public class TopPanel extends JPanel {
 					folder.add(table);
 					folder.setLayout(new GridLayout());
 	
+					JTree tree = MainWindow.getTree();
 					Executor executor = FolderPanel.getExecutor();
 					executor.execute(new Runnable() {
 						public void run() { 
@@ -454,6 +456,7 @@ public class TopPanel extends JPanel {
 			public void mouseReleased(MouseEvent event) {
 				MainWindow.selectDirectory(node);
 				MainWindow.getFolder().requestFocusInWindow();
+				MainWindow.focusLast();
 			}
 		});
 

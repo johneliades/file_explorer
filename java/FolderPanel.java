@@ -48,6 +48,7 @@ public class FolderPanel extends JPanel {
 				JTree tree = MainWindow.getTree();
 				
 				requestFocusInWindow();
+				MainWindow.setFocusExplorer();
 
 				String filePath = ((File) lastTreeNodeOpened.getUserObject()).
 															getPath();
@@ -405,7 +406,7 @@ public class FolderPanel extends JPanel {
 				MainWindow.historyPush(Tree.getLastTreeNodeOpened());
 				MainWindow.clearFuture();
 				MainWindow.enterOrOpen(panelFile, panelNode);
-				MainWindow.getFolder().requestFocusInWindow();
+				MainWindow.focusLast();
 			}
 		});
 		menuItem.setBackground(Color.white);
@@ -759,13 +760,14 @@ public class FolderPanel extends JPanel {
 					return;
 				}
 
+				MainWindow.setFocusExplorer();
 				selectPanel(panel);
 
 				if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
 					MainWindow.historyPush(Tree.getLastTreeNodeOpened());
 					MainWindow.clearFuture();
 					MainWindow.enterOrOpen(panelFile, panelNode);
-					MainWindow.getFolder().requestFocusInWindow();
+					MainWindow.focusLast();
 				}
 				else if(event.getButton() == MouseEvent.BUTTON3) {
 					JPopupMenu menu = getFilePopupMenu(panelFile, panelNode, panel);
@@ -804,7 +806,7 @@ public class FolderPanel extends JPanel {
 						MainWindow.historyPush(Tree.getLastTreeNodeOpened());
 						MainWindow.clearFuture();
 						MainWindow.enterOrOpen(panelFile, panelNode);
-						MainWindow.getFolder().requestFocusInWindow();
+						MainWindow.focusLast();
 
 						break;
 				
@@ -828,7 +830,7 @@ public class FolderPanel extends JPanel {
 
 					case KeyEvent.VK_BACK_SPACE:
 						TopPanel.historyBack();
-						MainWindow.getFolder().requestFocusInWindow();
+						MainWindow.focusLast();
 
 						break;
 

@@ -117,10 +117,12 @@ public class Tree extends JTree implements TreeSelectionListener {
 		this.addTreeSelectionListener(this);
 		this.addTreeWillExpandListener(new TreeWillExpandListener() {
 			@Override
-			public void treeWillCollapse(TreeExpansionEvent treeExpansionEvent) throws ExpandVetoException {}
+			public void treeWillCollapse(TreeExpansionEvent treeExpansionEvent) 
+				throws ExpandVetoException {}
 	  
 			@Override
-			public void treeWillExpand(TreeExpansionEvent treeExpansionEvent) throws ExpandVetoException {
+			public void treeWillExpand(TreeExpansionEvent treeExpansionEvent) 
+					throws ExpandVetoException {
 				TreePath path = treeExpansionEvent.getPath();
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
 										path.getLastPathComponent();
@@ -144,23 +146,15 @@ public class Tree extends JTree implements TreeSelectionListener {
 			public void mouseExited(MouseEvent e) {}
 			@Override
 			public void mousePressed(MouseEvent e) {
-//				JTree tree = MainWindow.getTree();
-//				int row = tree.getClosestRowForLocation(e.getX(), e.getY());
-//				tree.setSelectionRow(row);
-
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
 									getLastSelectedPathComponent();
+
+				MainWindow.setFocusTree();
+
 				if(node==null)
 					return;
 
-				if(lastTreeNodeOpened!=node) {
-					MainWindow.historyPush(lastTreeNodeOpened);
-					MainWindow.clearFuture();
-				}
-
-				String filePath = ((File) 
-					node.getUserObject()).getPath();
-
+				String filePath = ((File) node.getUserObject()).getPath();
 				File f = new File(filePath + "/");
 				if(!f.getName().equals(windowsTopName) && !f.exists()) {
 					findExistingParent(f);
@@ -168,18 +162,29 @@ public class Tree extends JTree implements TreeSelectionListener {
 				}
 
 				File current = (File) node.getUserObject();
-
 				if(current.exists()) {
 					createNodes(node);
 				}
-				lastTreeNodeOpened = node;
-				FolderPanel.showCurrentDirectory(node);
 				
-//				if(e.getButton() == MouseEvent.BUTTON3) {
-//					JPopupMenu menu = getFolderPopupMenu(node);
+				if(e.getButton() == MouseEvent.BUTTON3) {
+					JTree tree = MainWindow.getTree();
+					int row = tree.getClosestRowForLocation(e.getX(), e.getY());
+					tree.setSelectionRow(row);
 
-//					menu.show(e.getComponent(), e.getX(), e.getY());
-//				}
+					node = (DefaultMutableTreeNode) 
+						getLastSelectedPathComponent();
+
+					JPopupMenu menu = getFolderPopupMenu(node);
+					menu.show(e.getComponent(), e.getX(), e.getY());
+				}
+				else {
+					if(lastTreeNodeOpened!=node) {
+						MainWindow.historyPush(lastTreeNodeOpened);
+						MainWindow.clearFuture();
+						lastTreeNodeOpened = node;
+						FolderPanel.showCurrentDirectory(node);
+					}
+				}
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {}
@@ -351,6 +356,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				MainWindow.properties((File) node.getUserObject());
+				MainWindow.focusLast();
 			}
 		});
 
