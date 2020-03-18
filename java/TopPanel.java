@@ -289,6 +289,7 @@ public class TopPanel extends JPanel {
 				}
 
 				searchField.setText("Search" + " \"" + fileName + "\"");
+				searchField.setCaretPosition(0);
 			}
 		});
 
