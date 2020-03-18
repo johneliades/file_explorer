@@ -356,12 +356,12 @@ public class MainWindow extends JPanel {
 		selectDirectory(lastTreeNodeOpened);
 	}
 
-	public static String sha256(File file) {
+	public static String hashSHA(File file, String type) {
 		byte[] buffer= new byte[8192];
 		int count;
 		
 		try {
-			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			MessageDigest digest = MessageDigest.getInstance(type);
 			BufferedInputStream bis = new BufferedInputStream(new 
 				FileInputStream(file));
 			
@@ -434,9 +434,13 @@ public class MainWindow extends JPanel {
 		if(fileName==null || fileName.compareTo("")==0)
 			fileName = file.getPath();
 		
-		String sha256=sha256(file);
+		String sha256=hashSHA(file, "SHA-256");
 		if(sha256==null)
 			sha256="No calculation (Folder)";
+
+		String sha1=hashSHA(file, "SHA-1");
+		if(sha1==null)
+			sha1="No calculation (Folder)";
 
 		String text=
 			"Name: " + fileName 
@@ -445,7 +449,8 @@ public class MainWindow extends JPanel {
 			+ "\n\nRead: " + file.canRead()
 			+ "\nWrite: " + file.canWrite()
 			+ "\nExecute: " + file.canExecute()
-			+ "\n\nSHA256: " + sha256;
+			+ "\n\nSHA1: " + sha1
+			+ "\nSHA256: " + sha256;
 
 		JTextArea properties = new JTextArea(text.toString());
 		properties.setEditable(false);
