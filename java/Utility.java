@@ -74,14 +74,13 @@ public class Utility {
 		while (it.hasNext()) {
 			ScaledIcon element = (ScaledIcon) it.next();
 
-			if(element.getPath().contains(path)) {
-					String remnant = element.getPath().replaceFirst(path, "");
+			if(element.getPath().contains(path) && path.length()!=1) {
+				String remnant = element.getPath().replace(path, "");
 
-					if(!remnant.contains("/") && !remnant.contains("\\"))
-						images.remove(element);
+				if(!remnant.contains("/") && !remnant.contains("\\"))
+					images.remove(element);
 			}
 		}
-
 	}
 }
 
