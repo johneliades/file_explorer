@@ -116,7 +116,7 @@ public class TopPanel extends JPanel {
 					String path = navigationField.getText();
 					File file = new File(path);
 
-					if(file.exists() && path.equals(file.getPath())) {
+					if(file.exists()) {
 						java.util.Stack<String> pathComponents = 
 							new java.util.Stack<String>();
 

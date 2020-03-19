@@ -1,10 +1,13 @@
 import javax.swing.*;
 import java.awt.Image;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Utility {
-	private static HashSet<ScaledIcon> explorer_icons = new HashSet<>();
-	private static HashSet<ScaledIcon> images = new HashSet<>();
+	private static Set<ScaledIcon> explorer_icons = 
+		ConcurrentHashMap.newKeySet();
+	private static Set<ScaledIcon> images = 
+		ConcurrentHashMap.newKeySet();
 	private static ScaledIcon last=null;
 
 	static String getExtension(String fileName) {
@@ -56,6 +59,23 @@ public class Utility {
 		last = scaled;
 
 		return icon;
+	}
+
+	static void clearPathIcons(String path) {
+		Iterator it;
+
+		it = images.iterator();
+		
+		while (it.hasNext()) {
+			ScaledIcon element = (ScaledIcon) it.next();
+			System.out.println(element.getPath());
+
+			if(element.getPath().contains(path)) {
+				images.remove(element);
+				System.out.println("Deleted: " + element.getPath());
+			}
+		}
+
 	}
 }
 

@@ -196,6 +196,7 @@ public class MainWindow extends JPanel {
 	static void refresh(DefaultMutableTreeNode node) {
 		JTree tree = MainWindow.getTree();
 
+		Utility.clearPathIcons(((File) node.getUserObject()).getPath());
 		node.removeAllChildren();
 		DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
 		defMod1.reload();

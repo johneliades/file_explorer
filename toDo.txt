@@ -2,8 +2,6 @@
 |BUGLIST|
 +=======+
 
-#concurrency exception on utilies hashmap
-#refresh doesn't show changed image thumbnails
 #create cancellable runnable
 #better focus order, at startup focus folder
 #when going lower scroll with arrows
