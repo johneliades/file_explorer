@@ -63,16 +63,22 @@ public class Utility {
 
 	static void clearPathIcons(String path) {
 		Iterator it;
-
+			
+		if(path.contains("/"))
+			path = path + "/";
+		else if(path.contains("\\"))
+			path = path + "\\";
+			
 		it = images.iterator();
 		
 		while (it.hasNext()) {
 			ScaledIcon element = (ScaledIcon) it.next();
-			System.out.println(element.getPath());
 
 			if(element.getPath().contains(path)) {
-				images.remove(element);
-				System.out.println("Deleted: " + element.getPath());
+					String remnant = element.getPath().replaceFirst(path, "");
+
+					if(!remnant.contains("/") && !remnant.contains("\\"))
+						images.remove(element);
 			}
 		}
 

@@ -14,7 +14,6 @@
 #disks free space bar, and properties
 #tree rename, delete, choose focus after that
 #better property visuals and close when click outisde and calculate folders
-#load path This PC
 
 +=======+
 |_LATER_|
