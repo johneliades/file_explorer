@@ -13,6 +13,8 @@ public class FileExplorer {
 	private static final boolean showHiddenFiles = false;
 	private static File fileToOpen=null;
 
+	private static JFrame frame;
+
 	public static void main(String[] args) {
 
 		if(args.length>1)
@@ -48,7 +50,7 @@ public class FileExplorer {
 		}
 
 		//Create and set up the window.
-		JFrame frame = new JFrame("File Explorer");
+		frame = new JFrame("File Explorer");
 		frame.setBackground(new Color(53, 53, 53));
 		frame.getRootPane().setBorder(new EmptyBorder(0, 0, 0, 0));
 
@@ -90,6 +92,10 @@ public class FileExplorer {
 		return showHiddenFiles;
 	}
 	
+	public static JFrame getFrame() {
+		return frame;
+	}
+
 	public static Set<String> addExtensions() {
 		Set<String> set = new HashSet<>(); 
 	

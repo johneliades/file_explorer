@@ -399,7 +399,7 @@ public class MainWindow extends JPanel {
 			fileSizeInGB = fileSizeInMB / 1024;
 		}
 
-		String size="No calculation (Folder)";
+		String size="";
 		if(bytes!=0) {
 			size = bytes + " B";
 		}
@@ -426,59 +426,135 @@ public class MainWindow extends JPanel {
 	}
 
 	public static void properties(File file) {
+		JFrame frame = FileExplorer.getFrame();
+
+		JDialog dialog = new JDialog(frame, "Properties"); 
+		JPanel panel = new JPanel(); 
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
 		ImageIcon img = Utility.getImageFast(ICONPATH + 
 					"other/info.png", 50, 50, true);
+		JLabel label = new JLabel(img); 
 
-		long bytes = 0;
-		if(file.isDirectory())
-			bytes=0;
+		Font currentFont = label.getFont();
+		Font bigFont = new Font(currentFont.getName(), 
+				currentFont.getStyle(), currentFont.getSize() + 2);
 
-		bytes = file.length();
-		String size = convertBytes(bytes);
+		label.setForeground(Color.WHITE);
+		panel.add(label);
 		
-		SimpleDateFormat sdf = new SimpleDateFormat(
-										"dd/MM/yyyy HH:mm:ss");
-		
+		panel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+		dialog.add(panel); 
+		dialog.setResizable(false);
+		dialog.setSize(200, 200); 
+		dialog.setAlwaysOnTop(true);
+		dialog.addWindowFocusListener(new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent e) {
+			}
+
+			public void windowLostFocus(WindowEvent e) {
+				dialog.setVisible(false);
+			}
+		});
+
 		String fileName = file.getName();
 		if(fileName==null || fileName.compareTo("")==0)
 			fileName = file.getPath();
 		
-		String sha256=hashSHA(file, "SHA-256");
-		if(sha256==null)
-			sha256="No calculation (Folder)";
+		JTextField field = new JTextField("Name: " + fileName);
+		field.setEditable(false);
+		field.setBorder(null);
+		field.setForeground(Color.WHITE);
+		field.setBackground(UIManager.getColor("Panel.background"));
+		field.setFont(bigFont);
+		panel.add(field);
+
+		long bytes = 0;
+		String size = "";
+		if(!file.isDirectory()) {
+			bytes = file.length();
+			size = convertBytes(bytes);
+		}
+
+		String avail_space="";
+		if(file.getName().trim().length() == 0) {
+			avail_space = convertBytes(file.getFreeSpace());
+			size = convertBytes(file.getTotalSpace());
+		}
+
+		label = new JLabel("\nSize: " + size); 
+		label.setForeground(Color.WHITE);
+		label.setFont(bigFont);
+		if(size.length()!=0)
+			panel.add(label);
+
+		label = new JLabel("\nFree Space: " + avail_space); 
+		label.setForeground(Color.WHITE);
+		label.setFont(bigFont);
+		if(avail_space.length()!=0)
+			panel.add(label);
+		
+		panel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+		SimpleDateFormat sdf = new SimpleDateFormat(
+										"dd/MM/yyyy HH:mm:ss");
+		
+		label = new JLabel("Modified: " + sdf.format(file.lastModified())); 
+		label.setForeground(Color.WHITE);
+		label.setFont(bigFont);
+		panel.add(label);
+
+		panel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+		label = new JLabel("Read: " + file.canRead()); 
+		label.setForeground(Color.WHITE);
+		label.setFont(bigFont);
+		panel.add(label);
+		
+		label = new JLabel("Write: " + file.canWrite()); 
+		label.setForeground(Color.WHITE);
+		label.setFont(bigFont);
+		panel.add(label);
+		
+		label = new JLabel("Execute: " + file.canExecute()); 
+		label.setForeground(Color.WHITE);
+		label.setFont(bigFont);
+		panel.add(label);
+		
+		panel.add(Box.createRigidArea(new Dimension(0, 20)));
 
 		String sha1=hashSHA(file, "SHA-1");
 		if(sha1==null)
-			sha1="No calculation (Folder)";
+			sha1="";
 		
-		String avail_space="No space (Folder)";
-		if(file.getName().trim().length() == 0)
-			avail_space = convertBytes(file.getFreeSpace());
-
-		String text =
-			"Name: " + fileName 
-			+ "\nSize: " + size
-			+ "\nFree Space: " + avail_space
-			+ "\nModified: " + sdf.format(file.lastModified())
-			+ "\n\nRead: " + file.canRead()
-			+ "\nWrite: " + file.canWrite()
-			+ "\nExecute: " + file.canExecute()
-			+ "\n\nSHA1: " + sha1
-			+ "\nSHA256: " + sha256;
-
-		JTextArea properties = new JTextArea(text.toString());
-		properties.setEditable(false);
-		properties.setBackground(new Color(32, 32, 32));
-		properties.setForeground(Color.WHITE);
+		field = new JTextField("SHA1: " + sha1);
+		field.setEditable(false);
+		field.setBorder(null);
+		field.setForeground(Color.WHITE);
+		field.setBackground(UIManager.getColor("Panel.background"));
+		field.setFont(bigFont);
+		if(sha1.length()!=0)
+			panel.add(field);	
 		
-		Font currentFont = properties.getFont();
-		Font bigFont = new Font(currentFont.getName(), 
-				currentFont.getStyle(), currentFont.getSize() + 5);
-		properties.setFont(bigFont);
+		String sha256=hashSHA(file, "SHA-256");
+		if(sha256==null)
+			sha256="";
 
-		JOptionPane.showMessageDialog(null, 
-			properties, "Properties", 
-			JOptionPane.INFORMATION_MESSAGE, img);	
+		field = new JTextField("SHA256: " + sha256);
+		field.setEditable(false);
+		field.setBorder(null);
+		field.setForeground(Color.WHITE);
+		field.setBackground(UIManager.getColor("Panel.background"));
+		field.setFont(bigFont);
+		if(sha256.length()!=0)
+			panel.add(field); 
+			
+		dialog.pack();
+
+		dialog.setLocationRelativeTo(frame);
+		dialog.setVisible(true);
 	}
 
 	static public void selectDirectory(DefaultMutableTreeNode node) {
