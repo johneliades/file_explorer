@@ -10,7 +10,6 @@
 |EZ_FAST|
 +=======+
 
-#change scrollbar appearance
 #disks free space bar, and properties
 #tree rename, delete, choose focus after that
 #better property visuals and close when click outisde and calculate folders
@@ -19,8 +18,9 @@
 |_LATER_|
 +=======+
 
-#cut ctrl+X
+#change scrollbar appearance
 #copy ctrl+C
+#cut ctrl+X
 #paste ctrl+V
 #select all ctrl+A
 #drag n drop

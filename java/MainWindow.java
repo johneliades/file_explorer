@@ -442,11 +442,16 @@ public class MainWindow extends JPanel {
 		String sha1=hashSHA(file, "SHA-1");
 		if(sha1==null)
 			sha1="No calculation (Folder)";
+		
+		String avail_space="No space (Folder)";
+		if(file.getName().trim().length() == 0)
+			avail_space = file.getFreeSpace() + "";
 
 		String text=
 			"Name: " + fileName 
 			+ "\nSize: " + size
-			+"\nModified: " + sdf.format(file.lastModified())
+			+ "\nFree Space: " + avail_space
+			+ "\nModified: " + sdf.format(file.lastModified())
 			+ "\n\nRead: " + file.canRead()
 			+ "\nWrite: " + file.canWrite()
 			+ "\nExecute: " + file.canExecute()
