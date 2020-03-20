@@ -10,9 +10,8 @@
 |EZ_FAST|
 +=======+
 
-#disks free space bar, and properties
-#tree rename, delete, choose focus after that
-#better property visuals and close when click outisde and calculate folders
+#disks free space bar
+#tree rename, delete
 
 +=======+
 |_LATER_|
