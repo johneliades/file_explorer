@@ -429,6 +429,8 @@ public class MainWindow extends JPanel {
 		JFrame frame = FileExplorer.getFrame();
 
 		JDialog dialog = new JDialog(frame, "Properties"); 
+		dialog.setUndecorated(true);
+
 		JPanel panel = new JPanel(); 
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setBorder(new EmptyBorder(20, 20, 20, 20));
