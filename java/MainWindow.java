@@ -431,7 +431,7 @@ public class MainWindow extends JPanel {
 		JDialog dialog = new JDialog(frame, "Properties"); 
 		dialog.setUndecorated(true);
 
-		JPanel panel = new JPanel(); 
+		JPanel panel = new MotionPanel(dialog); 
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setBorder(new EmptyBorder(20, 20, 20, 20));
 
@@ -469,7 +469,7 @@ public class MainWindow extends JPanel {
 		field.setEditable(false);
 		field.setBorder(null);
 		field.setForeground(Color.WHITE);
-		field.setBackground(UIManager.getColor("Panel.background"));
+		field.setBackground(UIManager.getColor(Color.BLACK));
 		field.setFont(bigFont);
 		panel.add(field);
 
