@@ -405,19 +405,19 @@ public class MainWindow extends JPanel {
 		}
 
 		if(fileSizeInKB!=0) {
-			double tempSize = bytes/1024;
+			double tempSize = (double) bytes/1024;
 			size = String.format("%.2f", tempSize) + " KB "
 				+ " ( " + bytes + " B )";
 		}
 		
 		if(fileSizeInMB!=0) {
-			double tempSize = bytes/1024/1024;
+			double tempSize = (double) bytes/1024/1024;
 			size = String.format("%.2f", tempSize) + " MB "
 				+ " ( " + bytes + " B )";
 		}
 
 		if(fileSizeInGB!=0) {
-			double tempSize = bytes/1024/1024/1024;
+			double tempSize = (double) bytes/1024/1024/1024;
 			size = String.format("%.2f", tempSize) + " GB "
 				+ " ( " + bytes + " B )";
 		}
