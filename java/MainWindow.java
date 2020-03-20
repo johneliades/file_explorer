@@ -391,43 +391,51 @@ public class MainWindow extends JPanel {
 		return null;
 	}
 
-	public static void properties(File file) {
-		ImageIcon img = Utility.getImageFast(ICONPATH + 
-					"other/info.png", 50, 50, true);
-
-		long fileSizeInBytes = file.length();
-		if(file.isDirectory())
-			fileSizeInBytes=0;
+	private static String convertBytes(long bytes) {
 		long fileSizeInKB=0, fileSizeInMB=0, fileSizeInGB=0;
-		if(fileSizeInBytes!=0) {
-			fileSizeInKB = fileSizeInBytes / 1024;
+		if(bytes!=0) {
+			fileSizeInKB = bytes / 1024;
 			fileSizeInMB = fileSizeInKB / 1024;
 			fileSizeInGB = fileSizeInMB / 1024;
 		}
 
 		String size="No calculation (Folder)";
-		if(fileSizeInBytes!=0) {
-			size = fileSizeInBytes + " B";
+		if(bytes!=0) {
+			size = bytes + " B";
 		}
 
 		if(fileSizeInKB!=0) {
-			double tempSize = (double)file.length()/1024;
+			double tempSize = bytes/1024;
 			size = String.format("%.2f", tempSize) + " KB "
-				+ " ( " + fileSizeInBytes + " B )";
+				+ " ( " + bytes + " B )";
 		}
 		
 		if(fileSizeInMB!=0) {
-			double tempSize = (double)file.length()/1024/1024;
+			double tempSize = bytes/1024/1024;
 			size = String.format("%.2f", tempSize) + " MB "
-				+ " ( " + fileSizeInBytes + " B )";
+				+ " ( " + bytes + " B )";
 		}
 
 		if(fileSizeInGB!=0) {
-			double tempSize = (double)file.length()/1024/1024/1024;
+			double tempSize = bytes/1024/1024/1024;
 			size = String.format("%.2f", tempSize) + " GB "
-				+ " ( " + fileSizeInBytes + " B )";
+				+ " ( " + bytes + " B )";
 		}
 
+		return size;
+	}
+
+	public static void properties(File file) {
+		ImageIcon img = Utility.getImageFast(ICONPATH + 
+					"other/info.png", 50, 50, true);
+
+		long bytes = 0;
+		if(file.isDirectory())
+			bytes=0;
+
+		bytes = file.length();
+		String size = convertBytes(bytes);
+		
 		SimpleDateFormat sdf = new SimpleDateFormat(
 										"dd/MM/yyyy HH:mm:ss");
 		
@@ -445,9 +453,9 @@ public class MainWindow extends JPanel {
 		
 		String avail_space="No space (Folder)";
 		if(file.getName().trim().length() == 0)
-			avail_space = file.getFreeSpace() + "";
+			avail_space = convertBytes(file.getFreeSpace());
 
-		String text=
+		String text =
 			"Name: " + fileName 
 			+ "\nSize: " + size
 			+ "\nFree Space: " + avail_space
