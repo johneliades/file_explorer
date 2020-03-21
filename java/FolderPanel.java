@@ -763,7 +763,7 @@ public class FolderPanel extends JPanel {
 				MainWindow.setFocusExplorer();
 				selectPanel(panel);
 
-				if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
+				if(event.getClickCount()%2==0 && event.getButton() == MouseEvent.BUTTON1) {
 					MainWindow.historyPush(Tree.getLastTreeNodeOpened());
 					MainWindow.clearFuture();
 					MainWindow.enterOrOpen(panelFile, panelNode);
