@@ -18,6 +18,7 @@ import java.awt.event.*;
 import java.io.*;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 public class MainWindow extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
@@ -446,6 +447,23 @@ public class MainWindow extends JPanel {
 		return size;
 	}
 
+	public static long folderSize(File directory) {
+		long length = 0;
+		try {
+			for (File file : directory.listFiles()) {
+				if (file.isFile())
+					length += file.length();
+				else
+					length += folderSize(file);
+			}
+		}
+		catch(Exception e) {
+			return 0;
+		}
+
+		return length;
+	}
+
 	public static void properties(File file) {
 		JFrame frame = FileExplorer.getFrame();
 
@@ -494,31 +512,6 @@ public class MainWindow extends JPanel {
 		field.setFont(bigFont);
 		panel.add(field);
 
-		long bytes = 0;
-		String size = "";
-		if(!file.isDirectory()) {
-			bytes = file.length();
-			size = convertBytes(bytes);
-		}
-
-		String avail_space="";
-		if(file.getName().trim().length() == 0) {
-			avail_space = convertBytes(file.getFreeSpace());
-			size = convertBytes(file.getTotalSpace());
-		}
-
-		label = new JLabel("\nSize: " + size); 
-		label.setForeground(Color.WHITE);
-		label.setFont(bigFont);
-		if(size.length()!=0)
-			panel.add(label);
-
-		label = new JLabel("\nFree Space: " + avail_space); 
-		label.setForeground(Color.WHITE);
-		label.setFont(bigFont);
-		if(avail_space.length()!=0)
-			panel.add(label);
-		
 		panel.add(Box.createRigidArea(new Dimension(0, 20)));
 
 		SimpleDateFormat sdf = new SimpleDateFormat(
@@ -545,8 +538,6 @@ public class MainWindow extends JPanel {
 		label.setForeground(Color.WHITE);
 		label.setFont(bigFont);
 		panel.add(label);
-		
-		panel.add(Box.createRigidArea(new Dimension(0, 20)));
 
 		String sha1=hashSHA(file, "SHA-1");
 		if(sha1==null)
@@ -558,8 +549,10 @@ public class MainWindow extends JPanel {
 		field.setForeground(Color.WHITE);
 		field.setBackground(UIManager.getColor("Panel.background"));
 		field.setFont(bigFont);
-		if(sha1.length()!=0)
+		if(sha1.length()!=0) {
+			panel.add(Box.createRigidArea(new Dimension(0, 20)));
 			panel.add(field);	
+		}
 		
 		String sha256=hashSHA(file, "SHA-256");
 		if(sha256==null)
@@ -571,9 +564,68 @@ public class MainWindow extends JPanel {
 		field.setForeground(Color.WHITE);
 		field.setBackground(UIManager.getColor("Panel.background"));
 		field.setFont(bigFont);
-		if(sha256.length()!=0)
+		if(sha256.length()!=0) {
 			panel.add(field); 
-			
+		}
+
+		long bytes = 0;
+		String size = "", avail_space = "";
+		boolean calculated = false;
+
+		if(!file.isDirectory()) {
+			bytes = file.length();
+			size = convertBytes(bytes);
+			calculated = true;
+			panel.add(Box.createRigidArea(new Dimension(0, 20)));
+		}
+		else if(file.getName().trim().length() == 0) {
+			avail_space = convertBytes(file.getFreeSpace());
+			size = convertBytes(file.getTotalSpace());
+			calculated = true;
+			panel.add(Box.createRigidArea(new Dimension(0, 20)));
+		}
+
+		label = new JLabel("\nSize: " + size); 
+		label.setForeground(Color.WHITE);
+		label.setFont(bigFont);
+		if(size.length()!=0)
+			panel.add(label);
+
+		label = new JLabel("\nFree Space: " + avail_space); 
+		label.setForeground(Color.WHITE);
+		label.setFont(bigFont);
+		if(avail_space.length()!=0)
+			panel.add(label);
+
+		if(!calculated) {
+			Executor calcSize = Executors.newSingleThreadExecutor();
+			calcSize.execute(new Runnable() {
+				public void run() { 
+					panel.add(Box.createRigidArea(new Dimension(0, 20)));
+					JLabel label = new JLabel("\nSize: Calculating..."); 
+					label.setForeground(Color.WHITE);
+					label.setFont(bigFont);
+					panel.add(label);
+					dialog.pack();
+
+					long bytes = folderSize(file);
+
+					String size="0";
+					if(bytes!=0)
+						size = convertBytes(bytes);
+
+					panel.remove(label);
+					label = new JLabel("\nSize: " + size); 
+					label.setForeground(Color.WHITE);
+					label.setFont(bigFont);
+					if(size.length()!=0) {
+						panel.add(label);
+						dialog.pack();
+					}
+				}
+			});
+		}
+		
 		dialog.pack();
 
 		dialog.setLocationRelativeTo(frame);
