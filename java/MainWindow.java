@@ -6,6 +6,7 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.plaf.IconUIResource;
+import javax.swing.filechooser.FileSystemView;
 
 import java.text.SimpleDateFormat;
 
@@ -231,17 +232,27 @@ public class MainWindow extends JPanel {
 			}
 	}
 
-	static void rename(DefaultMutableTreeNode panelNode, JPanel panel) {
+	static void rename(DefaultMutableTreeNode panelNode) {
 		JTree tree = MainWindow.getTree();
 		DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
+		
 		String filePath = ((File) lastTreeNodeOpened.getUserObject()).getPath();
-		String nameNew,	nameOld="";
+		String nameNew,	nameOld="", path;
+
+		File nodeFile = (File) panelNode.getUserObject();
 
 		ImageIcon img=null;
 		Image folderImg;
 		int i;
 
-		nameOld = panel.getName();
+		nameOld = nodeFile.getName();
+
+		if(nameOld.trim().length() == 0) {
+			FileSystemView fsv = FileSystemView.getFileSystemView();
+
+			String description = fsv.getSystemTypeDescription(nodeFile);
+			nameOld = description + " (" + nodeFile.getPath().replace("\\", "") + ")";
+		}
 
 		File f = new File(filePath + "/" + nameOld);
 
@@ -274,7 +285,11 @@ public class MainWindow extends JPanel {
 			}
 		}
 		else {
-			if(!f.canWrite()) {
+			if(!f.exists()) {
+				JOptionPane.showMessageDialog(null, "File doesn't exist!");
+				return;
+			}
+			else if(!f.canWrite()) {
 				JOptionPane.showMessageDialog(null, "Not enough permissions!");
 				return;
 			}
@@ -289,17 +304,23 @@ public class MainWindow extends JPanel {
 		selectDirectory(lastTreeNodeOpened);
 	}
 
-	static void delete(DefaultMutableTreeNode panelNode, JPanel panel) {
+	static void delete(DefaultMutableTreeNode panelNode) {
 		DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
 		String filePath = ((File) lastTreeNodeOpened.getUserObject()).getPath();
+
+		File nodeFile = ((File) panelNode.getUserObject());
 
 		ImageIcon img=null;
 		int i;
 
-		String name = panel.getName();
-		if(name==null) {
-			return;
+		String name = nodeFile.getName();
+		if(name.trim().length() == 0) {
+			FileSystemView fsv = FileSystemView.getFileSystemView();
+
+			String description = fsv.getSystemTypeDescription(nodeFile);
+			name = description + " (" + nodeFile.getPath().replace("\\", "") + ")";
 		}
+
 		File f = new File(filePath + "/" + name);
 
 		img = Utility.getImageFast(ICONPATH + "other/delete.png", 50, 50, true);
@@ -341,16 +362,16 @@ public class MainWindow extends JPanel {
 			defMod1.reload();
 		}
 		else {
-			if(!f.canWrite()) {
-				JOptionPane.showMessageDialog(null, "Not enough permissions!");
-				if(panel!=null) {
-					panel.setBackground(new Color(0x3fa9ff));
-					panel.setBorder(BorderFactory.createLineBorder(Color.black));
-				}
+			if(!f.exists()) {
+				JOptionPane.showMessageDialog(null, "File doesn't exist!");
 				return;
 			}
-
-			JOptionPane.showMessageDialog(null, "File didn't exist!");
+			else if(!f.canWrite()) {
+				JOptionPane.showMessageDialog(null, "Not enough permissions!");
+				return;
+			}
+			
+			JOptionPane.showMessageDialog(null, "Deletion failed!");
 			return;
 		}
 

@@ -11,7 +11,7 @@
 +=======+
 
 #disks free space bar
-#tree rename, delete
+#tree rename and delete sometimes don't work: file.exists()
 
 +=======+
 |_LATER_|

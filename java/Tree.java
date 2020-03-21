@@ -327,7 +327,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-
+				MainWindow.rename(node);
 			}
 		});
 			
@@ -341,7 +341,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-
+				MainWindow.delete(node);
 			}
 		});
 
