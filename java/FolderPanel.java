@@ -487,7 +487,8 @@ public class FolderPanel extends JPanel {
 		});
 			
 		menuItem.setBackground(Color.white);
-		if(panelFile.exists() && panelFile.canWrite())
+		if(panelFile.exists() && panelFile.canWrite() && 
+				!panelFile.getName().equals(""));
 			popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem("  Delete");
@@ -501,7 +502,8 @@ public class FolderPanel extends JPanel {
 		});
 
 		menuItem.setBackground(Color.white);
-		if(panelFile.exists() && panelFile.canWrite())
+		if(panelFile.exists() && panelFile.canWrite() && 
+				!panelFile.getName().equals(""))
 			popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem("  Properties");

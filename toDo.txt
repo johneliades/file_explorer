@@ -2,6 +2,7 @@
 |BUGLIST|
 +=======+
 
+#tree rename and delete sometimes don't work: file.exists()
 #create cancellable runnable
 #better focus order, at startup focus folder
 #when going lower scroll with arrows
@@ -10,19 +11,19 @@
 |EZ_FAST|
 +=======+
 
+#select all ctrl+A, mouse (add in list and change what options appear when)
+#Undecorated window
 #disks free space bar
-#tree rename and delete sometimes don't work: file.exists()
 
 +=======+
 |_LATER_|
 +=======+
 
-#change scrollbar appearance
 #copy ctrl+C
 #cut ctrl+X
 #paste ctrl+V
-#select all ctrl+A
-#drag n drop
 #zip/unzip
+#change scrollbar appearance
+#drag n drop
 #ftp
 #open as
