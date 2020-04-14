@@ -3,27 +3,28 @@
 +=======+
 
 #tree rename and delete sometimes don't work: file.exists()
-#create cancellable runnable
+#create cancellable runnable for folder threads
 #better focus order, at startup focus folder
 #when going lower scroll with arrows
+#probably properties follow symlinks
 
 +=======+
 |EZ_FAST|
 +=======+
 
-#select all ctrl+A, mouse (add in list and change what options appear when)
-#Undecorated window
-#disks free space bar
+#select all ctrl+A (and choose options for multiple objects)
+#copy ctrl+C
+#cut ctrl+X
+#paste ctrl+V
 
 +=======+
 |_LATER_|
 +=======+
 
-#copy ctrl+C
-#cut ctrl+X
-#paste ctrl+V
+#disks free space bar
 #zip/unzip
 #change scrollbar appearance
 #drag n drop
 #ftp
 #open as
+#undecorated window

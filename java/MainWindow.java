@@ -227,7 +227,7 @@ public class MainWindow extends JPanel {
 		if(current!=null)
 			for(Component comp : folder.getComponents()) {
 				if(current.getName().equals(comp.getName())) {
-					FolderPanel.selectPanel((JPanel) comp);
+					FolderPanel.selectPanel((JPanel) comp, true);
 					break;
 				}
 			}
@@ -615,6 +615,8 @@ public class MainWindow extends JPanel {
 						size = convertBytes(bytes);
 
 					panel.remove(label);
+					dialog.pack();
+
 					label = new JLabel("\nSize: " + size); 
 					label.setForeground(Color.WHITE);
 					label.setFont(bigFont);

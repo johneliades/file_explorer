@@ -347,7 +347,7 @@ public class TopPanel extends JPanel {
 		DefaultMutableTreeNode previous,
 						lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
 
-		FolderPanel.clearLastPanelSelection();
+		FolderPanel.clearPanelSelection();
 
 		previous = MainWindow.historyPop();
 		if(previous==null) {
