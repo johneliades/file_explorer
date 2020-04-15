@@ -173,8 +173,20 @@ public class FolderPanel extends JPanel {
 				name = (String) JOptionPane.showInputDialog(null, 
 					"Enter File Name", "New Text Document", 
 					JOptionPane.INFORMATION_MESSAGE, img, null, "File");
-				if(name==null || name.equals(""))
+
+				if(name==null || name.equals("")) {
+					JOptionPane.showMessageDialog(null, 
+						"Can't have empty name");
 					return;
+				}
+
+				String invalidStripped = 
+					name.replaceAll("[\\\\/:*?\"<>|]", "_");
+				if(!name.equals(invalidStripped)) {
+					JOptionPane.showMessageDialog(null, 
+						"Replace invalid characters with \"_\"");
+					name = invalidStripped;
+				}
 
 				if(Utility.getExtension(name).equals("txt"))
 					f = new File(filePath + "/" + name);
@@ -231,9 +243,20 @@ public class FolderPanel extends JPanel {
 				name = (String) JOptionPane.showInputDialog(null, 
 					"Enter Folder Name", "New Folder", 
 					JOptionPane.INFORMATION_MESSAGE, img, null, "Folder");
-				
-				if(name==null || name.equals(""))
+			
+				if(name==null || name.equals("")) {
+					JOptionPane.showMessageDialog(null, 
+						"Can't have empty name");			
 					return;
+				}
+
+				String invalidStripped = 
+					name.replaceAll("[\\\\/:*?\"<>|]", "_");
+				if(!name.equals(invalidStripped)) {
+					JOptionPane.showMessageDialog(null, 
+						"Replace invalid characters with \"_\"");
+					name = invalidStripped;
+				}
 
 				f = new File(filePath + "/" + name);
 				if(!f.exists()){

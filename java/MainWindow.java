@@ -264,8 +264,20 @@ public class MainWindow extends JPanel {
 									"Rename", JOptionPane.INFORMATION_MESSAGE,
 									img, null, nameOld);
 
-			if(nameNew==null || nameNew.equals(nameOld) || nameNew.equals(""))
+			
+			if(nameNew==null || nameNew.equals(nameOld) || nameNew.equals("")) {
+				JOptionPane.showMessageDialog(null, 
+					"Can't have empty name");				
 				return;
+			}
+
+			String invalidStripped = 
+				nameNew.replaceAll("[\\\\/:*?\"<>|]", "_");
+			if(!nameNew.equals(invalidStripped)) {
+				JOptionPane.showMessageDialog(null, 
+					"Replace invalid characters with \"_\"");
+				nameNew = invalidStripped;
+			}
 
 			File file2 = new File(filePath + "/" + nameNew);
 
@@ -303,6 +315,7 @@ public class MainWindow extends JPanel {
 		defMod1.reload();
 
 		selectDirectory(lastTreeNodeOpened);
+		MainWindow.focusLast();
 	}
 
 	static void delete(DefaultMutableTreeNode panelNode) {
@@ -379,6 +392,7 @@ public class MainWindow extends JPanel {
 		}
 
 		selectDirectory(lastTreeNodeOpened);
+		MainWindow.focusLast();
 	}
 
 	public static String hashSHA(File file, String type) {
