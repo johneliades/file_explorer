@@ -26,6 +26,8 @@ public class FolderPanel extends JPanel {
 	private static JPanel currentPanelSelected; 
 	private static java.util.List<JPanel> selected = 
 		new java.util.ArrayList<JPanel>();
+	
+	private static Executor executor = Executors.newSingleThreadExecutor();
 
 	public FolderPanel() {
 		//Create the folder viewing pane.
@@ -188,7 +190,8 @@ public class FolderPanel extends JPanel {
 					}
 				}
 				else {
-					JOptionPane.showMessageDialog(null, "File with that name already exists!");
+					JOptionPane.showMessageDialog(null, 
+						"File with that name already exists!");
 					return;
 				}
 
@@ -242,7 +245,8 @@ public class FolderPanel extends JPanel {
 					}
 				}
 				else {
-					JOptionPane.showMessageDialog(null, "Directory with that name already exists!");
+					JOptionPane.showMessageDialog(null, 
+						"Directory with that name already exists!");
 					return;
 				}
 
@@ -391,7 +395,9 @@ public class FolderPanel extends JPanel {
 	}
 
 	static public JPopupMenu getFilePopupMenu(
-		File panelFile, DefaultMutableTreeNode panelNode, JPanel panel) {
+		DefaultMutableTreeNode panelNode, JPanel panel) {
+
+		File panelFile = (File) panelNode.getUserObject();
 
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItem menuItem;
@@ -409,7 +415,11 @@ public class FolderPanel extends JPanel {
 			public void actionPerformed(ActionEvent event) {
 				MainWindow.historyPush(Tree.getLastTreeNodeOpened());
 				MainWindow.clearFuture();
-				MainWindow.enterOrOpen(panelFile, panelNode);
+				if(panelNode!=null)
+					MainWindow.enterOrOpen(panelNode);
+				else
+					MainWindow.enterOrOpen(new DefaultMutableTreeNode(panelFile));
+		
 				MainWindow.focusLast();
 			}
 		});
@@ -534,10 +544,8 @@ public class FolderPanel extends JPanel {
 		return popupMenu;
 	}
 
-	private static Executor executor = Executors.newSingleThreadExecutor();
 
 	public static void showCurrentDirectory(DefaultMutableTreeNode node) {
-
 		executor.execute(new Runnable() {
 			public void run() { 
 				JTree tree = MainWindow.getTree();
@@ -579,16 +587,15 @@ public class FolderPanel extends JPanel {
 					if(showHiddenFiles ?  true : !currentFile.isHidden() || 
 									!currentFile.getName().startsWith(".")) {
 						if(currentFile.isDirectory())
-							folder.add(getPanel("folder.png", currentFile, 
-								currentNode));
+							folder.add(getPanel("folder.png", currentNode));
 						else if(iconSet.contains(Utility.getExtension(
-								currentFile.getName())))
+							currentFile.getName()))) {
+						
 							folder.add(getPanel(Utility.getExtension(
-								currentFile.getName()) + ".png", currentFile, 
-									currentNode));
+								currentFile.getName()) + ".png", currentNode));
+						}
 						else
-							folder.add(getPanel("question.png", currentFile, 
-								currentNode));
+							folder.add(getPanel("question.png", currentNode));
 					}
 					folder.repaint();
 					folder.revalidate();
@@ -610,15 +617,21 @@ public class FolderPanel extends JPanel {
 
 					if(showHiddenFiles ? true : !element.isHidden() || 
 										!element.getName().startsWith(".")) {
-						if (element.isDirectory())
-							folder.add(getPanel("folder.png", element, null));
-						else if(iconSet.contains(Utility.getExtension(
-												element.getName()))) {
-							folder.add(getPanel(Utility.getExtension(
-								element.getName()) + ".png", element, null));
+						if(element.isDirectory()) {
+							folder.add(getPanel("folder.png", 
+								new DefaultMutableTreeNode(element)));
 						}
-						else
-							folder.add(getPanel("question.png", element, null));
+						else if(iconSet.contains(Utility.getExtension(
+							element.getName()))) {
+							
+							folder.add(getPanel(Utility.getExtension(
+								element.getName()) + ".png", 
+								new DefaultMutableTreeNode(element)));
+						}
+						else {
+							folder.add(getPanel("question.png", 
+								new DefaultMutableTreeNode(element)));
+						}
 					}
 					folder.repaint();
 					folder.revalidate();
@@ -648,11 +661,11 @@ public class FolderPanel extends JPanel {
 	 }
 	*/
 
-	static JPanel getPanel(String iconName, File panelFile, 
-									DefaultMutableTreeNode panelNode) {
+	static JPanel getPanel(String iconName, DefaultMutableTreeNode panelNode) {
 		JLabel label;
 		ImageIcon img=null;
-		Set<String> set = new HashSet<>(); 
+		Set<String> set = new HashSet<>();
+		File panelFile = (File) panelNode.getUserObject();
 		String name = panelFile.getName(), path;
 		String extension = Utility.getExtension(panelFile.getName());
 
@@ -791,11 +804,12 @@ public class FolderPanel extends JPanel {
 				if(event.getClickCount()%2==0 && event.getButton() == MouseEvent.BUTTON1) {
 					MainWindow.historyPush(Tree.getLastTreeNodeOpened());
 					MainWindow.clearFuture();
-					MainWindow.enterOrOpen(panelFile, panelNode);
+					MainWindow.enterOrOpen(panelNode);
+
 					MainWindow.focusLast();
 				}
 				else if(event.getButton() == MouseEvent.BUTTON3) {
-					JPopupMenu menu = getFilePopupMenu(panelFile, panelNode, panel);
+					JPopupMenu menu = getFilePopupMenu(panelNode, panel);
 
 					menu.show(event.getComponent(), event.getX(), event.getY());
 				}
@@ -830,7 +844,10 @@ public class FolderPanel extends JPanel {
 					case KeyEvent.VK_ENTER:
 						MainWindow.historyPush(Tree.getLastTreeNodeOpened());
 						MainWindow.clearFuture();
-						MainWindow.enterOrOpen(panelFile, panelNode);
+						if(panelNode!=null)
+							MainWindow.enterOrOpen(panelNode);
+						else
+							MainWindow.enterOrOpen(new DefaultMutableTreeNode(panelFile));
 						MainWindow.focusLast();
 
 						break;

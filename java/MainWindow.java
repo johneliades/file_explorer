@@ -151,7 +151,7 @@ public class MainWindow extends JPanel {
 	}
 
 	static void loadPath(DefaultMutableTreeNode top, 
-								java.util.Stack<String> pathComponents) {	
+		java.util.Stack<String> pathComponents) {	
 		
 		String current = pathComponents.pop();
 		if(!((File) top.getUserObject()).getPath().equals(windowsTopName)) {
@@ -309,8 +309,10 @@ public class MainWindow extends JPanel {
 		DefaultMutableTreeNode lastTreeNodeOpened = Tree.getLastTreeNodeOpened();
 		String filePath = ((File) lastTreeNodeOpened.getUserObject()).getPath();
 
-		File nodeFile = ((File) panelNode.getUserObject());
-
+		File nodeFile;
+		 
+		nodeFile = ((File) panelNode.getUserObject());
+	
 		ImageIcon img=null;
 		int i;
 
@@ -643,9 +645,11 @@ public class MainWindow extends JPanel {
 		FolderPanel.showCurrentDirectory(node);	
 	}
 
-	static public void enterOrOpen(File file, DefaultMutableTreeNode node) {
+	static public void enterOrOpen(DefaultMutableTreeNode node) {
 		JTree tree = MainWindow.getTree();
 	
+		File file = (File) node.getUserObject();
+
 		if(!file.exists()) {
 			Tree.findExistingParent(file);
 			return;

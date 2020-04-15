@@ -371,7 +371,8 @@ public class TopPanel extends JPanel {
 
 			return;
 		}
-		MainWindow.enterOrOpen(file, previous);
+
+		MainWindow.enterOrOpen(previous);
 	}
 
 	public static void historyForward() {
@@ -398,7 +399,7 @@ public class TopPanel extends JPanel {
 
 			return;
 		}
-		MainWindow.enterOrOpen(file, next);
+		MainWindow.enterOrOpen(next);
 	}
 
 	public static void setNavigationText(String text) {
