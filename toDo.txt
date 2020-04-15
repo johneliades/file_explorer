@@ -7,12 +7,17 @@
 #better focus order, at startup focus folder
 #when going lower scroll with arrows
 #probably properties follow symlinks
+#when deselecting an item of multiple it can't be hovered(visual bug)
 
 +=======+
 |EZ_FAST|
 +=======+
 
-#select all ctrl+A (and choose options for multiple objects)
+#add node and file in selectPanel and then add objects in selected so 
+that you have access in panel's file(meaning there is need for lookup from panel 
+to file or node)
+
+#select all ctrl+A
 #copy ctrl+C
 #cut ctrl+X
 #paste ctrl+V

@@ -397,6 +397,10 @@ public class FolderPanel extends JPanel {
 		JMenuItem menuItem;
 		ImageIcon img=null;
 
+		Boolean multiple = false;
+		if(selected.size()>1)
+			multiple = true;
+
 		menuItem = new JMenuItem("  Open");
 		img = Utility.getImageFast(ICONPATH + "other/open.png", 17, 17, true);
 		menuItem.setIcon(img);
@@ -410,7 +414,7 @@ public class FolderPanel extends JPanel {
 			}
 		});
 		menuItem.setBackground(Color.white);
-		if(panelFile.exists() && panelFile.canRead())
+		if(panelFile.exists() && panelFile.canRead() && !multiple)
 			popupMenu.add(menuItem);
 	
 		menuItem = new JMenuItem("  New Window");
@@ -471,7 +475,9 @@ public class FolderPanel extends JPanel {
 		});
 
 		menuItem.setBackground(Color.white);
-		if(panelFile.isDirectory() && panelFile.exists() && panelFile.canRead())
+		if(panelFile.isDirectory() && panelFile.exists() && panelFile.canRead() 
+			&& !multiple)
+			
 			popupMenu.add(menuItem);
 
 		popupMenu.addSeparator();
@@ -488,7 +494,7 @@ public class FolderPanel extends JPanel {
 			
 		menuItem.setBackground(Color.white);
 		if(panelFile.exists() && panelFile.canWrite() && 
-				!panelFile.getName().equals(""))
+				!panelFile.getName().equals("") && !multiple)
 			popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem("  Delete");
@@ -503,7 +509,7 @@ public class FolderPanel extends JPanel {
 
 		menuItem.setBackground(Color.white);
 		if(panelFile.exists() && panelFile.canWrite() && 
-				!panelFile.getName().equals(""))
+				!panelFile.getName().equals("") && !multiple)
 			popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem("  Properties");
@@ -517,7 +523,8 @@ public class FolderPanel extends JPanel {
 		});
 
 		menuItem.setBackground(Color.white);
-		popupMenu.add(menuItem);
+		if(!multiple)
+			popupMenu.add(menuItem);
 
 		popupMenu.setBorder(new CompoundBorder(
 				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red), 
@@ -764,8 +771,16 @@ public class FolderPanel extends JPanel {
 
 				MainWindow.setFocusExplorer();
 
+				/* No control pressed */
 				if(!event.isControlDown()) {
-					selectPanel(panel, true);
+					/* Left Mouse Button */
+
+					if(SwingUtilities.isLeftMouseButton(event) || 
+						(SwingUtilities.isRightMouseButton(event) 
+							&& !selected.contains(panel))) {
+						
+						selectPanel(panel, true);
+					}
 				}
 				else if(event.isControlDown() && SwingUtilities.isLeftMouseButton(event) 
 					&& event.getClickCount() == 1) {
