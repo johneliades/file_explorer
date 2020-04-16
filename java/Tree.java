@@ -44,9 +44,8 @@ public class Tree extends JTree implements TreeSelectionListener {
 		});
 		this.setCellRenderer(new DefaultTreeCellRenderer() {
 			public Component getTreeCellRendererComponent ( JTree tree, 
-										Object value, boolean sel,
-										boolean expanded, boolean leaf,
-										int row, boolean hasFocus ) {
+				Object value, boolean sel, boolean expanded, boolean leaf,
+				int row, boolean hasFocus ) {
 
 				JLabel label = (JLabel) super.getTreeCellRendererComponent(tree, 
 									value, sel, expanded, leaf, row, hasFocus );
@@ -122,7 +121,8 @@ public class Tree extends JTree implements TreeSelectionListener {
 	  
 			@Override
 			public void treeWillExpand(TreeExpansionEvent treeExpansionEvent) 
-					throws ExpandVetoException {
+				throws ExpandVetoException {
+			
 				TreePath path = treeExpansionEvent.getPath();
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
 										path.getLastPathComponent();
@@ -147,7 +147,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
-									getLastSelectedPathComponent();
+					getLastSelectedPathComponent();
 
 				MainWindow.setFocusTree();
 

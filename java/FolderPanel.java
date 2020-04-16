@@ -24,7 +24,10 @@ public class FolderPanel extends JPanel {
 	private static String windowsTopName = Tree.getWindowsTopName();
 
 	private static JPanel currentPanelSelected; 
-	private static java.util.List<JPanel> selected = 
+	private static HashMap<JPanel, DefaultMutableTreeNode> mapPanelNode = 
+		new HashMap<JPanel, DefaultMutableTreeNode>();
+
+	private static java.util.List<JPanel> selectedList = 
 		new java.util.ArrayList<JPanel>();
 	
 	private static Executor executor = Executors.newSingleThreadExecutor();
@@ -427,7 +430,7 @@ public class FolderPanel extends JPanel {
 		ImageIcon img=null;
 
 		Boolean multiple = false;
-		if(selected.size()>1)
+		if(selectedList.size()>1)
 			multiple = true;
 
 		menuItem = new JMenuItem("  Open");
@@ -567,7 +570,6 @@ public class FolderPanel extends JPanel {
 		return popupMenu;
 	}
 
-
 	public static void showCurrentDirectory(DefaultMutableTreeNode node) {
 		executor.execute(new Runnable() {
 			public void run() { 
@@ -599,6 +601,7 @@ public class FolderPanel extends JPanel {
 					TopPanel.addNavButton(current);
 				}
 
+				mapPanelNode.clear();
 				folder.removeAll();
 				folder.repaint();
 				folder.revalidate();
@@ -608,22 +611,27 @@ public class FolderPanel extends JPanel {
 					currentFile =(File) currentNode.getUserObject();
 
 					if(showHiddenFiles ?  true : !currentFile.isHidden() || 
-									!currentFile.getName().startsWith(".")) {
+						!currentFile.getName().startsWith(".")) {
+					
+						JPanel newPanel;
 						if(currentFile.isDirectory())
-							folder.add(getPanel("folder.png", currentNode));
+							newPanel = getPanel("folder.png", currentNode);
 						else if(iconSet.contains(Utility.getExtension(
 							currentFile.getName()))) {
 						
-							folder.add(getPanel(Utility.getExtension(
-								currentFile.getName()) + ".png", currentNode));
+							newPanel = getPanel(Utility.getExtension(
+								currentFile.getName()) + ".png", currentNode);
 						}
 						else
-							folder.add(getPanel("question.png", currentNode));
+							newPanel = getPanel("question.png", currentNode);
+				
+						mapPanelNode.put(newPanel, currentNode);
+						folder.add(newPanel);
 					}
+					
 					folder.repaint();
 					folder.revalidate();
 				}
-
 
 				currentFile=(File) node.getUserObject();
 				File children[] = currentFile.listFiles();
@@ -640,21 +648,27 @@ public class FolderPanel extends JPanel {
 
 					if(showHiddenFiles ? true : !element.isHidden() || 
 										!element.getName().startsWith(".")) {
+						
+						JPanel newPanel;
 						if(element.isDirectory()) {
-							folder.add(getPanel("folder.png", 
-								new DefaultMutableTreeNode(element)));
+							newPanel = getPanel("folder.png", 
+								new DefaultMutableTreeNode(element));
 						}
 						else if(iconSet.contains(Utility.getExtension(
 							element.getName()))) {
 							
-							folder.add(getPanel(Utility.getExtension(
+							newPanel = getPanel(Utility.getExtension(
 								element.getName()) + ".png", 
-								new DefaultMutableTreeNode(element)));
+								new DefaultMutableTreeNode(element));
 						}
 						else {
-							folder.add(getPanel("question.png", 
-								new DefaultMutableTreeNode(element)));
+							newPanel = getPanel("question.png", 
+								new DefaultMutableTreeNode(element));
 						}
+		
+						mapPanelNode.put(newPanel, 
+							new DefaultMutableTreeNode(element));
+						folder.add(newPanel);
 					}
 					folder.repaint();
 					folder.revalidate();
@@ -790,12 +804,12 @@ public class FolderPanel extends JPanel {
 			public void mouseClicked(MouseEvent event) {}
 			@Override
 			public void mouseEntered(MouseEvent event) {		
-				if(currentPanelSelected!=panel && !selected.contains(panel))
+				if(currentPanelSelected!=panel && !selectedList.contains(panel))
 					panel.setBackground(new Color(0, 170, 170));
 			}
 			@Override
 			public void mouseExited(MouseEvent event) {
-				if(currentPanelSelected!=panel && !selected.contains(panel))
+				if(currentPanelSelected!=panel && !selectedList.contains(panel))
 					panel.setBackground(new Color(49, 49, 49));
 			}
 			@Override
@@ -813,7 +827,7 @@ public class FolderPanel extends JPanel {
 
 					if(SwingUtilities.isLeftMouseButton(event) || 
 						(SwingUtilities.isRightMouseButton(event) 
-							&& !selected.contains(panel))) {
+							&& !selectedList.contains(panel))) {
 						
 						selectPanel(panel, true);
 					}
@@ -924,6 +938,7 @@ public class FolderPanel extends JPanel {
 	}
 
 	static public void selectPanel(JPanel panel, Boolean clear) {
+		
 		if(panel==null)
 			return;
 
@@ -931,19 +946,19 @@ public class FolderPanel extends JPanel {
 			clearPanelSelection();
 			panel.setBackground(new Color(0, 100, 100));
 			panel.setBorder(BorderFactory.createLineBorder(Color.white));	
-			selected.add(panel);
+			selectedList.add(panel);
 		}
 		else {
-			if(selected.contains(panel)) {
+			if(selectedList.contains(panel)) {
 				panel.setBackground(new Color(49, 49, 49));
 				panel.setBorder(BorderFactory.createLineBorder(
 					new Color(49, 49, 49)));	
-				selected.remove(panel);
+				selectedList.remove(panel);
 			}
 			else
-				selected.add(panel);
+				selectedList.add(panel);
 
-			for(JPanel element : selected) {
+			for(JPanel element : selectedList) {
 				element.setBackground(new Color(0, 100, 100));
 				element.setBorder(BorderFactory.createLineBorder(Color.white));
 			}
@@ -954,12 +969,12 @@ public class FolderPanel extends JPanel {
 	}
 
 	static public void clearPanelSelection() {
-		for(JPanel element : selected) {
+		for(JPanel element : selectedList) {
 			element.setBackground(new Color(49, 49, 49));
 			element.setBorder(BorderFactory.createLineBorder(
 				new Color(49, 49, 49)));
 		}
-		selected.clear();
+		selectedList.clear();
 
 		if(currentPanelSelected!=null) {
 			currentPanelSelected.setBackground(new Color(49, 49, 49));

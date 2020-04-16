@@ -8,15 +8,14 @@
 #when going lower scroll with arrows
 #probably properties follow symlinks
 #when deselecting an item of multiple it can't be hovered(visual bug)
+#invalid names such as CON1
 
 +=======+
 |EZ_FAST|
 +=======+
 
-#add node and file in selectPanel and then add objects in selected so 
-that you have access in panel's file(meaning there is need for lookup from panel 
-to file or node)
-
+#mapPanelNode has panels and node, 
+	use it to give selected nodes via mapping to properties
 #select all ctrl+A
 #copy ctrl+C
 #cut ctrl+X
@@ -33,3 +32,4 @@ to file or node)
 #ftp
 #open as
 #undecorated window
+#consider auto refresh

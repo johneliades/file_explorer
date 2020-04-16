@@ -266,8 +266,6 @@ public class MainWindow extends JPanel {
 
 			
 			if(nameNew==null || nameNew.equals(nameOld) || nameNew.equals("")) {
-				JOptionPane.showMessageDialog(null, 
-					"Can't have empty name");				
 				return;
 			}
 
