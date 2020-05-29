@@ -1,4 +1,4 @@
-# file_explorer
+# File Explorer
 
 A simple file explorer written in java using Swing and DefaultMutableTreeNode aiming to achieve cross-platform functionality in a visually appealing way.
 					
