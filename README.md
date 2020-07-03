@@ -40,6 +40,14 @@ OR
 java -jar FileExplorer.jar
 ```
 
+## Compile and Run
+
+Open a cmd in the cloned folder and enter:
+
+```
+ant (Note: Must be installed).
+```
+
 ## Notes
 
 Fully working on Windows and Unix, not tested on Mac.

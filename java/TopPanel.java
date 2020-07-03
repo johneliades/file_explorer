@@ -84,7 +84,6 @@ public class TopPanel extends JPanel {
 		navigationField.setCaretColor(Color.WHITE);
 		navigationField.setBackground(topColor);
 		navigationField.setForeground(new Color(0, 255, 255));
-		navigationField.setSelectionColor(new Color(0, 255, 255));
 		navigationField.setPreferredSize(new Dimension(navigationField.
 					getPreferredSize().width, navHeight));
 		

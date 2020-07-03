@@ -537,21 +537,67 @@ public class MainWindow extends JPanel {
 		panel.add(label);
 
 		panel.add(Box.createRigidArea(new Dimension(0, 20)));
+		
+		JCheckBox execute = new JCheckBox("Execute", file.canExecute());
+		execute.setBackground(new Color(22, 22, 22));
+		execute.setForeground(Color.WHITE);
+		execute.setFocusPainted(false);
+		if(file.setExecutable(!file.canExecute())){
+		   file.setExecutable(!file.canExecute());
+		}
+		else{
+			execute.setEnabled(false);
+		}
+		execute.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==1)
+					file.setExecutable(true);
+				else
+					file.setExecutable(false);
+			}
+		});
+		
+		JCheckBox read = new JCheckBox("Read", file.canRead());
+		read.setBackground(new Color(22, 22, 22));
+		read.setForeground(Color.WHITE);
+		read.setFocusPainted(false);
+		if(file.setReadable(!file.canRead())){
+			file.setReadable(!file.canRead());
+		}
+		else{
+			read.setEnabled(false);
+		}
+		read.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==1)
+					file.setReadable(true);
+				else
+					file.setReadable(false);
+			}
+		});
 
-		label = new JLabel("Read: " + file.canRead()); 
-		label.setForeground(Color.WHITE);
-		label.setFont(bigFont);
-		panel.add(label);
-		
-		label = new JLabel("Write: " + file.canWrite()); 
-		label.setForeground(Color.WHITE);
-		label.setFont(bigFont);
-		panel.add(label);
-		
-		label = new JLabel("Execute: " + file.canExecute()); 
-		label.setForeground(Color.WHITE);
-		label.setFont(bigFont);
-		panel.add(label);
+		JCheckBox write = new JCheckBox("Write", file.canWrite());
+		write.setBackground(new Color(22, 22, 22));
+		write.setForeground(Color.WHITE);
+		write.setFocusPainted(false);
+		if(file.setWritable(!file.canWrite())){
+			file.setWritable(!file.canWrite());
+		}
+		else{
+			write.setEnabled(false);
+		}
+		write.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==1)
+					file.setWritable(true);
+				else
+					file.setWritable(false);
+			}
+		});
+
+		panel.add(execute);
+		panel.add(read);
+		panel.add(write);
 
 		String sha1=hashSHA(file, "SHA-1");
 		if(sha1==null)

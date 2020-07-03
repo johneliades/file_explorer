@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project default="run" name="FileExplorer">
+	<target name="run" depends="compile">
+		<java classname="FileExplorer" fork="true">
+			<classpath path="classes"/>
+		</java>
+	</target>
+	<target name="compile">
+		<mkdir dir="classes"/>
+		<javac includeantruntime="false" srcdir="./java" destdir="classes"/>
+	</target>
+</project>
