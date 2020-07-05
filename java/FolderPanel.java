@@ -108,6 +108,7 @@ public class FolderPanel extends JPanel {
 		this.getActionMap().put("refresh", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				MainWindow.refresh(Tree.getLastTreeNodeOpened());
+				MainWindow.focusLast();
 			}
 		});
 
@@ -801,6 +802,7 @@ public class FolderPanel extends JPanel {
 		panel.getActionMap().put("refresh", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				MainWindow.refresh(Tree.getLastTreeNodeOpened());
+				MainWindow.focusLast();
 			}
 		});
 
