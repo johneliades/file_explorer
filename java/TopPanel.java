@@ -315,19 +315,8 @@ public class TopPanel extends JPanel {
 		if(isSymbolicLink)
 			return;
 
-		for(int i=0; i<numChild; i++) {	  
-			current=(DefaultMutableTreeNode) tree.getModel().getChild(top, i);
-			File element = (File) current.getUserObject();
-
-			if(element.getName().contains(searchQuery)) {
-				model.addRow(new Object[] { current });
-				folder.repaint();
-				folder.revalidate();
-			}
-			
-			File children[] = element.listFiles();
-			if(children==null)
-				continue;
+		File children[] = ((File) top.getUserObject()).listFiles();
+		if(children!=null) {
 			for(File child : children) {
 				if(child.isFile() && child.getName().contains(searchQuery)) {
 					model.addRow(new Object[] { new DefaultMutableTreeNode(child) });
@@ -335,6 +324,19 @@ public class TopPanel extends JPanel {
 					folder.repaint();
 					folder.revalidate();
 				}
+			}
+		}
+
+		for(int i=0; i<numChild; i++) {	  
+			current = (DefaultMutableTreeNode) tree.getModel().getChild(top, i);
+			File element = (File) current.getUserObject();
+
+			System.out.println(element.getName());
+
+			if(element.getName().contains(searchQuery)) {
+				model.addRow(new Object[] { current });
+				folder.repaint();
+				folder.revalidate();
 			}
 
 			search(tree, current, searchQuery, model);
