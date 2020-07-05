@@ -190,65 +190,45 @@ public class Tree extends JTree implements TreeSelectionListener {
 			public void mouseReleased(MouseEvent e) {}
 		});
 
-		this.addKeyListener(new KeyListener() {
-			boolean alt_pressed = false;
-
-			@Override
-			public void keyTyped(KeyEvent e) {}
-			@Override
-			public void keyPressed(KeyEvent e) {
-				switch(e.getKeyCode()) {
-					case KeyEvent.VK_ALT:
-						alt_pressed = true;
-						break;
-
-					case KeyEvent.VK_ENTER:
-
-						DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
-											getLastSelectedPathComponent();
-					
-						if(lastTreeNodeOpened!=node) {
-							MainWindow.historyPush(lastTreeNodeOpened);
-							MainWindow.clearFuture();
-						}
-						lastTreeNodeOpened = node;
-						File current;
-
-						current = (File) node.getUserObject();
-						if (current.isDirectory()) {
-							createNodes(node);
-						}
-						FolderPanel.showCurrentDirectory(node);
-						break;
-	
-					case KeyEvent.VK_BACK_SPACE:
-						TopPanel.historyBack();
-
-						break;
-
-					case KeyEvent.VK_LEFT:
-						if(alt_pressed)
-							TopPanel.historyBack();
-
-						break;
-
-					case KeyEvent.VK_RIGHT:
-						if(alt_pressed)
-							TopPanel.historyForward();
-						break;
-
-					default:
-				}
-			}
-			@Override
-			public void keyReleased(KeyEvent e) {
-				switch(e.getKeyCode()) {
-					case KeyEvent.VK_ALT:
-						alt_pressed = false;
-						break;
-				}
+		this.getActionMap().put("history back", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				TopPanel.historyBack();
+				MainWindow.focusLast();
 			}
 		});
+
+		this.getActionMap().put("history forward", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				TopPanel.historyForward(); 
+				MainWindow.focusLast();
+			}
+		});
+
+		this.getActionMap().put("enter", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
+									getLastSelectedPathComponent();
+			
+				if(lastTreeNodeOpened!=node) {
+					MainWindow.historyPush(lastTreeNodeOpened);
+					MainWindow.clearFuture();
+				}
+				lastTreeNodeOpened = node;
+				File current;
+
+				current = (File) node.getUserObject();
+				if (current.isDirectory()) {
+					createNodes(node);
+				}
+				FolderPanel.showCurrentDirectory(node);
+			}
+		});
+
+		InputMap inputMap = this.getInputMap();
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "history back");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK), "history back");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK), "history forward");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "enter");
 	}
 
 	static private JPopupMenu getFolderPopupMenu(DefaultMutableTreeNode node) {
