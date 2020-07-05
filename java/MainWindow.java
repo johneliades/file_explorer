@@ -222,7 +222,7 @@ public class MainWindow extends JPanel {
 		selectDirectory(node);
 
 		JPanel folder = getFolder();
-		JPanel current = FolderPanel.getCurrentPanelSelected();
+		JPanel current = FolderPanel.getLastPanelSelected();
 
 		if(current!=null)
 			for(Component comp : folder.getComponents()) {

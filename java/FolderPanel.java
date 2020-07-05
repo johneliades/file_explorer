@@ -23,7 +23,7 @@ public class FolderPanel extends JPanel {
 	static Set<String> iconSet = FileExplorer.addExtensions();
 	private static String windowsTopName = Tree.getWindowsTopName();
 
-	private static JPanel currentPanelSelected; 
+	private static JPanel lastPanelSelected; 
 	private static HashMap<JPanel, DefaultMutableTreeNode> mapPanelNode = 
 		new HashMap<JPanel, DefaultMutableTreeNode>();
 
@@ -84,51 +84,42 @@ public class FolderPanel extends JPanel {
 			public void mouseReleased(MouseEvent event) {}
 		});
 
-		this.addKeyListener(new KeyListener() {
-			boolean alt_pressed = false;
-
-			@Override
-			public void keyTyped(KeyEvent e) {}
-			@Override
-			public void keyPressed(KeyEvent e) {
-				DefaultMutableTreeNode lastTreeNodeOpened = Tree.
-													getLastTreeNodeOpened();
-				JPanel panel;
-
-				switch(e.getKeyCode()) {
-					case KeyEvent.VK_ALT:
-						alt_pressed = true;
-						break;
-					case KeyEvent.VK_F5:
-						MainWindow.refresh(lastTreeNodeOpened);
-						break;
-
-					case KeyEvent.VK_LEFT: 
-						if(alt_pressed) {TopPanel.historyBack(); break;}
-					case KeyEvent.VK_RIGHT: 
-						if(alt_pressed) {TopPanel.historyForward(); break;}
-					case KeyEvent.VK_UP:
-					case KeyEvent.VK_DOWN:
-						panel = (JPanel) WrapLayout.getComponent(0);
-						selectPanel(panel, true);
-						break;
-
-					case KeyEvent.VK_BACK_SPACE:
-						TopPanel.historyBack();
-						break;
-					default:
-				}
-
-			}
-			@Override
-			public void keyReleased(KeyEvent e) {
-				switch(e.getKeyCode()) {
-					case KeyEvent.VK_ALT:
-						alt_pressed = false;
-						break;
-				}
+		this.getActionMap().put("history back", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				TopPanel.historyBack(); 
+				MainWindow.focusLast();
 			}
 		});
+
+		this.getActionMap().put("history forward", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				TopPanel.historyForward(); 
+				MainWindow.focusLast();
+			}
+		});
+
+		this.getActionMap().put("select first", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				JPanel panel = (JPanel) WrapLayout.getComponent(0);
+				selectPanel(panel, true);
+			}
+		});
+		
+		this.getActionMap().put("refresh", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				MainWindow.refresh(Tree.getLastTreeNodeOpened());
+			}
+		});
+
+		InputMap inputMap = this.getInputMap();
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "history back");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK), "history back");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK), "history forward");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "select first");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "select first");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "select first");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "select first");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "refresh");
 
 		this.addFocusListener(new FocusListener() {
 			@Override
@@ -164,12 +155,12 @@ public class FolderPanel extends JPanel {
 				ImageIcon img=null;
 				File f;
  
- 				f = new File(filePath + "/");
- 				if(!f.canWrite()) {
+				f = new File(filePath + "/");
+				if(!f.canWrite()) {
 					JOptionPane.showMessageDialog(null, 
 						"Not enough permissions!");
 					return;
- 				}
+				}
 
 				img = Utility.getImageFast(ICONPATH + "extensions/txt.png", 
 											50, 50, true);
@@ -233,13 +224,13 @@ public class FolderPanel extends JPanel {
 				String name;
 				ImageIcon img=null;
 				Image folderImg;
- 				
- 				File f = new File(filePath + "/");
- 				if(!f.canWrite()) {
+				
+				File f = new File(filePath + "/");
+				if(!f.canWrite()) {
 					JOptionPane.showMessageDialog(
 						null, "Not enough permissions!");
 					return;
- 				}
+				}
 
 				img = Utility.getImageFast(
 					ICONPATH + "other/folder.png", 50, 50, true);
@@ -789,6 +780,106 @@ public class FolderPanel extends JPanel {
 		//label.setBorder(b);
 		panel.add(label,  BorderLayout.CENTER);
 
+		panel.getActionMap().put("select all", new AbstractAction() {
+				public void actionPerformed(ActionEvent e) {
+					for(JPanel current : mapPanelNode.keySet())
+							selectedList.add(current);
+
+					for(JPanel element : selectedList) {
+						element.setBackground(new Color(0, 100, 100));
+						element.setBorder(BorderFactory.createLineBorder(Color.white));
+					}	
+				}
+			});
+
+		panel.getActionMap().put("rename", new AbstractAction() {
+				public void actionPerformed(ActionEvent e) {
+					MainWindow.rename(panelNode);		
+				}
+			});
+
+		panel.getActionMap().put("refresh", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				MainWindow.refresh(Tree.getLastTreeNodeOpened());
+			}
+		});
+
+		panel.getActionMap().put("delete", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				MainWindow.delete(panelNode);		
+			}
+		});
+
+		panel.getActionMap().put("select left", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				int position = WrapLayout.getIndex(lastPanelSelected);
+				selectPanel((JPanel) WrapLayout.getComponent(position - 1), true);
+			}
+		});
+
+		panel.getActionMap().put("select right", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				int position = WrapLayout.getIndex(lastPanelSelected);
+				selectPanel((JPanel) WrapLayout.getComponent(position + 1), true);
+			}
+		});
+
+		panel.getActionMap().put("select down", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				int position = WrapLayout.getIndex(lastPanelSelected);
+				selectPanel((JPanel) WrapLayout.
+					getComponent(position + WrapLayout.getRowLength()), true);
+			}
+		});
+
+		panel.getActionMap().put("select up", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				int position = WrapLayout.getIndex(lastPanelSelected);
+				selectPanel((JPanel) WrapLayout.
+					getComponent(position - WrapLayout.getRowLength()), true);
+			}
+		});
+
+		panel.getActionMap().put("history back", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				TopPanel.historyBack(); 
+				MainWindow.focusLast();
+			}
+		});
+
+		panel.getActionMap().put("history forward", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				TopPanel.historyForward(); 
+				MainWindow.focusLast();
+			}
+		});
+
+		panel.getActionMap().put("enter", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				MainWindow.historyPush(Tree.getLastTreeNodeOpened());
+				MainWindow.clearFuture();
+				if(panelNode!=null)
+					MainWindow.enterOrOpen(panelNode);
+				else
+					MainWindow.enterOrOpen(new DefaultMutableTreeNode(panelFile));
+				MainWindow.focusLast();
+			}
+		});
+
+		InputMap inputMap = panel.getInputMap();
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK), "select all");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "rename");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "refresh");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "delete");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "select left");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "select right");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "select down");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "select up");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "history back");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK), "history back");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK), "history forward");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "enter");
+
 		label = new JLabel(name, JLabel.CENTER);
 		label.setPreferredSize(new Dimension(150, 30));
 		label.setForeground (Color.white);
@@ -804,12 +895,12 @@ public class FolderPanel extends JPanel {
 			public void mouseClicked(MouseEvent event) {}
 			@Override
 			public void mouseEntered(MouseEvent event) {		
-				if(currentPanelSelected!=panel && !selectedList.contains(panel))
+				if(!selectedList.contains(panel))
 					panel.setBackground(new Color(0, 170, 170));
 			}
 			@Override
 			public void mouseExited(MouseEvent event) {
-				if(currentPanelSelected!=panel && !selectedList.contains(panel))
+				if(!selectedList.contains(panel))
 					panel.setBackground(new Color(49, 49, 49));
 			}
 			@Override
@@ -855,75 +946,6 @@ public class FolderPanel extends JPanel {
 			public void mouseReleased(MouseEvent event) {}
 		});
 
-		panel.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {}
-			@Override
-			public void keyPressed(KeyEvent e) {
-				DefaultMutableTreeNode previous, lastTreeNodeOpened = 
-									Tree.getLastTreeNodeOpened();
-				JPanel current=null;
-				int position = WrapLayout.getIndex(currentPanelSelected);
-
-				switch(e.getKeyCode()) {
-					case KeyEvent.VK_F2:
-						MainWindow.rename(panelNode);		
-						break;
-
-					case KeyEvent.VK_F5:
-						MainWindow.refresh(lastTreeNodeOpened);
-						break;
-
-					case KeyEvent.VK_DELETE:
-						MainWindow.delete(panelNode);		
-						break;
-				
-					case KeyEvent.VK_ENTER:
-						MainWindow.historyPush(Tree.getLastTreeNodeOpened());
-						MainWindow.clearFuture();
-						if(panelNode!=null)
-							MainWindow.enterOrOpen(panelNode);
-						else
-							MainWindow.enterOrOpen(new DefaultMutableTreeNode(panelFile));
-						MainWindow.focusLast();
-
-						break;
-				
-					case KeyEvent.VK_LEFT:
-						current = (JPanel) WrapLayout.getComponent(position - 1);
-						break;
-				
-					case KeyEvent.VK_DOWN:
-						current = (JPanel) WrapLayout.
-									getComponent(position + WrapLayout.getRowLength());
-						break;
-				
-					case KeyEvent.VK_UP:
-						current = (JPanel) WrapLayout.
-									getComponent(position - WrapLayout.getRowLength());
-						break;
-				
-					case KeyEvent.VK_RIGHT:
-						current = (JPanel) WrapLayout.getComponent(position + 1);
-						break;
-
-					case KeyEvent.VK_BACK_SPACE:
-						TopPanel.historyBack();
-						MainWindow.focusLast();
-
-						break;
-
-					default:
-				}
-
-				if(current!=null) {
-					selectPanel(current, true);
-				}
-			}
-			@Override
-			public void keyReleased(KeyEvent e) {}
-		});
-
 		panel.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -965,7 +987,7 @@ public class FolderPanel extends JPanel {
 		}
 
 		panel.requestFocusInWindow();
-		currentPanelSelected = panel;
+		lastPanelSelected = panel;
 	}
 
 	static public void clearPanelSelection() {
@@ -976,16 +998,16 @@ public class FolderPanel extends JPanel {
 		}
 		selectedList.clear();
 
-		if(currentPanelSelected!=null) {
-			currentPanelSelected.setBackground(new Color(49, 49, 49));
-			currentPanelSelected.setBorder(BorderFactory.createLineBorder(
+		if(lastPanelSelected!=null) {
+			lastPanelSelected.setBackground(new Color(49, 49, 49));
+			lastPanelSelected.setBorder(BorderFactory.createLineBorder(
 				new Color(49, 49, 49)));
 		}
-		currentPanelSelected = null;
+		lastPanelSelected = null;
 	}
 
-	public static JPanel getCurrentPanelSelected() {
-		return currentPanelSelected;
+	public static JPanel getLastPanelSelected() {
+		return lastPanelSelected;
 	}
 
 	public static Executor getExecutor() {
