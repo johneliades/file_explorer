@@ -417,7 +417,7 @@ public class MainWindow extends JPanel {
 	}
 
 	public static String hashSHA(File file, String type) {
-		byte[] buffer= new byte[8192];
+		byte[] buffer= new byte[1048576];
 		int count;
 		
 		try {
