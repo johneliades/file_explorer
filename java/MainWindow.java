@@ -417,7 +417,7 @@ public class MainWindow extends JPanel {
 	}
 
 	public static String hashSHA(File file, String type) {
-		byte[] buffer= new byte[8192];
+		byte[] buffer= new byte[4096];
 		int count;
 		
 		try {
@@ -621,7 +621,7 @@ public class MainWindow extends JPanel {
 		panel.add(execute);
 		panel.add(read);
 		panel.add(write);
-
+/*
 		String sha1=hashSHA(file, "SHA-1");
 		if(sha1==null)
 			sha1="";
@@ -633,11 +633,10 @@ public class MainWindow extends JPanel {
 		field.setBackground(UIManager.getColor("Panel.background"));
 		field.setFont(bigFont);
 		if(sha1.length()!=0) {
-			panel.add(Box.createRigidArea(new Dimension(0, 20)));
 			panel.add(field);	
 		}
-		
-		/*String sha256=hashSHA(file, "SHA-256");
+		*/
+		String sha256=hashSHA(file, "SHA-256");
 		if(sha256==null)
 			sha256="";
 
@@ -648,8 +647,9 @@ public class MainWindow extends JPanel {
 		field.setBackground(UIManager.getColor("Panel.background"));
 		field.setFont(bigFont);
 		if(sha256.length()!=0) {
+			panel.add(Box.createRigidArea(new Dimension(0, 20)));
 			panel.add(field); 
-		}*/
+		}
 
 		long bytes = 0;
 		String size = "", avail_space = "";
