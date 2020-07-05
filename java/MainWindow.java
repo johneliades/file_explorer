@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.nio.file.Files;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -391,6 +392,28 @@ public class MainWindow extends JPanel {
 
 		selectDirectory(lastTreeNodeOpened);
 		MainWindow.focusLast();
+	}
+
+	public static void pasteFile(File source, File destination, String op) throws IOException {
+		if(op == "cut") {
+			source.renameTo(new File(destination.getPath() + File.separator + source.getName()));
+		}
+		else if(op == "copy") {
+			if(source.isDirectory()) {
+				if(!destination.exists())
+					destination.mkdir();
+				String files[] = source.list();
+				for (String file : files){
+					File srcFile = new File(source, file);
+					File destFile = new File(destination, file);
+					pasteFile(srcFile, destFile, op);
+				}
+			}
+			else {
+				File newFile = new File(destination.getPath() + File.separator + source.getName());
+				Files.copy(source.toPath(), newFile.toPath());
+			}	
+		}
 	}
 
 	public static String hashSHA(File file, String type) {

@@ -30,6 +30,10 @@ public class FolderPanel extends JPanel {
 	private static java.util.List<JPanel> selectedList = 
 		new java.util.ArrayList<JPanel>();
 	
+	private static java.util.List<DefaultMutableTreeNode> clipboard = 
+		new java.util.ArrayList<DefaultMutableTreeNode>();
+	private static String operation = "";
+
 	private static Executor executor = Executors.newSingleThreadExecutor();
 
 	public FolderPanel() {
@@ -310,7 +314,35 @@ public class FolderPanel extends JPanel {
 
 		menuItem.setBackground(Color.white);
 		popupMenu.add(menuItem);
+
 		popupMenu.addSeparator();
+
+		menuItem = new JMenuItem("  Paste");
+		menuItem.setIcon(Utility.getImageFast(
+			ICONPATH + "other/paste.png", 17, 17, true));
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				for(DefaultMutableTreeNode current : clipboard) {
+					try {
+						MainWindow.pasteFile((File) current.getUserObject(), selected, operation);
+					}
+					catch(Exception e) {
+
+					}
+				}
+
+				MainWindow.refresh(Tree.getLastTreeNodeOpened());
+				clipboard.clear();
+				operation = "";
+			}
+		});
+		menuItem.setBackground(Color.white);
+		if(selected.exists() && selected.canWrite() && 
+				!selected.getName().equals("") && clipboard.size()!=0) {
+			popupMenu.add(menuItem);
+			popupMenu.addSeparator();
+		}
 
 		menuItem = new JMenuItem("  OS Explorer");
 		menuItem.setIcon(Utility.getImageFast(ICONPATH + 
@@ -506,6 +538,69 @@ public class FolderPanel extends JPanel {
 		if(panelFile.isDirectory() && panelFile.exists() && panelFile.canRead() 
 			&& !multiple)
 			
+			popupMenu.add(menuItem);
+
+		popupMenu.addSeparator();
+
+		menuItem = new JMenuItem("  Cut");
+		menuItem.setIcon(Utility.getImageFast(
+			ICONPATH + "other/cut.png", 17, 17, true));
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				clipboard.clear();
+
+				for(JPanel currentPanel : selectedList) 
+					clipboard.add(mapPanelNode.get(currentPanel));
+
+				operation = "cut";
+			}
+		});
+		menuItem.setBackground(Color.white);
+		if(panelFile.exists() && panelFile.canWrite() && 
+				!panelFile.getName().equals(""))
+			popupMenu.add(menuItem);
+
+		menuItem = new JMenuItem("  Copy");
+		menuItem.setIcon(Utility.getImageFast(
+			ICONPATH + "other/copy.png", 17, 17, true));
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				clipboard.clear();
+
+				for(JPanel currentPanel : selectedList)
+					clipboard.add(mapPanelNode.get(currentPanel));
+
+				operation = "copy";
+			}
+		});
+		menuItem.setBackground(Color.white);
+		if(panelFile.exists() && !panelFile.getName().equals(""))
+			popupMenu.add(menuItem);
+
+		menuItem = new JMenuItem("  Paste");
+		menuItem.setIcon(Utility.getImageFast(
+			ICONPATH + "other/paste.png", 17, 17, true));
+		menuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				for(DefaultMutableTreeNode current : clipboard) {
+					try {
+						MainWindow.pasteFile((File) current.getUserObject(), panelFile, operation);
+					}
+					catch(Exception e) {
+
+					}
+				}
+
+				clipboard.clear();
+				operation = "";
+			}
+		});
+		menuItem.setBackground(Color.white);
+		if(panelFile.exists() && panelFile.canWrite() && clipboard.size()!=0 &&
+				!panelFile.getName().equals("") && panelFile.isDirectory() && !multiple)
 			popupMenu.add(menuItem);
 
 		popupMenu.addSeparator();
@@ -795,7 +890,8 @@ public class FolderPanel extends JPanel {
 
 		panel.getActionMap().put("rename", new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
-					MainWindow.rename(panelNode);		
+					if(selectedList.size()==1)
+						MainWindow.rename(panelNode);		
 				}
 			});
 
@@ -858,13 +954,15 @@ public class FolderPanel extends JPanel {
 
 		panel.getActionMap().put("enter", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				MainWindow.historyPush(Tree.getLastTreeNodeOpened());
-				MainWindow.clearFuture();
-				if(panelNode!=null)
-					MainWindow.enterOrOpen(panelNode);
-				else
-					MainWindow.enterOrOpen(new DefaultMutableTreeNode(panelFile));
-				MainWindow.focusLast();
+				if(selectedList.size()==1) {
+					MainWindow.historyPush(Tree.getLastTreeNodeOpened());
+					MainWindow.clearFuture();
+					if(panelNode!=null)
+						MainWindow.enterOrOpen(panelNode);
+					else
+						MainWindow.enterOrOpen(new DefaultMutableTreeNode(panelFile));
+					MainWindow.focusLast();
+				}
 			}
 		});
 
