@@ -593,7 +593,8 @@ public class FolderPanel extends JPanel {
 
 					}
 				}
-
+				
+				MainWindow.refresh(Tree.getLastTreeNodeOpened());
 				clipboard.clear();
 				operation = "";
 			}

@@ -8,16 +8,15 @@
 #when going lower scroll with arrows
 #probably properties follow symlinks
 #invalid names such as CON1
+#copy folder problem
+#cut refresh problem
 
 +=======+
 |EZ_FAST|
 +=======+
 
-#mapPanelNode has panels and node, 
-	use it to give selected nodes via mapping to properties
-#copy ctrl+C
-#cut ctrl+X
-#paste ctrl+V
+#calculate hash of folders
+#cut, copy, paste shortcuts
 
 +=======+
 |_LATER_|
