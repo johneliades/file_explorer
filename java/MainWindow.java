@@ -416,14 +416,12 @@ public class MainWindow extends JPanel {
 		}
 	}
 
-	public static String hashSHA(File file, String type) {
+	public static String hashStream(BufferedInputStream bis, String type) {
 		byte[] buffer= new byte[4096];
 		int count;
-		
+
 		try {
 			MessageDigest digest = MessageDigest.getInstance(type);
-			BufferedInputStream bis = new BufferedInputStream(new 
-				FileInputStream(file));
 			
 			while ((count = bis.read(buffer)) > 0) {
 				digest.update(buffer, 0, count);
@@ -447,6 +445,37 @@ public class MainWindow extends JPanel {
 
 		}
 
+		return null;
+	}
+
+	public static String hashFile(File file, String type) {
+
+		if(file.isDirectory()) {
+			File[] files = file.listFiles();
+			String total = "";
+
+			Arrays.sort(files);
+
+			for(File current : files)
+				total += hashFile(current, type);
+
+			InputStream stream = new ByteArrayInputStream(
+				total.getBytes(StandardCharsets.UTF_8));
+
+			BufferedInputStream bis = new BufferedInputStream(stream);
+			return hashStream(bis, type);
+		}
+		else {
+			try {
+				BufferedInputStream bis = new BufferedInputStream(new 
+					FileInputStream(file));
+
+				return hashStream(bis, type);
+			}
+			catch(Exception e) {
+
+			}
+		}
 		return null;
 	}
 
@@ -624,10 +653,38 @@ public class MainWindow extends JPanel {
 
 		panel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-		JButton button = new JButton("SHA1");
+		JButton button = new JButton("MD5");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String sha1=hashSHA(file, "SHA-1");
+				String sha256=hashFile(file, "MD5");
+				if(sha256==null)
+					sha256="";
+
+				JTextField field = new JTextField(sha256);
+				field.setEditable(false);
+				field.setBorder(null);
+				field.setForeground(Color.WHITE);
+				field.setBackground(UIManager.getColor("Panel.background"));
+				field.setFont(bigFont);
+				if(sha256.length()!=0) {
+					JButton buttonThatWasClicked = (JButton) e.getSource();
+					panel.add(field, panel.getComponentZOrder(buttonThatWasClicked));
+					panel.remove(buttonThatWasClicked);
+
+					dialog.pack();
+				}
+			}
+		});
+		button.setBackground(Color.BLACK);
+		button.setForeground(Color.CYAN);
+		panel.add(button);
+
+		panel.add(Box.createRigidArea(new Dimension(0, 3)));
+
+		button = new JButton("SHA1");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String sha1=hashFile(file, "SHA-1");
 				if(sha1==null)
 					sha1="";
 				JTextField field = new JTextField(sha1);
@@ -654,7 +711,7 @@ public class MainWindow extends JPanel {
 		button = new JButton("SHA256");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String sha256=hashSHA(file, "SHA-256");
+				String sha256=hashFile(file, "SHA-256");
 				if(sha256==null)
 					sha256="";
 

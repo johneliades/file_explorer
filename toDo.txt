@@ -15,7 +15,6 @@
 |EZ_FAST|
 +=======+
 
-#calculate hash of folders
 #cut, copy, paste shortcuts
 
 +=======+
