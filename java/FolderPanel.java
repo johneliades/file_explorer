@@ -88,6 +88,37 @@ public class FolderPanel extends JPanel {
 			public void mouseReleased(MouseEvent event) {}
 		});
 
+		this.getActionMap().put("select all", new AbstractAction() {
+				public void actionPerformed(ActionEvent e) {
+					for(JPanel current : mapPanelNode.keySet())
+							selectedList.add(current);
+
+					for(JPanel element : selectedList) {
+						element.setBackground(new Color(0, 100, 100));
+						element.setBorder(BorderFactory.createLineBorder(Color.white));
+					}	
+				}
+			});
+
+		this.getActionMap().put("paste", new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				for(DefaultMutableTreeNode current : clipboard) {
+					try {
+						File selected = (File) Tree.getLastTreeNodeOpened().getUserObject();
+
+						MainWindow.pasteFile((File) current.getUserObject(), selected, operation);
+					}
+					catch(Exception except) {
+
+					}
+				}
+
+				MainWindow.refresh(Tree.getLastTreeNodeOpened());
+				clipboard.clear();
+				operation = "";
+			}
+		});
+
 		this.getActionMap().put("history back", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				TopPanel.historyBack(); 
@@ -117,6 +148,8 @@ public class FolderPanel extends JPanel {
 		});
 
 		InputMap inputMap = this.getInputMap();
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK), "select all");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK), "paste");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "history back");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK), "history back");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK), "history forward");
@@ -889,6 +922,28 @@ public class FolderPanel extends JPanel {
 				}
 			});
 
+		panel.getActionMap().put("cut", new AbstractAction() {
+				public void actionPerformed(ActionEvent e) {
+					clipboard.clear();
+
+					for(JPanel currentPanel : selectedList) 
+						clipboard.add(mapPanelNode.get(currentPanel));
+
+					operation = "cut";	
+				}
+			});
+
+		panel.getActionMap().put("copy", new AbstractAction() {
+				public void actionPerformed(ActionEvent e) {
+					clipboard.clear();
+
+					for(JPanel currentPanel : selectedList) 
+						clipboard.add(mapPanelNode.get(currentPanel));
+
+					operation = "copy";
+				}
+			});
+
 		panel.getActionMap().put("rename", new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
 					if(selectedList.size()==1)
@@ -969,6 +1024,8 @@ public class FolderPanel extends JPanel {
 
 		InputMap inputMap = panel.getInputMap();
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK), "select all");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK), "cut");
+		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK), "copy");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "rename");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "refresh");
 		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "delete");

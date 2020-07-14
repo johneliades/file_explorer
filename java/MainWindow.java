@@ -394,26 +394,40 @@ public class MainWindow extends JPanel {
 		MainWindow.focusLast();
 	}
 
-	public static void pasteFile(File source, File destination, String op) throws IOException {
+	public static boolean pasteFile(File source, File destination, String op) throws IOException {
+		File newFile = new File(destination.getPath() + File.separator + source.getName());
+		boolean success = true;
+
 		if(op == "cut") {
-			source.renameTo(new File(destination.getPath() + File.separator + source.getName()));
+			source.renameTo(newFile);
 		}
 		else if(op == "copy") {
 			if(source.isDirectory()) {
-				if(!destination.exists())
-					destination.mkdir();
+				if(!newFile.exists())
+					newFile.mkdir();
+			
 				String files[] = source.list();
-				for (String file : files){
+				for (String file : files) {
 					File srcFile = new File(source, file);
-					File destFile = new File(destination, file);
-					pasteFile(srcFile, destFile, op);
+					success = pasteFile(srcFile, newFile, op);
+					
+					File destFile = new File(newFile, file);
+					if(!hashFile(srcFile, "MD5").equals(hashFile(destFile, "MD5"))) {
+						System.out.println("copy failed " + srcFile.toPath() + " " + destFile.toPath());
+						return false;
+					}
 				}
 			}
 			else {
-				File newFile = new File(destination.getPath() + File.separator + source.getName());
 				Files.copy(source.toPath(), newFile.toPath());
+				if(!hashFile(newFile, "MD5").equals(hashFile(source, "MD5"))) {
+					System.out.println("copy failed " + source.toPath() + " " + newFile.toPath());
+					return false;
+				}
 			}	
 		}
+
+		return success;
 	}
 
 	public static String hashStream(BufferedInputStream bis, String type) {
