@@ -466,6 +466,9 @@ public class MainWindow extends JPanel {
 
 		if(file.isDirectory()) {
 			File[] files = file.listFiles();
+			if(files == null)
+				return "";
+			
 			String total = "";
 
 			Arrays.sort(files);
@@ -490,7 +493,7 @@ public class MainWindow extends JPanel {
 
 			}
 		}
-		return null;
+		return "";
 	}
 
 	private static String convertBytes(long bytes) {

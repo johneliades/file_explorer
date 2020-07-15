@@ -10,6 +10,7 @@
 #invalid names such as CON1
 #cut refresh source and check if file exists
 #not everything can be copied (snap?)
+#cant paste in source folder infinite recursion
 
 +=======+
 |EZ_FAST|
