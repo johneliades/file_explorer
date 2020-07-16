@@ -15,7 +15,7 @@ import java.util.concurrent.*;
 public class TopPanel extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	private static String windowsTopName = Tree.getWindowsTopName();
-	private static final Color topColor = new Color(25, 25, 25);
+
 	private static final int navHeight = 26;
 
 	private static JButton buttonBack, buttonForward;
@@ -29,7 +29,7 @@ public class TopPanel extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 		this.setBackground(Color.WHITE);
 		this.setBorder(
-			BorderFactory.createMatteBorder(6, 3, 6, 3, topColor));
+			BorderFactory.createMatteBorder(6, 3, 6, 3, FileExplorer.topBackgroundColor));
 
 		c.weightx = 0.005;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -81,8 +81,8 @@ public class TopPanel extends JPanel {
 				15, 15, true));
 
 		navigationField.setCaretColor(Color.WHITE);
-		navigationField.setBackground(topColor);
-		navigationField.setForeground(new Color(0, 255, 255));
+		navigationField.setBackground(FileExplorer.topBackgroundColor);
+		navigationField.setForeground(FileExplorer.textSelectionColor);
 		navigationField.setPreferredSize(new Dimension(navigationField.
 					getPreferredSize().width, navHeight));
 		
@@ -139,8 +139,8 @@ public class TopPanel extends JPanel {
 
 		buttonField = new JPanel();
 		buttonField.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		buttonField.setBackground(topColor);
-		buttonField.setForeground(new Color(0, 255, 255));
+		buttonField.setBackground(FileExplorer.topBackgroundColor);
+		buttonField.setForeground(FileExplorer.textSelectionColor);
 		buttonField.setPreferredSize(new Dimension(navigationField.
 					getPreferredSize().width, navHeight));
 
@@ -167,8 +167,8 @@ public class TopPanel extends JPanel {
 				"other/magnifyingglass.png", 15, 15, true));
 
 		searchField.setCaretColor(Color.WHITE);
-		searchField.setBackground(topColor);
-		searchField.setForeground(new Color(0, 255, 255));
+		searchField.setBackground(FileExplorer.topBackgroundColor);
+		searchField.setForeground(FileExplorer.textSelectionColor);
 		searchField.setPreferredSize(new Dimension(searchField.
 				getPreferredSize().width, navHeight));
 
@@ -206,7 +206,7 @@ public class TopPanel extends JPanel {
 					TableColumnModel tcm = table.getColumnModel();
 					tcm.getColumn(0).setCellRenderer(new IconTextCellRenderer());
 
-					table.setBackground(new Color(49, 49, 49));
+					table.setBackground(FileExplorer.folderBackgroundColor);
 					table.setForeground(Color.WHITE);
 					table.setRowHeight(50);
 					table.setShowGrid(false);
@@ -449,8 +449,8 @@ public class TopPanel extends JPanel {
 			UIManager.setLookAndFeel(previousLF);
 
 			button.setFocusPainted(false);
-			button.setBackground(topColor);
-			button.setForeground(new Color(0, 255, 255));
+			button.setBackground(FileExplorer.topBackgroundColor);
+			button.setForeground(FileExplorer.textSelectionColor);
 			button.setPreferredSize(new Dimension(button.
 				getPreferredSize().width, navHeight));
 			button.addMouseListener(new MouseListener() {
@@ -462,7 +462,7 @@ public class TopPanel extends JPanel {
 				}
 				@Override
 				public void mouseExited(MouseEvent event) {
-					button.setForeground(new Color(0, 255, 255));
+					button.setForeground(FileExplorer.textSelectionColor);
 				}
 				@Override
 				public void mousePressed(MouseEvent event) {

@@ -6,6 +6,7 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.plaf.IconUIResource;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.filechooser.FileSystemView;
 
 import java.text.SimpleDateFormat;
@@ -37,6 +38,11 @@ public class MainWindow extends JPanel {
 
 	public MainWindow(File fileToOpen) {
 		super(new GridLayout(1, 0));
+
+		UIManager UI=new UIManager();
+		UI.put("OptionPane.background", FileExplorer.propertiesColor);
+		UI.put("Panel.background", FileExplorer.propertiesColor);
+		UI.put("OptionPane.messageForeground", Color.WHITE);
 
 		//Create the nodes.
 		File roots[]=File.listRoots();
@@ -72,7 +78,6 @@ public class MainWindow extends JPanel {
 			JScrollPane treeView = new JScrollPane(tree);
 			treeView.getVerticalScrollBar().setPreferredSize(new Dimension(12, 0));
 			treeView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 12));
-			treeView.getVerticalScrollBar().setBackground(new Color(53, 53, 53));
 			treeView.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			treeView.setBorder(new EmptyBorder(0, 0, 0, 0));
 
@@ -81,7 +86,6 @@ public class MainWindow extends JPanel {
 			folderView.getVerticalScrollBar().setUnitIncrement(16);
 			folderView.getVerticalScrollBar().setPreferredSize(new Dimension(12, 0));
 			folderView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 12));
-			folderView.getVerticalScrollBar().setBackground(new Color(53, 53, 53));
 			folderView.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			folderView.setBorder(new EmptyBorder(0, 0, 0, 0));
 
@@ -623,7 +627,7 @@ public class MainWindow extends JPanel {
 		panel.add(Box.createRigidArea(new Dimension(0, 20)));
 		
 		JCheckBox execute = new JCheckBox("Execute", file.canExecute());
-		execute.setBackground(new Color(22, 22, 22));
+		execute.setBackground(FileExplorer.propertiesColor);
 		execute.setForeground(Color.WHITE);
 		execute.setFocusPainted(false);
 		if(file.setExecutable(!file.canExecute())){
@@ -642,7 +646,7 @@ public class MainWindow extends JPanel {
 		});
 		
 		JCheckBox read = new JCheckBox("Read", file.canRead());
-		read.setBackground(new Color(22, 22, 22));
+		read.setBackground(FileExplorer.propertiesColor);
 		read.setForeground(Color.WHITE);
 		read.setFocusPainted(false);
 		if(file.setReadable(!file.canRead())){
@@ -661,7 +665,7 @@ public class MainWindow extends JPanel {
 		});
 
 		JCheckBox write = new JCheckBox("Write", file.canWrite());
-		write.setBackground(new Color(22, 22, 22));
+		write.setBackground(FileExplorer.propertiesColor);
 		write.setForeground(Color.WHITE);
 		write.setFocusPainted(false);
 		if(file.setWritable(!file.canWrite())){

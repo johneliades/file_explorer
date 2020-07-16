@@ -7,9 +7,17 @@ import java.awt.*;
 import java.util.*;
 
 public class FileExplorer {
-	private static final String ICONPATH="./icons/"; // path-until-src/src/hw4/icons/
+	private static final String ICONPATH="./icons/";
 	private static final boolean showHiddenFiles = false;
 	private static File fileToOpen=null;
+
+	public static final Color folderBackgroundColor = new Color(49, 49, 49);
+	public static final Color treeBackgroundColor = new Color(32, 32, 32);
+	public static final Color topBackgroundColor = new Color(25, 25, 25);
+	public static final Color panelHoverColor = new Color(0, 170, 170);
+	public static final Color panelSelectionColor = new Color(0, 100, 100);
+	public static final Color textSelectionColor = new Color(0, 255, 255);
+	public static final Color propertiesColor = new Color(22, 22, 22);
 
 	private static JFrame frame;
 
@@ -40,7 +48,7 @@ public class FileExplorer {
 	private static void createAndShowGUI(File file) {
 		//Create and set up the window.
 		frame = new JFrame("File Explorer");
-		frame.setBackground(new Color(53, 53, 53));
+		frame.setBackground(folderBackgroundColor);
 		frame.getRootPane().setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		frame.setIconImage(new ImageIcon(ICONPATH + "other/folder.png").getImage());

@@ -8,7 +8,6 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.JTextArea;
-import javax.swing.plaf.ColorUIResource;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -39,11 +38,7 @@ public class FolderPanel extends JPanel {
 	public FolderPanel() {
 		//Create the folder viewing pane.
 		super(new WrapLayout(FlowLayout.LEFT, 10, 10));
-		this.setBackground(new Color(49, 49, 49));
-		UIManager UI=new UIManager();
-		UI.put("OptionPane.background",new ColorUIResource(22, 22, 22));
-		UI.put("Panel.background",new ColorUIResource(22, 22, 22));
-		UI.put("OptionPane.messageForeground", Color.WHITE);
+		this.setBackground(FileExplorer.folderBackgroundColor);
 
 		this.addMouseListener(new MouseListener() {
 			@Override
@@ -93,7 +88,7 @@ public class FolderPanel extends JPanel {
 							selectedList.add(current);
 
 					for(JPanel element : selectedList) {
-						element.setBackground(new Color(0, 100, 100));
+						element.setBackground(FileExplorer.panelSelectionColor);
 						element.setBorder(BorderFactory.createLineBorder(Color.white));
 					}	
 				}
@@ -902,7 +897,7 @@ public class FolderPanel extends JPanel {
 							selectedList.add(current);
 
 					for(JPanel element : selectedList) {
-						element.setBackground(new Color(0, 100, 100));
+						element.setBackground(FileExplorer.panelSelectionColor);
 						element.setBorder(BorderFactory.createLineBorder(Color.white));
 					}	
 				}
@@ -1031,8 +1026,8 @@ public class FolderPanel extends JPanel {
 		panel.add(label, BorderLayout.SOUTH);
 
 		panel.setName(name);
-		panel.setBorder(BorderFactory.createLineBorder(new Color(49, 49, 49)));
-		panel.setBackground(new Color(49, 49, 49));
+		panel.setBorder(BorderFactory.createLineBorder(FileExplorer.folderBackgroundColor));
+		panel.setBackground(FileExplorer.folderBackgroundColor);
 
 		panel.addMouseListener(new MouseListener() {
 			@Override
@@ -1040,12 +1035,12 @@ public class FolderPanel extends JPanel {
 			@Override
 			public void mouseEntered(MouseEvent event) {		
 				if(!selectedList.contains(panel))
-					panel.setBackground(new Color(0, 170, 170));
+					panel.setBackground(FileExplorer.panelHoverColor);
 			}
 			@Override
 			public void mouseExited(MouseEvent event) {
 				if(!selectedList.contains(panel))
-					panel.setBackground(new Color(49, 49, 49));
+					panel.setBackground(FileExplorer.folderBackgroundColor);
 			}
 			@Override
 			public void mousePressed(MouseEvent event) {
@@ -1109,22 +1104,22 @@ public class FolderPanel extends JPanel {
 
 		if(clear) {
 			clearPanelSelection();
-			panel.setBackground(new Color(0, 100, 100));
+			panel.setBackground(FileExplorer.panelSelectionColor);
 			panel.setBorder(BorderFactory.createLineBorder(Color.white));	
 			selectedList.add(panel);
 		}
 		else {
 			if(selectedList.contains(panel)) {
-				panel.setBackground(new Color(49, 49, 49));
+				panel.setBackground(FileExplorer.folderBackgroundColor);
 				panel.setBorder(BorderFactory.createLineBorder(
-					new Color(49, 49, 49)));	
+					FileExplorer.folderBackgroundColor));	
 				selectedList.remove(panel);
 			}
 			else
 				selectedList.add(panel);
 
 			for(JPanel element : selectedList) {
-				element.setBackground(new Color(0, 100, 100));
+				element.setBackground(FileExplorer.panelSelectionColor);
 				element.setBorder(BorderFactory.createLineBorder(Color.white));
 			}
 		}
@@ -1135,16 +1130,16 @@ public class FolderPanel extends JPanel {
 
 	static public void clearPanelSelection() {
 		for(JPanel element : selectedList) {
-			element.setBackground(new Color(49, 49, 49));
+			element.setBackground(FileExplorer.folderBackgroundColor);
 			element.setBorder(BorderFactory.createLineBorder(
-				new Color(49, 49, 49)));
+				FileExplorer.folderBackgroundColor));
 		}
 		selectedList.clear();
 
 		if(lastPanelSelected!=null) {
-			lastPanelSelected.setBackground(new Color(49, 49, 49));
+			lastPanelSelected.setBackground(FileExplorer.folderBackgroundColor);
 			lastPanelSelected.setBorder(BorderFactory.createLineBorder(
-				new Color(49, 49, 49)));
+				FileExplorer.folderBackgroundColor));
 		}
 		lastPanelSelected = null;
 	}
