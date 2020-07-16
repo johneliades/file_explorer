@@ -320,12 +320,10 @@ public class FolderPanel extends JPanel {
 					ICONPATH + "other/plus.png", 17, 17, true));	
 
 		if(selected.exists() && selected.canWrite()) {
-			popupMenu.addSeparator();
 			popupMenu.add(sectionsMenu);
-			popupMenu.addSeparator();
 		}
 
-		popupMenu.setBorder(BorderFactory.createLineBorder(Color.white));
+		popupMenu.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		popupMenu.setBackground(Color.white);	
 
 		//Refresh option
@@ -344,8 +342,6 @@ public class FolderPanel extends JPanel {
 
 		menuItem.setBackground(Color.white);
 		popupMenu.add(menuItem);
-
-		popupMenu.addSeparator();
 
 		menuItem = new JMenuItem("  Paste");
 		menuItem.setIcon(Utility.getImageFast(
@@ -371,7 +367,6 @@ public class FolderPanel extends JPanel {
 		if(selected.exists() && selected.canWrite() && 
 				!selected.getName().equals("") && clipboard.size()!=0) {
 			popupMenu.add(menuItem);
-			popupMenu.addSeparator();
 		}
 
 		menuItem = new JMenuItem("  OS Explorer");
@@ -570,8 +565,6 @@ public class FolderPanel extends JPanel {
 			
 			popupMenu.add(menuItem);
 
-		popupMenu.addSeparator();
-
 		menuItem = new JMenuItem("  Cut");
 		menuItem.setIcon(Utility.getImageFast(
 			ICONPATH + "other/cut.png", 17, 17, true));
@@ -634,8 +627,6 @@ public class FolderPanel extends JPanel {
 				!panelFile.getName().equals("") && panelFile.isDirectory() && !multiple)
 			popupMenu.add(menuItem);
 
-		popupMenu.addSeparator();
-
 		menuItem = new JMenuItem("  Rename");
 		menuItem.setIcon(Utility.getImageFast(
 			ICONPATH + "other/rename.png", 17, 17, true));
@@ -680,7 +671,7 @@ public class FolderPanel extends JPanel {
 		if(!multiple)
 			popupMenu.add(menuItem);
 
-		popupMenu.setBorder(BorderFactory.createLineBorder(Color.white));		
+		popupMenu.setBorder(BorderFactory.createLineBorder(Color.BLACK));		
 		popupMenu.setBackground(Color.white);
 		
 		return popupMenu;

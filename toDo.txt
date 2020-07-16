@@ -22,7 +22,6 @@
 
 #disks free space bar
 #zip/unzip
-#change scrollbar appearance
 #drag n drop
 #ftp
 #open as
