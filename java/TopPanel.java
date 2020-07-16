@@ -36,7 +36,6 @@ public class TopPanel extends JPanel {
 		c.gridx = 0;
 		c.gridy = 0;
 
-
 		buttonBack = new JButton(Utility.getImageFast(
 			FileExplorer.getIconPath() + 
 				"other/grayedback.png", navHeight, navHeight, true));
@@ -95,7 +94,7 @@ public class TopPanel extends JPanel {
 		navigationField.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent e) {
-                navigationField.select(0, navigationField.getText().length());
+				navigationField.select(0, navigationField.getText().length());
 			}
 			public void focusLost(FocusEvent e) {
 				DefaultMutableTreeNode node = Tree.getLastTreeNodeOpened();
@@ -213,14 +212,14 @@ public class TopPanel extends JPanel {
 					table.setShowGrid(false);
 					table.setDefaultEditor(Object.class, null);
 					table.setSelectionModel(new DefaultListSelectionModel() {
-					    @Override
-					    public void clearSelection() {
-					    }
+						@Override
+						public void clearSelection() {
+						}
 
-					    @Override
-					    public void removeSelectionInterval(
-					    	int index0, int index1) {
-					    }
+						@Override
+						public void removeSelectionInterval(
+							int index0, int index1) {
+						}
 					});
 					table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -434,39 +433,55 @@ public class TopPanel extends JPanel {
 			else
 				name = "Local Disk (" + file.getPath().replace("\\", "") + ")";
 		}
+		
+		LookAndFeel previousLF = UIManager.getLookAndFeel();
+		try {
+			for (javax.swing.UIManager.LookAndFeelInfo info : 
+				javax.swing.UIManager.getInstalledLookAndFeels()) {
+				
+				if ("Nimbus".equals(info.getName())) {
+					javax.swing.UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
 
-		JButton button = new JButton(name);
-		button.setFocusPainted(false);
-		button.setBackground(topColor);
-		button.setForeground(new Color(0, 255, 255));
-		button.setPreferredSize(new Dimension(button.
-					getPreferredSize().width, navHeight));
-		button.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseClicked(MouseEvent event) {}
-			@Override
-			public void mouseEntered(MouseEvent event) {
-				button.setForeground(Color.WHITE);
-			}
-			@Override
-			public void mouseExited(MouseEvent event) {
-				button.setForeground(new Color(0, 255, 255));
-			}
-			@Override
-			public void mousePressed(MouseEvent event) {
-				button.setForeground(Color.BLACK);
-			}
-			@Override
-			public void mouseReleased(MouseEvent event) {
-				MainWindow.selectDirectory(node);
-				MainWindow.getFolder().requestFocusInWindow();
-				MainWindow.focusLast();
-			}
-		});
+			JButton button = new JButton(name);
+			UIManager.setLookAndFeel(previousLF);
 
-		buttonField.add(button);
-		buttonField.revalidate();
-		buttonField.repaint();
+			button.setFocusPainted(false);
+			button.setBackground(topColor);
+			button.setForeground(new Color(0, 255, 255));
+			button.setPreferredSize(new Dimension(button.
+				getPreferredSize().width, navHeight));
+			button.addMouseListener(new MouseListener() {
+				@Override
+				public void mouseClicked(MouseEvent event) {}
+				@Override
+				public void mouseEntered(MouseEvent event) {
+					button.setForeground(Color.WHITE);
+				}
+				@Override
+				public void mouseExited(MouseEvent event) {
+					button.setForeground(new Color(0, 255, 255));
+				}
+				@Override
+				public void mousePressed(MouseEvent event) {
+					button.setForeground(Color.BLACK);
+				}
+				@Override
+				public void mouseReleased(MouseEvent event) {
+					MainWindow.selectDirectory(node);
+					MainWindow.getFolder().requestFocusInWindow();
+					MainWindow.focusLast();
+				}
+			});
+
+			buttonField.add(button);
+			buttonField.revalidate();
+			buttonField.repaint();
+		} catch (IllegalAccessException | 
+			UnsupportedLookAndFeelException | 
+			InstantiationException | ClassNotFoundException e) {}
 	}
 
 	public static void toggleNavigation() {

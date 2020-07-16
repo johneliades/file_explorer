@@ -670,86 +670,101 @@ public class MainWindow extends JPanel {
 
 		panel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-		JButton button = new JButton("MD5");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String sha256=hashFile(file, "MD5");
-				if(sha256==null)
-					sha256="";
-
-				JTextField field = new JTextField(sha256);
-				field.setEditable(false);
-				field.setBorder(null);
-				field.setForeground(Color.WHITE);
-				field.setBackground(UIManager.getColor("Panel.background"));
-				field.setFont(bigFont);
-				if(sha256.length()!=0) {
-					JButton buttonThatWasClicked = (JButton) e.getSource();
-					panel.add(field, panel.getComponentZOrder(buttonThatWasClicked));
-					panel.remove(buttonThatWasClicked);
-
-					dialog.pack();
+		LookAndFeel previousLF = UIManager.getLookAndFeel();
+		try {
+			for (javax.swing.UIManager.LookAndFeelInfo info : 
+				javax.swing.UIManager.getInstalledLookAndFeels()) {
+				
+				if ("Nimbus".equals(info.getName())) {
+					javax.swing.UIManager.setLookAndFeel(info.getClassName());
+					break;
 				}
 			}
-		});
-		button.setBackground(Color.BLACK);
-		button.setForeground(Color.CYAN);
-		panel.add(button);
 
-		panel.add(Box.createRigidArea(new Dimension(0, 3)));
+			JButton button = new JButton("MD5");
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String sha256=hashFile(file, "MD5");
+					if(sha256==null)
+						sha256="";
 
-		button = new JButton("SHA1");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String sha1=hashFile(file, "SHA-1");
-				if(sha1==null)
-					sha1="";
-				JTextField field = new JTextField(sha1);
-				field.setEditable(false);
-				field.setBorder(null);
-				field.setForeground(Color.WHITE);
-				field.setBackground(UIManager.getColor("Panel.background"));
-				field.setFont(bigFont);
-				if(sha1.length()!=0) {
-					JButton buttonThatWasClicked = (JButton) e.getSource();
-					panel.add(field, panel.getComponentZOrder(buttonThatWasClicked));
-					panel.remove(buttonThatWasClicked);
-	
-					dialog.pack();
+					JTextField field = new JTextField(sha256);
+					field.setEditable(false);
+					field.setBorder(null);
+					field.setForeground(Color.WHITE);
+					field.setBackground(UIManager.getColor("Panel.background"));
+					field.setFont(bigFont);
+					if(sha256.length()!=0) {
+						JButton buttonThatWasClicked = (JButton) e.getSource();
+						panel.add(field, panel.getComponentZOrder(buttonThatWasClicked));
+						panel.remove(buttonThatWasClicked);
+
+						dialog.pack();
+					}
 				}
-			}
-		});
-		button.setBackground(Color.BLACK);
-		button.setForeground(Color.CYAN);
-		panel.add(button);	
+			});
+			button.setBackground(Color.BLACK);
+			button.setForeground(Color.CYAN);
+			panel.add(button);
 
-		panel.add(Box.createRigidArea(new Dimension(0, 3)));
+			panel.add(Box.createRigidArea(new Dimension(0, 3)));
 
-		button = new JButton("SHA256");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String sha256=hashFile(file, "SHA-256");
-				if(sha256==null)
-					sha256="";
-
-				JTextField field = new JTextField(sha256);
-				field.setEditable(false);
-				field.setBorder(null);
-				field.setForeground(Color.WHITE);
-				field.setBackground(UIManager.getColor("Panel.background"));
-				field.setFont(bigFont);
-				if(sha256.length()!=0) {
-					JButton buttonThatWasClicked = (JButton) e.getSource();
-					panel.add(field, panel.getComponentZOrder(buttonThatWasClicked));
-					panel.remove(buttonThatWasClicked);
-
-					dialog.pack();
+			button = new JButton("SHA1");
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String sha1=hashFile(file, "SHA-1");
+					if(sha1==null)
+						sha1="";
+					JTextField field = new JTextField(sha1);
+					field.setEditable(false);
+					field.setBorder(null);
+					field.setForeground(Color.WHITE);
+					field.setBackground(UIManager.getColor("Panel.background"));
+					field.setFont(bigFont);
+					if(sha1.length()!=0) {
+						JButton buttonThatWasClicked = (JButton) e.getSource();
+						panel.add(field, panel.getComponentZOrder(buttonThatWasClicked));
+						panel.remove(buttonThatWasClicked);
+		
+						dialog.pack();
+					}
 				}
-			}
-		});
-		button.setBackground(Color.BLACK);
-		button.setForeground(Color.CYAN);
-		panel.add(button);
+			});
+			button.setBackground(Color.BLACK);
+			button.setForeground(Color.CYAN);
+			panel.add(button);	
+
+			panel.add(Box.createRigidArea(new Dimension(0, 3)));
+
+			button = new JButton("SHA256");
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String sha256=hashFile(file, "SHA-256");
+					if(sha256==null)
+						sha256="";
+
+					JTextField field = new JTextField(sha256);
+					field.setEditable(false);
+					field.setBorder(null);
+					field.setForeground(Color.WHITE);
+					field.setBackground(UIManager.getColor("Panel.background"));
+					field.setFont(bigFont);
+					if(sha256.length()!=0) {
+						JButton buttonThatWasClicked = (JButton) e.getSource();
+						panel.add(field, panel.getComponentZOrder(buttonThatWasClicked));
+						panel.remove(buttonThatWasClicked);
+
+						dialog.pack();
+					}
+				}
+			});
+			button.setBackground(Color.BLACK);
+			button.setForeground(Color.CYAN);
+			panel.add(button);
+
+			UIManager.setLookAndFeel(previousLF);
+		}
+		catch(Exception e) {}
 
 		long bytes = 0;
 		String size = "", avail_space = "";
