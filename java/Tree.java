@@ -172,7 +172,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 					tree.setSelectionRow(row);
 
 					node = (DefaultMutableTreeNode) 
-						getLastSelectedPathComponent();
+					getLastSelectedPathComponent();
 
 					JPopupMenu menu = getFolderPopupMenu(node);
 					menu.show(e.getComponent(), e.getX(), e.getY());
@@ -343,9 +343,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 		menuItem.setBackground(Color.white);
 		popupMenu.add(menuItem);
 
-		popupMenu.setBorder(new CompoundBorder(
-				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red), 
-				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black)));		
+		popupMenu.setBorder(BorderFactory.createLineBorder(Color.white));		
 		popupMenu.setBackground(Color.white);
 		
 		return popupMenu;

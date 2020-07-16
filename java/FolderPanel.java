@@ -74,23 +74,11 @@ public class FolderPanel extends JPanel {
 				if(event.getButton() == MouseEvent.BUTTON1) {
 					clearPanelSelection();
 				}
-				else if(event.getButton() == MouseEvent.BUTTON3) {
-					LookAndFeel previousLF = UIManager.getLookAndFeel();
-
-					try {
-						UIManager.setLookAndFeel(
-							UIManager.getSystemLookAndFeelClassName());
-					
-						JPopupMenu menu = getBackgroundPopupMenu();
-						UIManager.setLookAndFeel(previousLF);
-						if(tree.getLastSelectedPathComponent()!=null)
-							menu.show(event.getComponent(), event.getX(), 
-														event.getY());
-					} catch (ClassNotFoundException | 
-						IllegalAccessException | 
-						InstantiationException | 
-						UnsupportedLookAndFeelException e) {
-					}
+				else if(event.getButton() == MouseEvent.BUTTON3) {	
+					JPopupMenu menu = getBackgroundPopupMenu();
+					if(tree.getLastSelectedPathComponent()!=null)
+						menu.show(event.getComponent(), event.getX(), 
+													event.getY());
 
 					clearPanelSelection();
 				}
@@ -1102,22 +1090,8 @@ public class FolderPanel extends JPanel {
 					MainWindow.focusLast();
 				}
 				else if(event.getButton() == MouseEvent.BUTTON3) {
-					LookAndFeel previousLF = UIManager.getLookAndFeel();
-
-					try {
-						UIManager.setLookAndFeel(
-							UIManager.getSystemLookAndFeelClassName());
-					
-						JPopupMenu menu = getFilePopupMenu(panelNode, panel);
-						UIManager.setLookAndFeel(previousLF);
-						menu.show(event.getComponent(), event.getX(), event.getY());
-					} catch (ClassNotFoundException | 
-						IllegalAccessException | 
-						InstantiationException | 
-						UnsupportedLookAndFeelException e) {
-						
-						System.err.println("Couldn't use system look and feel.");
-					}
+					JPopupMenu menu = getFilePopupMenu(panelNode, panel);
+					menu.show(event.getComponent(), event.getX(), event.getY());
 				}
 			}
 			@Override

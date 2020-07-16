@@ -54,15 +54,7 @@ public class MainWindow extends JPanel {
 
 		//Create a tree that allows one selection at a time.
 		tree = new Tree(top);
-		
-		//Create the scroll pane and add the tree to it. 
-		JScrollPane treeView = new JScrollPane(tree);
-		treeView.getVerticalScrollBar().setPreferredSize(new Dimension(12, 0));
-		treeView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 12));
-		treeView.getVerticalScrollBar().setBackground(new Color(53, 53, 53));
-		treeView.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		treeView.setBorder(new EmptyBorder(0, 0, 0, 0));
-
+	
 		BasicTreeUI basicTreeUI = (BasicTreeUI) tree.getUI();
 		basicTreeUI.setLeftChildIndent(0);
 		basicTreeUI.setRightChildIndent(12);
@@ -71,84 +63,107 @@ public class MainWindow extends JPanel {
 		basicTreeUI.setExpandedIcon(Utility.getImageFast(ICONPATH + 
 			"other/expanded.png", 9, 9, true));
 
-		folder = new FolderPanel();
-		JScrollPane folderView = new JScrollPane(folder);
-		folderView.getVerticalScrollBar().setUnitIncrement(16);
-		folderView.getVerticalScrollBar().setPreferredSize(new Dimension(12, 0));
-		folderView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 12));
-		folderView.getVerticalScrollBar().setBackground(new Color(53, 53, 53));
-		folderView.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		folderView.setBorder(new EmptyBorder(0, 0, 0, 0));
+		LookAndFeel previousLF = UIManager.getLookAndFeel();
+		try {
+			UIManager.setLookAndFeel(
+				UIManager.getSystemLookAndFeelClassName());
 
-		if(roots.length==1)
-			Tree.createNodes(top);
-		else {
-			int numChild=tree.getModel().getChildCount(top);
-			for(int i=0; i<numChild; i++) { 
-				DefaultMutableTreeNode current=(DefaultMutableTreeNode) 
-						tree.getModel().getChild(top, i);
-				Tree.createNodes(current);
+			//Create the scroll pane and add the tree to it. 
+			JScrollPane treeView = new JScrollPane(tree);
+			treeView.getVerticalScrollBar().setPreferredSize(new Dimension(12, 0));
+			treeView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 12));
+			treeView.getVerticalScrollBar().setBackground(new Color(53, 53, 53));
+			treeView.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			treeView.setBorder(new EmptyBorder(0, 0, 0, 0));
+
+			folder = new FolderPanel();
+			JScrollPane folderView = new JScrollPane(folder);
+			folderView.getVerticalScrollBar().setUnitIncrement(16);
+			folderView.getVerticalScrollBar().setPreferredSize(new Dimension(12, 0));
+			folderView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 12));
+			folderView.getVerticalScrollBar().setBackground(new Color(53, 53, 53));
+			folderView.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			folderView.setBorder(new EmptyBorder(0, 0, 0, 0));
+
+			if(roots.length==1)
+				Tree.createNodes(top);
+			else {
+				int numChild=tree.getModel().getChildCount(top);
+				for(int i=0; i<numChild; i++) { 
+					DefaultMutableTreeNode current=(DefaultMutableTreeNode) 
+							tree.getModel().getChild(top, i);
+					Tree.createNodes(current);
+				}
 			}
-		}
 
-		if(fileToOpen==null) {
-			selectDirectory(top);
-		}
-		else {
-			java.util.Stack<String> pathComponents = 
-				new java.util.Stack<String>();
+			if(fileToOpen==null) {
+				selectDirectory(top);
+			}
+			else {
+				java.util.Stack<String> pathComponents = 
+					new java.util.Stack<String>();
 
-			while(true) {
-				if(fileToOpen.getParentFile() == null)
-					break;
-				pathComponents.add(fileToOpen.getName());
-				fileToOpen = fileToOpen.getParentFile();
-			} 
-			
-			pathComponents.add(fileToOpen.getPath().replace("\\", ""));
-			//PathComponents now contains the path 
-			//components starting from root
+				while(true) {
+					if(fileToOpen.getParentFile() == null)
+						break;
+					pathComponents.add(fileToOpen.getName());
+					fileToOpen = fileToOpen.getParentFile();
+				} 
+				
+				pathComponents.add(fileToOpen.getPath().replace("\\", ""));
+				//PathComponents now contains the path 
+				//components starting from root
 
-			loadPath(top, pathComponents);
-		}
+				loadPath(top, pathComponents);
+			}
 
-		folderView.setMinimumSize(new Dimension(400, 50));
-		treeView.setMinimumSize(new Dimension(250, 50));
-		treeView.getVerticalScrollBar().setValue(0);
+			folderView.setMinimumSize(new Dimension(400, 50));
+			treeView.setMinimumSize(new Dimension(250, 50));
+			treeView.getVerticalScrollBar().setValue(0);
 
-		//Add the scroll panes to a split pane.
-		JSplitPaneWithZeroSizeDivider splitPane = new 
-					JSplitPaneWithZeroSizeDivider(
-						JSplitPaneWithZeroSizeDivider.HORIZONTAL_SPLIT);
-		splitPane.setLeftComponent(treeView);
-		splitPane.setRightComponent(folderView);
-		splitPane.setBorder(
-			BorderFactory.createMatteBorder(0, 3, 3, 3, Color.BLACK));
+			//Add the scroll panes to a split pane.
+			JSplitPaneWithZeroSizeDivider splitPane = new 
+						JSplitPaneWithZeroSizeDivider(
+							JSplitPaneWithZeroSizeDivider.HORIZONTAL_SPLIT);
+			splitPane.setLeftComponent(treeView);
+			splitPane.setRightComponent(folderView);
+			splitPane.setBorder(
+				BorderFactory.createMatteBorder(0, 3, 3, 3, Color.BLACK));
 
-		// Mouse back and forward
-		if (Toolkit.getDefaultToolkit().areExtraMouseButtonsEnabled() && 
-				MouseInfo.getNumberOfButtons() > 3) {
-			
-			Toolkit.getDefaultToolkit().addAWTEventListener(event -> {
-				if (event instanceof MouseEvent) {
-					MouseEvent mouseEvent = (MouseEvent) event;
-					if (mouseEvent.getID() == MouseEvent.MOUSE_RELEASED &&
-						mouseEvent.getButton() > 3) {
-						
-						if (mouseEvent.getButton() == 4) {
-							TopPanel.historyBack();
-							MainWindow.focusLast();
-						} else if (mouseEvent.getButton() == 5) {
-							TopPanel.historyForward();
-							MainWindow.focusLast();
+			// Mouse back and forward
+			if (Toolkit.getDefaultToolkit().areExtraMouseButtonsEnabled() && 
+					MouseInfo.getNumberOfButtons() > 3) {
+				
+				Toolkit.getDefaultToolkit().addAWTEventListener(event -> {
+					if (event instanceof MouseEvent) {
+						MouseEvent mouseEvent = (MouseEvent) event;
+						if (mouseEvent.getID() == MouseEvent.MOUSE_RELEASED &&
+							mouseEvent.getButton() > 3) {
+							
+							if (mouseEvent.getButton() == 4) {
+								TopPanel.historyBack();
+								MainWindow.focusLast();
+							} else if (mouseEvent.getButton() == 5) {
+								TopPanel.historyForward();
+								MainWindow.focusLast();
+							}
 						}
 					}
-				}
-			}, AWTEvent.MOUSE_EVENT_MASK);
-		}
+				}, AWTEvent.MOUSE_EVENT_MASK);
+			}
 
-		//Add the split pane to this panel.
-		add(splitPane);
+			//Add the split pane to this panel.
+			add(splitPane);
+			
+			UIManager.setLookAndFeel(previousLF);
+		} 
+		catch (ClassNotFoundException | 
+			IllegalAccessException | 
+			InstantiationException | 
+			UnsupportedLookAndFeelException e) {
+			
+			System.err.println("Couldn't use system look and feel.");
+		}	
 	}
 
 	static void loadPath(DefaultMutableTreeNode top, 
