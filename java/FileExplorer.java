@@ -7,8 +7,6 @@ import java.awt.*;
 import java.util.*;
 
 public class FileExplorer {
-	//Optionally set the look and feel.
-	private static final boolean useSystemLookAndFeel = false;
 	private static final String ICONPATH="./icons/"; // path-until-src/src/hw4/icons/
 	private static final boolean showHiddenFiles = false;
 	private static File fileToOpen=null;
@@ -40,15 +38,6 @@ public class FileExplorer {
 	 * event dispatch thread.
 	 */
 	private static void createAndShowGUI(File file) {
-		if (useSystemLookAndFeel) {
-			try {
-				UIManager.setLookAndFeel(
-					UIManager.getSystemLookAndFeelClassName());
-			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
-				System.err.println("Couldn't use system look and feel.");
-			}
-		}
-
 		//Create and set up the window.
 		frame = new JFrame("File Explorer");
 		frame.setBackground(new Color(53, 53, 53));

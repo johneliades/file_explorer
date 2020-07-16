@@ -75,11 +75,22 @@ public class FolderPanel extends JPanel {
 					clearPanelSelection();
 				}
 				else if(event.getButton() == MouseEvent.BUTTON3) {
-					JPopupMenu menu = getBackgroundPopupMenu();
+					LookAndFeel previousLF = UIManager.getLookAndFeel();
 
-					if(tree.getLastSelectedPathComponent()!=null)
-						menu.show(event.getComponent(), event.getX(), 
-													event.getY());
+					try {
+						UIManager.setLookAndFeel(
+							UIManager.getSystemLookAndFeelClassName());
+					
+						JPopupMenu menu = getBackgroundPopupMenu();
+						UIManager.setLookAndFeel(previousLF);
+						if(tree.getLastSelectedPathComponent()!=null)
+							menu.show(event.getComponent(), event.getX(), 
+														event.getY());
+					} catch (ClassNotFoundException | 
+						IllegalAccessException | 
+						InstantiationException | 
+						UnsupportedLookAndFeelException e) {
+					}
 
 					clearPanelSelection();
 				}
@@ -326,9 +337,7 @@ public class FolderPanel extends JPanel {
 			popupMenu.addSeparator();
 		}
 
-		popupMenu.setBorder(new CompoundBorder(
-				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red), 
-				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black)));
+		popupMenu.setBorder(BorderFactory.createLineBorder(Color.white));
 		popupMenu.setBackground(Color.white);	
 
 		//Refresh option
@@ -683,9 +692,7 @@ public class FolderPanel extends JPanel {
 		if(!multiple)
 			popupMenu.add(menuItem);
 
-		popupMenu.setBorder(new CompoundBorder(
-				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red), 
-				BorderFactory.createMatteBorder(1, 1, 1, 1, Color.black)));		
+		popupMenu.setBorder(BorderFactory.createLineBorder(Color.white));		
 		popupMenu.setBackground(Color.white);
 		
 		return popupMenu;
@@ -1095,9 +1102,22 @@ public class FolderPanel extends JPanel {
 					MainWindow.focusLast();
 				}
 				else if(event.getButton() == MouseEvent.BUTTON3) {
-					JPopupMenu menu = getFilePopupMenu(panelNode, panel);
+					LookAndFeel previousLF = UIManager.getLookAndFeel();
 
-					menu.show(event.getComponent(), event.getX(), event.getY());
+					try {
+						UIManager.setLookAndFeel(
+							UIManager.getSystemLookAndFeelClassName());
+					
+						JPopupMenu menu = getFilePopupMenu(panelNode, panel);
+						UIManager.setLookAndFeel(previousLF);
+						menu.show(event.getComponent(), event.getX(), event.getY());
+					} catch (ClassNotFoundException | 
+						IllegalAccessException | 
+						InstantiationException | 
+						UnsupportedLookAndFeelException e) {
+						
+						System.err.println("Couldn't use system look and feel.");
+					}
 				}
 			}
 			@Override
