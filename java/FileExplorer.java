@@ -17,7 +17,7 @@ public class FileExplorer {
 	public static final Color panelHoverColor = new Color(0, 170, 170);
 	public static final Color panelSelectionColor = new Color(0, 100, 100);
 	public static final Color textSelectionColor = new Color(0, 255, 255);
-	public static final Color propertiesColor = new Color(22, 22, 22);
+	public static final Color propertiesColor = new Color(0, 0, 0);
 
 	private static JFrame frame;
 

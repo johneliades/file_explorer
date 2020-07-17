@@ -549,21 +549,34 @@ public class MainWindow extends JPanel {
 		return size;
 	}
 
-	public static long folderSize(File directory) {
-		long length = 0;
+	public static long[] folderSize(File directory) {
+		long[] total = new long[3];
+		total[0] = 0; //length
+		total[1] = 0; //files
+		total[2] = 0; //folders
+
 		try {
 			for (File file : directory.listFiles()) {
-				if (file.isFile())
-					length += file.length();
-				else
-					length += folderSize(file);
+				if(!Files.isSymbolicLink(file.toPath())) {
+					if(file.isFile()) {
+						total[0] += file.length();
+						total[1] += 1;
+					}
+					else {
+						long[] temp = folderSize(file);
+						
+						total[0] += temp[0];
+						total[1] += temp[1];
+						total[2] += temp[2] + 1;
+					}
+				}
 			}
 		}
 		catch(Exception e) {
-			return 0;
+			return total;
 		}
 
-		return length;
+		return total;
 	}
 
 	public static void properties(File file) {
@@ -813,6 +826,8 @@ public class MainWindow extends JPanel {
 		label.setFont(bigFont);
 		if(avail_space.length()!=0)
 			panel.add(label);
+			
+		dialog.pack();
 
 		if(!calculated) {
 			Executor calcSize = Executors.newSingleThreadExecutor();
@@ -825,7 +840,12 @@ public class MainWindow extends JPanel {
 					panel.add(label);
 					dialog.pack();
 
-					long bytes = folderSize(file);
+					long[] total;
+					total = folderSize(file);
+
+					long bytes = total[0];
+					long files = total[1];
+					long folders = total[2];
 
 					String size="0";
 					if(bytes!=0)
@@ -841,11 +861,17 @@ public class MainWindow extends JPanel {
 						panel.add(label);
 						dialog.pack();
 					}
+					
+					panel.add(Box.createRigidArea(new Dimension(0, 20)));
+		
+					label = new JLabel("\nContains: " + files + " Files, " + folders + " Folders"); 
+					label.setForeground(Color.WHITE);
+					label.setFont(bigFont);
+					panel.add(label);
+					dialog.pack();
 				}
 			});
 		}
-		
-		dialog.pack();
 
 		dialog.setLocationRelativeTo(frame);
 		dialog.setVisible(true);

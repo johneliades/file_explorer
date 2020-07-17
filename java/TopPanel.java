@@ -465,9 +465,7 @@ public class TopPanel extends JPanel {
 					button.setForeground(FileExplorer.textSelectionColor);
 				}
 				@Override
-				public void mousePressed(MouseEvent event) {
-					button.setForeground(Color.BLACK);
-				}
+				public void mousePressed(MouseEvent event) {}
 				@Override
 				public void mouseReleased(MouseEvent event) {
 					MainWindow.selectDirectory(node);
