@@ -564,7 +564,7 @@ public class MainWindow extends JPanel {
 					}
 					else {
 						long[] temp = folderSize(file);
-						
+	
 						total[0] += temp[0];
 						total[1] += temp[1];
 						total[2] += temp[2] + 1;

@@ -35,9 +35,26 @@ public class FolderPanel extends JPanel {
 
 	private static Executor executor = Executors.newSingleThreadExecutor();
 
+	private int x, y, x2, y2;
+
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.setColor(Color.CYAN);
+
+		int px = Math.min(x, x2);
+		int py = Math.min(y, y2);
+		int pw = Math.abs(x-x2);
+		int ph = Math.abs(y-y2);
+		g.drawRect(px, py, pw, ph);		
+		g.fillRect(px, py, pw, ph);
+	}
+
 	public FolderPanel() {
 		//Create the folder viewing pane.
 		super(new WrapLayout(FlowLayout.LEFT, 10, 10));
+
+		x = y = x2 = y2 = -1;
+
 		this.setBackground(FileExplorer.folderBackgroundColor);
 
 		this.addMouseListener(new MouseListener() {
@@ -53,6 +70,11 @@ public class FolderPanel extends JPanel {
 													getLastTreeNodeOpened();
 				JTree tree = MainWindow.getTree();
 				
+				if(event.getButton() == MouseEvent.BUTTON1) {
+					x = event.getX();
+					y = event.getY();
+				}
+
 				requestFocusInWindow();
 				MainWindow.setFocusExplorer();
 
@@ -64,7 +86,6 @@ public class FolderPanel extends JPanel {
 					Tree.findExistingParent(f);
 					return;
 				}
-
 
 				if(event.getButton() == MouseEvent.BUTTON1) {
 					clearPanelSelection();
@@ -79,7 +100,69 @@ public class FolderPanel extends JPanel {
 				}
 			}
 			@Override
-			public void mouseReleased(MouseEvent event) {}
+			public void mouseReleased(MouseEvent event) {
+				if(event.getButton() == MouseEvent.BUTTON1) {
+					x2 = event.getX();
+					y2 = event.getY();
+					repaint();
+
+					clearPanelSelection();
+
+					for (int i = 0; i < MainWindow.getFolder().getComponentCount(); i++) {
+						Component current = MainWindow.getFolder().getComponent(i);
+						int curX = current.getX(); 
+						int curY = current.getY();
+
+						int minX = Math.min(x, x2);
+						int minY = Math.min(y, y2);
+						int maxX = Math.max(x, x2);
+						int maxY = Math.max(y, y2);
+
+						if(curX > minX && curX < maxX && curY > minY && curY < maxY) {
+							selectedList.add((JPanel) current);
+
+							for(JPanel element : selectedList) {
+								element.setBackground(FileExplorer.panelSelectionColor);
+								element.setBorder(BorderFactory.createLineBorder(Color.white));
+							}	
+						}
+					}
+					x = y = x2 = y2 = -1; 
+					repaint();
+				}
+			}
+		});
+
+		this.addMouseMotionListener(new MouseAdapter() {
+            public void mouseDragged(MouseEvent event) {
+				if(SwingUtilities.isLeftMouseButton(event)) {
+					x2 = event.getX();
+					y2 = event.getY();
+					repaint();
+		
+					clearPanelSelection();
+
+					for (int i = 0; i < MainWindow.getFolder().getComponentCount(); i++) {
+						Component current = MainWindow.getFolder().getComponent(i);
+						int curX = current.getX(); 
+						int curY = current.getY();
+
+						int minX = Math.min(x, x2);
+						int minY = Math.min(y, y2);
+						int maxX = Math.max(x, x2);
+						int maxY = Math.max(y, y2);
+
+						if(curX > minX && curX < maxX && curY > minY && curY < maxY) {
+							selectedList.add((JPanel) current);
+
+							for(JPanel element : selectedList) {
+								element.setBackground(FileExplorer.panelSelectionColor);
+								element.setBorder(BorderFactory.createLineBorder(Color.white));
+							}	
+						}
+					}
+				}
+            }
 		});
 
 		this.getActionMap().put("select all", new AbstractAction() {
