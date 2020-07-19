@@ -716,23 +716,38 @@ public class MainWindow extends JPanel {
 			JButton button = new JButton("MD5");
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String sha256=hashFile(file, "MD5");
-					if(sha256==null)
-						sha256="";
+					JProgressBar progress = new JProgressBar();
+					progress.setIndeterminate(true);
+					progress.setBackground(FileExplorer.propertiesColor);
+					progress.setForeground(Color.CYAN);
+					progress.setBorderPainted(false);
 
-					JTextField field = new JTextField(sha256);
-					field.setEditable(false);
-					field.setBorder(null);
-					field.setForeground(Color.WHITE);
-					field.setBackground(UIManager.getColor("Panel.background"));
-					field.setFont(bigFont);
-					if(sha256.length()!=0) {
-						JButton buttonThatWasClicked = (JButton) e.getSource();
-						panel.add(field, panel.getComponentZOrder(buttonThatWasClicked));
-						panel.remove(buttonThatWasClicked);
+					JButton buttonThatWasClicked = (JButton) e.getSource();
+					panel.add(progress, panel.getComponentZOrder(buttonThatWasClicked));
+					panel.remove(buttonThatWasClicked);
+				
+					dialog.pack();
 
-						dialog.pack();
-					}
+					Executor calcMD5 = Executors.newSingleThreadExecutor();
+					calcMD5.execute(new Runnable() {
+						public void run() { 
+							String hash=hashFile(file, "MD5");
+							if(hash==null)
+								hash="";
+							JTextField field = new JTextField(hash);
+							field.setEditable(false);
+							field.setBorder(null);
+							field.setForeground(Color.WHITE);
+							field.setBackground(UIManager.getColor("Panel.background"));
+							field.setFont(bigFont);
+							if(hash.length()!=0) {
+								panel.add(field, panel.getComponentZOrder(progress));
+								panel.remove(progress);
+				
+								dialog.pack();
+							}
+						}
+					});
 				}
 			});
 			button.setBackground(Color.BLACK);
@@ -744,22 +759,38 @@ public class MainWindow extends JPanel {
 			button = new JButton("SHA1");
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String sha1=hashFile(file, "SHA-1");
-					if(sha1==null)
-						sha1="";
-					JTextField field = new JTextField(sha1);
-					field.setEditable(false);
-					field.setBorder(null);
-					field.setForeground(Color.WHITE);
-					field.setBackground(UIManager.getColor("Panel.background"));
-					field.setFont(bigFont);
-					if(sha1.length()!=0) {
-						JButton buttonThatWasClicked = (JButton) e.getSource();
-						panel.add(field, panel.getComponentZOrder(buttonThatWasClicked));
-						panel.remove(buttonThatWasClicked);
-		
-						dialog.pack();
-					}
+					JProgressBar progress = new JProgressBar();
+					progress.setIndeterminate(true);
+					progress.setBackground(FileExplorer.propertiesColor);
+					progress.setForeground(Color.CYAN);
+					progress.setBorderPainted(false);
+
+					JButton buttonThatWasClicked = (JButton) e.getSource();
+					panel.add(progress, panel.getComponentZOrder(buttonThatWasClicked));
+					panel.remove(buttonThatWasClicked);
+				
+					dialog.pack();
+
+					Executor calcSHA = Executors.newSingleThreadExecutor();
+					calcSHA.execute(new Runnable() {
+						public void run() { 
+							String hash=hashFile(file, "SHA-1");
+							if(hash==null)
+								hash="";
+							JTextField field = new JTextField(hash);
+							field.setEditable(false);
+							field.setBorder(null);
+							field.setForeground(Color.WHITE);
+							field.setBackground(UIManager.getColor("Panel.background"));
+							field.setFont(bigFont);
+							if(hash.length()!=0) {
+								panel.add(field, panel.getComponentZOrder(progress));
+								panel.remove(progress);
+				
+								dialog.pack();
+							}
+						}
+					});
 				}
 			});
 			button.setBackground(Color.BLACK);
@@ -771,23 +802,38 @@ public class MainWindow extends JPanel {
 			button = new JButton("SHA256");
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					String sha256=hashFile(file, "SHA-256");
-					if(sha256==null)
-						sha256="";
+					JProgressBar progress = new JProgressBar();
+					progress.setIndeterminate(true);
+					progress.setBackground(FileExplorer.propertiesColor);
+					progress.setForeground(Color.CYAN);
+					progress.setBorderPainted(false);
 
-					JTextField field = new JTextField(sha256);
-					field.setEditable(false);
-					field.setBorder(null);
-					field.setForeground(Color.WHITE);
-					field.setBackground(UIManager.getColor("Panel.background"));
-					field.setFont(bigFont);
-					if(sha256.length()!=0) {
-						JButton buttonThatWasClicked = (JButton) e.getSource();
-						panel.add(field, panel.getComponentZOrder(buttonThatWasClicked));
-						panel.remove(buttonThatWasClicked);
+					JButton buttonThatWasClicked = (JButton) e.getSource();
+					panel.add(progress, panel.getComponentZOrder(buttonThatWasClicked));
+					panel.remove(buttonThatWasClicked);
+				
+					dialog.pack();
 
-						dialog.pack();
-					}
+					Executor calcSHA = Executors.newSingleThreadExecutor();
+					calcSHA.execute(new Runnable() {
+						public void run() { 
+							String hash=hashFile(file, "SHA-256");
+							if(hash==null)
+								hash="";
+							JTextField field = new JTextField(hash);
+							field.setEditable(false);
+							field.setBorder(null);
+							field.setForeground(Color.WHITE);
+							field.setBackground(UIManager.getColor("Panel.background"));
+							field.setFont(bigFont);
+							if(hash.length()!=0) {
+								panel.add(field, panel.getComponentZOrder(progress));
+								panel.remove(progress);
+				
+								dialog.pack();
+							}
+						}
+					});
 				}
 			});
 			button.setBackground(Color.BLACK);
