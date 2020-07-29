@@ -112,13 +112,19 @@ public class FolderPanel extends JPanel {
 						Component current = MainWindow.getFolder().getComponent(i);
 						int curX = current.getX(); 
 						int curY = current.getY();
+						int curWidth = current.getWidth();
+						int curHeight = current.getHeight();
+					
+						Rectangle rect1 = new Rectangle(curX, curY, curWidth, curHeight);
 
-						int minX = Math.min(x, x2);
-						int minY = Math.min(y, y2);
-						int maxX = Math.max(x, x2);
-						int maxY = Math.max(y, y2);
+						int px = Math.min(x, x2);
+						int py = Math.min(y, y2);
+						int pw = Math.abs(x-x2);
+						int ph = Math.abs(y-y2);
 
-						if(curX > minX && curX < maxX && curY > minY && curY < maxY) {
+						Rectangle rect2 = new Rectangle(px, py, pw, ph);
+
+						if(overlaps(rect1, rect2)) {
 							selectedList.add((JPanel) current);
 
 							for(JPanel element : selectedList) {
@@ -130,6 +136,11 @@ public class FolderPanel extends JPanel {
 					x = y = x2 = y2 = -1; 
 					repaint();
 				}
+			}
+
+			public boolean overlaps(Rectangle z, Rectangle r) {
+				return z.x < r.x + r.width && z.x + z.width > r.x && 
+					z.y < r.y + r.height && z.y + z.height > r.y;
 			}
 		});
 
@@ -146,13 +157,19 @@ public class FolderPanel extends JPanel {
 						Component current = MainWindow.getFolder().getComponent(i);
 						int curX = current.getX(); 
 						int curY = current.getY();
+						int curWidth = current.getWidth();
+						int curHeight = current.getHeight();
+					
+						Rectangle rect1 = new Rectangle(curX, curY, curWidth, curHeight);
 
-						int minX = Math.min(x, x2);
-						int minY = Math.min(y, y2);
-						int maxX = Math.max(x, x2);
-						int maxY = Math.max(y, y2);
+						int px = Math.min(x, x2);
+						int py = Math.min(y, y2);
+						int pw = Math.abs(x-x2);
+						int ph = Math.abs(y-y2);
 
-						if(curX > minX && curX < maxX && curY > minY && curY < maxY) {
+						Rectangle rect2 = new Rectangle(px, py, pw, ph);
+
+						if(overlaps(rect1, rect2)) {
 							selectedList.add((JPanel) current);
 
 							for(JPanel element : selectedList) {
@@ -163,6 +180,11 @@ public class FolderPanel extends JPanel {
 					}
 				}
             }
+
+			public boolean overlaps(Rectangle z, Rectangle r) {
+				return z.x < r.x + r.width && z.x + z.width > r.x && 
+					z.y < r.y + r.height && z.y + z.height > r.y;
+			}
 		});
 
 		this.getActionMap().put("select all", new AbstractAction() {

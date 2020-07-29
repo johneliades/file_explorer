@@ -15,11 +15,14 @@
 |EZ_FAST|
 +=======+
 
+#indication of how many files selected
+
 +=======+
 |_LATER_|
 +=======+
 
-#indication of how many files selected
+#dropdown for search with settings
+#embed icons in jar 
 #disks free space bar
 #zip/unzip
 #drag n drop
