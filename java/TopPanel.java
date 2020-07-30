@@ -27,7 +27,7 @@ public class TopPanel extends JPanel {
 		super(new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints();
-		this.setBackground(Color.WHITE);
+		this.setBackground(FileExplorer.topBackgroundColor);
 		this.setBorder(
 			BorderFactory.createMatteBorder(6, 3, 6, 3, FileExplorer.topBackgroundColor));
 
