@@ -54,4 +54,9 @@ public class JTextFieldIcon extends JTextField {
 			g.setColor(prevColor);
 		}
 	}
+
+	protected void paintBorder(Graphics g) {
+		g.setColor(FileExplorer.folderBackgroundColor);
+		g.drawRect(0, 0, getWidth()-1, getHeight()-1);
+	}
 }

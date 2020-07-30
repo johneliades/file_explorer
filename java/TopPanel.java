@@ -80,8 +80,8 @@ public class TopPanel extends JPanel {
 			Utility.getImageFast(FileExplorer.getIconPath() + "other/pc.png", 
 				15, 15, true));
 
-		navigationField.setCaretColor(Color.WHITE);
-		navigationField.setBackground(FileExplorer.topBackgroundColor);
+		navigationField.setCaretColor(Color.RED);
+		navigationField.setBackground(FileExplorer.treeBackgroundColor);
 		navigationField.setForeground(FileExplorer.textSelectionColor);
 		navigationField.setPreferredSize(new Dimension(navigationField.
 					getPreferredSize().width, navHeight));
@@ -125,8 +125,11 @@ public class TopPanel extends JPanel {
 							file = file.getParentFile();
 						} 
 						pathComponents.add(file.getPath().replace("\\", ""));
-					
+		
+						MainWindow.historyPush(Tree.getLastTreeNodeOpened());
+						MainWindow.clearFuture();
 						MainWindow.loadPath(MainWindow.getTop(), pathComponents);
+
 						MainWindow.focusLast();
 					}
 				}
@@ -166,7 +169,7 @@ public class TopPanel extends JPanel {
 			Utility.getImageFast(FileExplorer.getIconPath() + 
 				"other/magnifyingglass.png", 15, 15, true));
 
-		searchField.setCaretColor(Color.WHITE);
+		searchField.setCaretColor(Color.RED);
 		searchField.setBackground(FileExplorer.topBackgroundColor);
 		searchField.setForeground(FileExplorer.textSelectionColor);
 		searchField.setPreferredSize(new Dimension(searchField.
@@ -468,6 +471,8 @@ public class TopPanel extends JPanel {
 				public void mousePressed(MouseEvent event) {}
 				@Override
 				public void mouseReleased(MouseEvent event) {
+					MainWindow.historyPush(Tree.getLastTreeNodeOpened());
+					MainWindow.clearFuture();
 					MainWindow.selectDirectory(node);
 					MainWindow.getFolder().requestFocusInWindow();
 					MainWindow.focusLast();
