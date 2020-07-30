@@ -280,10 +280,13 @@ public class TopPanel extends JPanel {
 			@Override
 			public void focusGained(FocusEvent e) {
 				searchField.setText("");
+				searchField.setBackground(FileExplorer.treeBackgroundColor);
 			}
 			public void focusLost(FocusEvent e) {
 				DefaultMutableTreeNode node = Tree.getLastTreeNodeOpened();
 				String fileName = ((File) node.getUserObject()).getName();
+		
+				searchField.setBackground(FileExplorer.topBackgroundColor);
 
 				if(fileName.equals("") || fileName==null) {
 					fileName = ((File) node.getUserObject()).getPath();
