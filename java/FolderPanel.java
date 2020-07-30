@@ -305,9 +305,12 @@ public class FolderPanel extends JPanel {
 					"Enter File Name", "New Text Document", 
 					JOptionPane.INFORMATION_MESSAGE, img, null, "File");
 
-				if(name==null || name.equals("")) {
-					JOptionPane.showMessageDialog(null, 
-						"Can't have empty name");
+				if(name==null)
+					return;
+
+				if(name.equals("")) {
+					JOptionPane.showMessageDialog(null, "Can't have empty name");
+					
 					return;
 				}
 
@@ -375,9 +378,12 @@ public class FolderPanel extends JPanel {
 					"Enter Folder Name", "New Folder", 
 					JOptionPane.INFORMATION_MESSAGE, img, null, "Folder");
 			
-				if(name==null || name.equals("")) {
-					JOptionPane.showMessageDialog(null, 
-						"Can't have empty name");			
+				if(name==null)
+					return;
+
+				if(name.equals("")) {
+					JOptionPane.showMessageDialog(null, "Can't have empty name");
+					
 					return;
 				}
 

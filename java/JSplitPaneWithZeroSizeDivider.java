@@ -50,7 +50,7 @@ public class JSplitPaneWithZeroSizeDivider
 	 * Useful values are in the range 0 to {@link #dividerDragSize}.
 	 * Default is centered.
 	 */
-	private int dividerDragOffset = 0;
+	private int dividerDragOffset = 2;
 
 	public JSplitPaneWithZeroSizeDivider() {
 		this( HORIZONTAL_SPLIT );
@@ -133,7 +133,7 @@ public class JSplitPaneWithZeroSizeDivider
 
 		@Override
 		public void paint( Graphics g ) {
-			g.setColor( Color.BLACK );
+			g.setColor( FileExplorer.topBackgroundColor );
 			if( orientation == HORIZONTAL_SPLIT )
 				g.drawLine( dividerDragOffset, 0, dividerDragOffset, getHeight() - 1 );
 			else

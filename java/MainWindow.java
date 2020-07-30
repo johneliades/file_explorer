@@ -27,10 +27,10 @@ public class MainWindow extends JPanel {
 	private static final boolean showHiddenFiles = FileExplorer.getHiddenFilesOption();
 	private static String windowsTopName = Tree.getWindowsTopName();
 	static private java.util.Stack<DefaultMutableTreeNode> history = 
-			new java.util.Stack<DefaultMutableTreeNode>();
+		new java.util.Stack<DefaultMutableTreeNode>();
 
 	static public java.util.Stack<DefaultMutableTreeNode> futureHistory = 
-			new java.util.Stack<DefaultMutableTreeNode>();
+		new java.util.Stack<DefaultMutableTreeNode>();
 
 	private static DefaultMutableTreeNode top;
 	private static JPanel folder;
@@ -129,7 +129,7 @@ public class MainWindow extends JPanel {
 		splitPane.setLeftComponent(treeView);
 		splitPane.setRightComponent(folderView);
 		splitPane.setBorder(
-			BorderFactory.createMatteBorder(0, 3, 3, 3, Color.BLACK));
+			BorderFactory.createMatteBorder(0, 2, 2, 2, FileExplorer.topBackgroundColor));
 
 		// Mouse back and forward
 		if (Toolkit.getDefaultToolkit().areExtraMouseButtonsEnabled() && 
