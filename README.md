@@ -26,7 +26,7 @@ jar -cvmf MANIFEST.MF FileExplorer.jar -C classes .
 to make a jar executable.
 
 ## Run
-Double click the FileExplorer.jar file (Note: icons folder must be in the same folder as the jar).
+Double click the FileExplorer.jar file.
 
 OR
 

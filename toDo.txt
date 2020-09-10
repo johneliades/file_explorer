@@ -22,7 +22,6 @@
 +=======+
 
 #dropdown for search with settings
-#embed icons in jar 
 #disks free space bar
 #zip/unzip
 #drag n drop

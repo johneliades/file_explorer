@@ -1,4 +1,4 @@
-import java.io.File;
+import java.io.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.*;
 
 public class FileExplorer {
-	private static final String ICONPATH="./icons/";
+	private static final String ICONPATH="/icons/";
 	private static final boolean showHiddenFiles = false;
 	private static File fileToOpen=null;
 
@@ -93,17 +93,49 @@ public class FileExplorer {
 		return frame;
 	}
 
+	private static ArrayList<String> getResourceFiles(String path) throws IOException {
+		ArrayList<String> filenames = new ArrayList<>();
+
+		try (
+			InputStream in = getResourceAsStream(path);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+			String resource;
+
+			while ((resource = br.readLine()) != null) {
+				filenames.add(resource);
+			}
+		}
+
+		return filenames;
+	}
+
+	private static InputStream getResourceAsStream(String resource) {
+		final InputStream in = getContextClassLoader().getResourceAsStream(resource);
+
+		return in == null ? FileExplorer.class.getResourceAsStream(resource) : in;
+	}
+
+	private static ClassLoader getContextClassLoader() {
+		return Thread.currentThread().getContextClassLoader();
+	}
+
 	public static Set<String> addExtensions() {
 		Set<String> set = new HashSet<>(); 
 	
-		File path = new File(ICONPATH + "extensions");
-		File icons[] = path.listFiles();
-		for(File temp : icons) {
-			String name = temp.getName().replace(".png", "");
-			set.add(name);
-		}
+		try {
+			ArrayList<String> icons = getResourceFiles(ICONPATH + "extensions");
 
-		return set;
+			for(String temp : icons) {
+				String name = temp.replace(".png", "");
+				set.add(name);
+			}
+
+			return set;
+		}
+		catch(Exception e) {}
+
+		return null;
+
 	}
 
 }

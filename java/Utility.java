@@ -44,7 +44,8 @@ public class Utility {
 				return element.getIcon();
 		}
 
-		ImageIcon icon = new ImageIcon(path);
+		java.net.URL imgURL = FileExplorer.class.getResource(path);
+		ImageIcon icon = new ImageIcon(imgURL);
 
 		Image img = icon.getImage().getScaledInstance(x, y, 
 					Image.SCALE_SMOOTH);
