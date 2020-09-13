@@ -45,6 +45,9 @@ public class Utility {
 		}
 
 		java.net.URL imgURL = FileExplorer.class.getResource(path);
+		if(imgURL==null)
+			return null;
+		
 		ImageIcon icon = new ImageIcon(imgURL);
 
 		Image img = icon.getImage().getScaledInstance(x, y, 

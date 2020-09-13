@@ -826,18 +826,8 @@ public class FolderPanel extends JPanel {
 					if(showHiddenFiles ?  true : !currentFile.isHidden() || 
 						!currentFile.getName().startsWith(".")) {
 					
-						JPanel newPanel;
-						if(currentFile.isDirectory())
-							newPanel = getPanel("folder.png", currentNode);
-						else if(iconSet.contains(Utility.getExtension(
-							currentFile.getName()))) {
-						
-							newPanel = getPanel(Utility.getExtension(
-								currentFile.getName()) + ".png", currentNode);
-						}
-						else
-							newPanel = getPanel("question.png", currentNode);
-				
+						JPanel newPanel = getPanel(currentFile, currentNode);
+
 						mapPanelNode.put(newPanel, currentNode);
 						folder.add(newPanel);
 					}
@@ -863,21 +853,7 @@ public class FolderPanel extends JPanel {
 										!element.getName().startsWith(".")) {
 						
 						JPanel newPanel;
-						if(element.isDirectory()) {
-							newPanel = getPanel("folder.png", 
-								new DefaultMutableTreeNode(element));
-						}
-						else if(iconSet.contains(Utility.getExtension(
-							element.getName()))) {
-							
-							newPanel = getPanel(Utility.getExtension(
-								element.getName()) + ".png", 
-								new DefaultMutableTreeNode(element));
-						}
-						else {
-							newPanel = getPanel("question.png", 
-								new DefaultMutableTreeNode(element));
-						}
+						newPanel = getPanel(element, new DefaultMutableTreeNode(element));
 		
 						mapPanelNode.put(newPanel, 
 							new DefaultMutableTreeNode(element));
@@ -911,7 +887,7 @@ public class FolderPanel extends JPanel {
 	 }
 	*/
 
-	static JPanel getPanel(String iconName, DefaultMutableTreeNode panelNode) {
+	static JPanel getPanel(File currentFile, DefaultMutableTreeNode panelNode) {
 		JLabel label;
 		ImageIcon img=null;
 		Set<String> set = new HashSet<>();
@@ -950,22 +926,23 @@ public class FolderPanel extends JPanel {
 		}
 
 		if(img==null) {
-			if(iconName=="folder.png") {
+			if(currentFile.isDirectory()) {
 				if(panelFile.list()!=null && panelFile.list().length==0)
 					img = Utility.getImageFast(FileExplorer.getIconPath() 
 						+ "other/folderempty.png", 60, 60, true);
 				else {
-					img = Utility.getImageFast(FileExplorer.getIconPath() 
+					img = Utility.getImageFast(ICONPATH 
 						+ "other/folder.png", 60, 60, true);
 				}
 			}
-			else if(iconName=="question.png") {
-				img = Utility.getImageFast(FileExplorer.getIconPath() 
-					+ "other/question.png", 60, 60, true);
-			}
 			else {
-				img = Utility.getImageFast(ICONPATH + "extensions/" + iconName, 
-					60, 60, true);
+				img = Utility.getImageFast(ICONPATH + "extensions/" + 
+					Utility.getExtension(currentFile.getName()) + ".png", 60, 60, true);
+
+				if(img==null) {
+					img = Utility.getImageFast(ICONPATH 
+						+ "other/question.png", 60, 60, true);
+				}
 			}
 		}
 
