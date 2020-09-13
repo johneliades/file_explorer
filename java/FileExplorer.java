@@ -51,7 +51,8 @@ public class FileExplorer {
 		frame.setBackground(folderBackgroundColor);
 		frame.getRootPane().setBorder(new EmptyBorder(0, 0, 0, 0));
 
-		frame.setIconImage(new ImageIcon(ICONPATH + "other/folder.png").getImage());
+		java.net.URL imgURL = FileExplorer.class.getResource(ICONPATH + "other/folder.png");
+		frame.setIconImage(new ImageIcon(imgURL).getImage());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		//Gets screen's Dimensions
