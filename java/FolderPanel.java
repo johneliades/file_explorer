@@ -899,15 +899,17 @@ public class FolderPanel extends JPanel {
 			FileSystemView fsv = FileSystemView.getFileSystemView();
 
 			String description = fsv.getSystemTypeDescription(panelFile);
-			name = description + " (" + panelFile.getPath().replace("\\", "") + ")";
+			name = fsv.getSystemDisplayName(panelFile);
 			
 			path = ICONPATH + "other/harddiskfolder.png";
 
 			if(description.equals("CD Drive")) {
 				path = ICONPATH + "other/cd.png";
+				name = description + " (" + panelFile.getPath().replace("\\", "") + ")";
 			}
 			else if(description.equals("DVD Drive")) {
 				path = ICONPATH + "other/dvd.png";
+				name = description + " (" + panelFile.getPath().replace("\\", "") + ")";
 			}
 			else if(description.equals("USB Drive")) {
 				path = ICONPATH + "other/usb.png";			

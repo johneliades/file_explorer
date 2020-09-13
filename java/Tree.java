@@ -77,13 +77,15 @@ public class Tree extends JTree implements TreeSelectionListener {
 					setText(file.getPath().replace("\\", ""));
 					
 					String description = fsv.getSystemTypeDescription(file);
-					name = file.getPath().replace("\\", "");
+					name = fsv.getSystemDisplayName(file);
 
 					if(description.equals("CD Drive")) {
 						path = ICONPATH + "other/cd.png";
+						name = file.getPath().replace("\\", "");
 					}
 					else if(description.equals("DVD Drive")) {
 						path = ICONPATH + "other/dvd.png";
+						name = file.getPath().replace("\\", "");
 					}
 					else if(description.equals("USB Drive")) {
 						path = ICONPATH + "other/usb.png";			
