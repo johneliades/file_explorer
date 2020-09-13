@@ -44,11 +44,15 @@ public class Utility {
 				return element.getIcon();
 		}
 
-		java.net.URL imgURL = FileExplorer.class.getResource(path);
-		if(imgURL==null)
-			return null;
-		
-		ImageIcon icon = new ImageIcon(imgURL);
+		ImageIcon icon;
+		if(explorer) {
+			java.net.URL imgURL = FileExplorer.class.getResource(path);
+			if(imgURL==null)
+				return null;
+			icon = new ImageIcon(imgURL);
+		}
+		else
+			icon = new ImageIcon(path);
 
 		Image img = icon.getImage().getScaledInstance(x, y, 
 					Image.SCALE_SMOOTH);
