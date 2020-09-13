@@ -16,6 +16,7 @@
 +=======+
 
 #indication of how many files selected
+#border around preview images
 
 +=======+
 |_LATER_|
