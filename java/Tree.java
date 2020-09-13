@@ -78,7 +78,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 					String description = fsv.getSystemTypeDescription(file);
 					name = fsv.getSystemTypeDescription(file);
 					if(name.equals("")) {
-						name = description;
+						name = file.getPath().replace("\\", "");
 					}
 
 					if(description.equals("CD Drive")) {
