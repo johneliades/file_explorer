@@ -904,7 +904,7 @@ public class FolderPanel extends JPanel {
 			path = ICONPATH + "other/harddiskfolder.png";
 
 			if(description.equals("CD Drive")) {
-				path = ICONPATH + "other/cd.png";
+				path = ICONPATH + "other/cdfolder.png";
 				name = description + " (" + panelFile.getPath().replace("\\", "") + ")";
 			}
 			else if(description.equals("DVD Drive")) {
@@ -912,7 +912,7 @@ public class FolderPanel extends JPanel {
 				name = description + " (" + panelFile.getPath().replace("\\", "") + ")";
 			}
 			else if(description.equals("USB Drive")) {
-				path = ICONPATH + "other/usb.png";			
+				path = ICONPATH + "other/usbfolder.png";			
 			}
 
 			img = Utility.getImageFast(path, 60, 60, true);
