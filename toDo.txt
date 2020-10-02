@@ -28,5 +28,4 @@
 #drag n drop
 #ftp
 #open as
-#undecorated window
 #consider auto refresh

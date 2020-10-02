@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 
-public class TopPanel extends JPanel {
+public class TopWindow extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	private static String windowsTopName = Tree.getWindowsTopName();
 
@@ -23,12 +23,50 @@ public class TopPanel extends JPanel {
 	private static JPanel buttonField;
 	private static String searchQuery = "";
 
-	public TopPanel() {
-		super(new GridBagLayout());
+	public TopWindow() {
+		super(new BorderLayout());
+
+		JPanel exitPanel = new MotionPanel(FileExplorer.getFrame());
+		exitPanel.setBorder(new EmptyBorder(0, 5, 5, 5));
+		exitPanel.setBackground(FileExplorer.exitPanelBackgroundColor);
+
+		exitPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		exitPanel.setComponentOrientation(
+			ComponentOrientation.RIGHT_TO_LEFT);
+
+		ImageIcon img = new ImageIcon(FileExplorer.class.getResource(ICONPATH + "other/close.png"));
+		Image pict = img.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+		img = new ImageIcon(pict);
+
+		JButton button = new JButton(img);
+		button.setBorder(new EmptyBorder(0, 0, 0, 0));
+		button.setContentAreaFilled(false);
+
+		button.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				System.exit(0);
+			}
+			@Override
+			public void mouseEntered(MouseEvent event) {}
+			@Override
+			public void mouseExited(MouseEvent event) {}
+			@Override
+			public void mousePressed(MouseEvent event) {}
+			@Override
+			public void mouseReleased(MouseEvent event) {}
+		});
+
+		exitPanel.add(button);
+
+		this.add(exitPanel, BorderLayout.NORTH);
+
+		JPanel topPanel = new JPanel(new GridBagLayout());
+		topPanel.setBackground(FileExplorer.topBackgroundColor);
 
 		GridBagConstraints c = new GridBagConstraints();
-		this.setBackground(FileExplorer.topBackgroundColor);
-		this.setBorder(
+		topPanel.setBackground(FileExplorer.topBackgroundColor);
+		topPanel.setBorder(
 			BorderFactory.createMatteBorder(6, 3, 6, 3, FileExplorer.topBackgroundColor));
 
 		c.weightx = 0.005;
@@ -49,7 +87,7 @@ public class TopPanel extends JPanel {
 				MainWindow.focusLast();
 			}
 		});
-		this.add(buttonBack, c);
+		topPanel.add(buttonBack, c);
 
 		c.weightx = 0.005;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -69,7 +107,7 @@ public class TopPanel extends JPanel {
 				MainWindow.focusLast();
 			}
 		});
-		this.add(buttonForward, c);
+		topPanel.add(buttonForward, c);
 
 		c.weightx = 0.8;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -138,7 +176,7 @@ public class TopPanel extends JPanel {
 			public void keyReleased(KeyEvent e) {}
 		});
 
-		this.add(navigationField, c);
+		topPanel.add(navigationField, c);
 
 		buttonField = new JPanel();
 		buttonField.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -163,7 +201,7 @@ public class TopPanel extends JPanel {
 			public void mouseReleased(MouseEvent event) {}
 		});
 
-		this.add(buttonField, c);
+		topPanel.add(buttonField, c);
 
 		searchField = new JTextFieldIcon(new JTextField(), 
 			Utility.getImageFast(FileExplorer.getIconPath() + 
@@ -302,7 +340,9 @@ public class TopPanel extends JPanel {
 		c.gridx = 3;
 		c.gridy = 0;
 
-		this.add(searchField, c);
+		topPanel.add(searchField, c);
+		
+		this.add(topPanel, BorderLayout.CENTER);
 	}
 
 	static void search(JTree tree, DefaultMutableTreeNode top, String searchQuery, DefaultTableModel model) {

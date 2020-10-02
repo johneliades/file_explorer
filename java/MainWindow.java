@@ -128,8 +128,7 @@ public class MainWindow extends JPanel {
 						JSplitPaneWithZeroSizeDivider.HORIZONTAL_SPLIT);
 		splitPane.setLeftComponent(treeView);
 		splitPane.setRightComponent(folderView);
-		splitPane.setBorder(
-			BorderFactory.createMatteBorder(0, 2, 2, 2, FileExplorer.topBackgroundColor));
+		splitPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		// Mouse back and forward
 		if (Toolkit.getDefaultToolkit().areExtraMouseButtonsEnabled() && 
@@ -142,10 +141,10 @@ public class MainWindow extends JPanel {
 						mouseEvent.getButton() > 3) {
 						
 						if (mouseEvent.getButton() == 4) {
-							TopPanel.historyBack();
+							TopWindow.historyBack();
 							MainWindow.focusLast();
 						} else if (mouseEvent.getButton() == 5) {
-							TopPanel.historyForward();
+							TopWindow.historyForward();
 							MainWindow.focusLast();
 						}
 					}
@@ -991,7 +990,7 @@ public class MainWindow extends JPanel {
 
 		if(history.empty() || (!history.empty() && history.peek()!=node)) {
 			history.push(node);
-			TopPanel.getButtonBack().setIcon(Utility.getImageFast(
+			TopWindow.getButtonBack().setIcon(Utility.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/backarrow.png", 23, 23, true));
 		}
@@ -1000,7 +999,7 @@ public class MainWindow extends JPanel {
 	public static DefaultMutableTreeNode historyPop() {
 		if(!history.empty()) {
 			if(history.size()==1) {
-				TopPanel.getButtonBack().setIcon(Utility.getImageFast(
+				TopWindow.getButtonBack().setIcon(Utility.getImageFast(
 					FileExplorer.getIconPath() + 
 						"other/grayedback.png", 23, 23, true));
 			}
@@ -1013,7 +1012,7 @@ public class MainWindow extends JPanel {
 
 	public static void clearFuture() {
 		futureHistory.clear();
-		TopPanel.getButtonForward().setIcon(Utility.getImageFast(
+		TopWindow.getButtonForward().setIcon(Utility.getImageFast(
 			FileExplorer.getIconPath() + 
 				"other/grayedforward.png", 23, 23, true));
 	}
@@ -1027,7 +1026,7 @@ public class MainWindow extends JPanel {
 
 		if(futureHistory.peek()!=node) {
 			futureHistory.push(node);
-			TopPanel.getButtonForward().setIcon(Utility.getImageFast(
+			TopWindow.getButtonForward().setIcon(Utility.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/forwardarrow.png", 23, 23, true));
 		}
@@ -1042,7 +1041,7 @@ public class MainWindow extends JPanel {
 
 		node = futureHistory.pop();
 		if(futureHistory.empty()) {
-			TopPanel.getButtonForward().setIcon(Utility.getImageFast(
+			TopWindow.getButtonForward().setIcon(Utility.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/grayedforward.png", 23, 23, true));		
 		}

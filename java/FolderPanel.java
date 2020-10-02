@@ -220,14 +220,14 @@ public class FolderPanel extends JPanel {
 
 		this.getActionMap().put("history back", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				TopPanel.historyBack(); 
+				TopWindow.historyBack(); 
 				MainWindow.focusLast();
 			}
 		});
 
 		this.getActionMap().put("history forward", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				TopPanel.historyForward(); 
+				TopWindow.historyForward(); 
 				MainWindow.focusLast();
 			}
 		});
@@ -802,16 +802,16 @@ public class FolderPanel extends JPanel {
 				if(FileName.isEmpty())
 					FileName = ((File) node.getUserObject()).getPath();
 				
-				TopPanel.setNavigationText(((File) node.getUserObject()).getPath());
-				TopPanel.setSearchText("Search" + " \"" + FileName + "\"");
-				TopPanel.clearNavButtons();
+				TopWindow.setNavigationText(((File) node.getUserObject()).getPath());
+				TopWindow.setSearchText("Search" + " \"" + FileName + "\"");
+				TopWindow.clearNavButtons();
 				
 				TreePath path = new TreePath(node.getPath());
 				for(int i=0; i < path.getPathCount(); i++) {
 					DefaultMutableTreeNode current =  (DefaultMutableTreeNode)
 						path.getPathComponent(i);
 
-					TopPanel.addNavButton(current);
+					TopWindow.addNavButton(current);
 				}
 
 				mapPanelNode.clear();
@@ -1067,14 +1067,14 @@ public class FolderPanel extends JPanel {
 
 		panel.getActionMap().put("history back", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				TopPanel.historyBack(); 
+				TopWindow.historyBack(); 
 				MainWindow.focusLast();
 			}
 		});
 
 		panel.getActionMap().put("history forward", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				TopPanel.historyForward(); 
+				TopWindow.historyForward(); 
 				MainWindow.focusLast();
 			}
 		});

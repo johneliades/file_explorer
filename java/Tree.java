@@ -193,14 +193,14 @@ public class Tree extends JTree implements TreeSelectionListener {
 
 		this.getActionMap().put("history back", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				TopPanel.historyBack();
+				TopWindow.historyBack();
 				MainWindow.focusLast();
 			}
 		});
 
 		this.getActionMap().put("history forward", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				TopPanel.historyForward(); 
+				TopWindow.historyForward(); 
 				MainWindow.focusLast();
 			}
 		});

@@ -14,6 +14,7 @@ public class FileExplorer {
 	public static final Color folderBackgroundColor = new Color(49, 49, 49);
 	public static final Color treeBackgroundColor = new Color(32, 32, 32);
 	public static final Color topBackgroundColor = new Color(25, 25, 25);
+	public static final Color exitPanelBackgroundColor = new Color(10, 10, 10);
 	public static final Color panelHoverColor = new Color(0, 170, 170);
 	public static final Color panelSelectionColor = new Color(0, 100, 100);
 	public static final Color textSelectionColor = new Color(0, 255, 255);
@@ -51,6 +52,12 @@ public class FileExplorer {
 		frame.setBackground(folderBackgroundColor);
 		frame.getRootPane().setBorder(new EmptyBorder(0, 0, 0, 0));
 
+		frame.setUndecorated(true);
+
+		ComponentResizer cr = new ComponentResizer();
+		cr.registerComponent(frame);
+		cr.setSnapSize(new Dimension(10, 10));
+
 		java.net.URL imgURL = FileExplorer.class.getResource(ICONPATH + "other/folder.png");
 		frame.setIconImage(new ImageIcon(imgURL).getImage());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,13 +77,19 @@ public class FileExplorer {
 
 		//Set window layout manager
 		frame.setLayout(new BorderLayout());
-		
-		//Set Menu Bar
-	//	frame.setJMenuBar(new MenuBar());
+
+		JPanel topWindow = new TopWindow();
+		topWindow.setBorder(new EmptyBorder(5, 0, 0, 0));
+		topWindow.setBackground(exitPanelBackgroundColor);
 
 		//Add content to the window.
-		frame.add(new TopPanel(), BorderLayout.NORTH);
-		frame.add(new MainWindow(file), BorderLayout.CENTER);
+		frame.add(topWindow, BorderLayout.NORTH);
+
+		JPanel mainWindow = new MainWindow(file);
+		mainWindow.setBorder(new EmptyBorder(0, 5, 5, 5));
+		mainWindow.setBackground(topBackgroundColor);
+
+		frame.add(mainWindow, BorderLayout.CENTER);
 	
 		//Display the window.
 		frame.setVisible(true);
