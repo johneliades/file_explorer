@@ -300,6 +300,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 		if(fileNode.isDirectory() && fileNode.exists() && fileNode.canRead())
 			popupMenu.add(menuItem);
 
+/*
 		menuItem = new JMenuItem("  Rename");
 		menuItem.setIcon(Utility.getImageFast(
 			ICONPATH + "other/rename.png", 17, 17, true));
@@ -327,6 +328,7 @@ public class Tree extends JTree implements TreeSelectionListener {
 		menuItem.setBackground(Color.white);
 		if(fileNode.exists() && fileNode.canWrite())
 			popupMenu.add(menuItem);
+*/
 
 		menuItem = new JMenuItem("  Properties");
 		menuItem.setIcon(

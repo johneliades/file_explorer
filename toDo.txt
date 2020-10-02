@@ -2,14 +2,11 @@
 |BUGLIST|
 +=======+
 
-#tree rename and delete sometimes don't work: file.exists()
 #create cancellable runnable for folder threads
 #better focus order, at startup focus folder
 #when going lower scroll with arrows
 #invalid names such as CON1
-#cut refresh source and check if file exists
-#not everything can be copied (snap?)
-#cant paste in source folder infinite recursion
+#cut, copy, paste
 
 +=======+
 |EZ_FAST|
@@ -22,6 +19,7 @@
 |_LATER_|
 +=======+
 
+#tree rename and delete
 #dropdown for search with settings
 #disks free space bar
 #zip/unzip
