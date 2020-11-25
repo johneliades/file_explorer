@@ -2,6 +2,7 @@
 |BUGLIST|
 +=======+
 
+#huge windows gui bug after right click left click
 #create cancellable runnable for folder threads
 #better focus order, at startup focus folder
 #when going lower scroll with arrows
@@ -14,6 +15,8 @@
 
 #indication of how many files selected
 #border around preview images
+#maybe used this somewhere new Color(0x4287f5);
+#maybe change checkbox image
 
 +=======+
 |_LATER_|
