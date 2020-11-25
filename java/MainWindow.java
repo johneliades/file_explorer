@@ -201,6 +201,42 @@ public class MainWindow extends JPanel {
 		}
 	}
 
+	public static Boolean isInvalidFileName(String fileName) {
+		ArrayList<String> list = new ArrayList<String>();
+		list.add("CON");
+		list.add("PRN");
+		list.add("AUX");
+		list.add("NUL");
+		list.add("COM1");
+		list.add("COM2");
+		list.add("COM3");
+		list.add("COM4");
+		list.add("COM5");
+		list.add("COM6");
+		list.add("COM7");
+		list.add("COM8");
+		list.add("COM9");
+		list.add("LPT1");
+		list.add("LPT2");
+		list.add("LPT3");
+		list.add("LPT4");
+		list.add("LPT5");
+		list.add("LPT6");
+		list.add("LPT7");
+		list.add("LPT8");
+		list.add("LPT9");
+
+		Iterator itr=list.iterator();
+		while(itr.hasNext()) {
+			boolean isFound = fileName.indexOf((String) itr.next()) != -1 ? true : false;
+			if(isFound) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	static void refresh(DefaultMutableTreeNode node) {
 		JTree tree = MainWindow.getTree();
 
@@ -275,18 +311,23 @@ public class MainWindow extends JPanel {
 				return;
 			}
 
+			if(isInvalidFileName(nameNew)) {
+				JOptionPane.showMessageDialog(null, "Rename failed! Invalid name");
+				return;
+			}
+
 			String invalidStripped = 
 				nameNew.replaceAll("[\\\\/:*?\"<>|]", "_");
 			if(!nameNew.equals(invalidStripped)) {
 				JOptionPane.showMessageDialog(null, 
-					"Replace invalid characters with \"_\"");
+					"Replaced invalid characters with \"_\"");
 				nameNew = invalidStripped;
 			}
 
 			File file2 = new File(filePath + "/" + nameNew);
 
 			if(file2.exists()) {
-				JOptionPane.showMessageDialog(null, "Rename Failed! File exists");
+				JOptionPane.showMessageDialog(null, "Rename failed! File exists");
 				return;
 			}
 
@@ -297,7 +338,7 @@ public class MainWindow extends JPanel {
 			boolean success = f.renameTo(file2);
 
 			if (!success) {
-				JOptionPane.showMessageDialog(null, "Rename Failed!");
+				JOptionPane.showMessageDialog(null, "Rename failed!");
 				return;
 			}
 		}
@@ -311,7 +352,7 @@ public class MainWindow extends JPanel {
 				return;
 			}
 
-			JOptionPane.showMessageDialog(null, "Rename Failed!");
+			JOptionPane.showMessageDialog(null, "Rename failed!");
 			return;
 		}
 
@@ -626,6 +667,22 @@ public class MainWindow extends JPanel {
 		panel.add(Box.createRigidArea(new Dimension(0, 20)));
 		
 		JCheckBox execute = new JCheckBox("Execute", file.canExecute());
+		execute.setIcon(Utility.getImageFast(
+				FileExplorer.getIconPath() + 
+					"other/unchecked.png", 15, 15, true));
+		execute.setSelectedIcon(Utility.getImageFast(
+				FileExplorer.getIconPath() + 
+					"other/checked.png", 15, 15, true));
+		execute.setDisabledIcon(Utility.getImageFast(
+				FileExplorer.getIconPath() + 
+					"other/unchecked_disabled.png", 15, 15, true));
+		execute.setDisabledSelectedIcon(Utility.getImageFast(
+				FileExplorer.getIconPath() + 
+					"other/checked_disabled.png", 15, 15, true));
+		execute.setPressedIcon(Utility.getImageFast(
+				FileExplorer.getIconPath() + 
+					"other/half_checked.png", 15, 15, true));
+	
 		execute.setBackground(FileExplorer.propertiesColor);
 		execute.setForeground(Color.WHITE);
 		execute.setFocusPainted(false);
@@ -645,6 +702,22 @@ public class MainWindow extends JPanel {
 		});
 		
 		JCheckBox read = new JCheckBox("Read", file.canRead());
+		read.setIcon(Utility.getImageFast(
+				FileExplorer.getIconPath() + 
+					"other/unchecked.png", 15, 15, true));
+		read.setSelectedIcon(Utility.getImageFast(
+				FileExplorer.getIconPath() + 
+					"other/checked.png", 15, 15, true));
+		read.setDisabledIcon(Utility.getImageFast(
+				FileExplorer.getIconPath() + 
+					"other/unchecked_disabled.png", 15, 15, true));
+		read.setDisabledSelectedIcon(Utility.getImageFast(
+				FileExplorer.getIconPath() + 
+					"other/checked_disabled.png", 15, 15, true));
+		read.setPressedIcon(Utility.getImageFast(
+				FileExplorer.getIconPath() + 
+					"other/half_checked.png", 15, 15, true));
+
 		read.setBackground(FileExplorer.propertiesColor);
 		read.setForeground(Color.WHITE);
 		read.setFocusPainted(false);
@@ -664,6 +737,22 @@ public class MainWindow extends JPanel {
 		});
 
 		JCheckBox write = new JCheckBox("Write", file.canWrite());
+		write.setIcon(Utility.getImageFast(
+				FileExplorer.getIconPath() + 
+					"other/unchecked.png", 15, 15, true));
+		write.setSelectedIcon(Utility.getImageFast(
+				FileExplorer.getIconPath() + 
+					"other/checked.png", 15, 15, true));
+		write.setDisabledIcon(Utility.getImageFast(
+				FileExplorer.getIconPath() + 
+					"other/unchecked_disabled.png", 15, 15, true));
+		write.setDisabledSelectedIcon(Utility.getImageFast(
+				FileExplorer.getIconPath() + 
+					"other/checked_disabled.png", 15, 15, true));
+		write.setPressedIcon(Utility.getImageFast(
+				FileExplorer.getIconPath() + 
+					"other/half_checked.png", 15, 15, true));
+
 		write.setBackground(FileExplorer.propertiesColor);
 		write.setForeground(Color.WHITE);
 		write.setFocusPainted(false);

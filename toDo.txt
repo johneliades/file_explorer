@@ -5,7 +5,6 @@
 #create cancellable runnable for folder threads
 #better focus order, at startup focus folder
 #when going lower scroll with arrows
-#invalid names such as CON1
 #cut, copy, paste
 
 +=======+
@@ -14,8 +13,7 @@
 
 #indication of how many files selected
 #border around preview images
-#maybe used this somewhere new Color(0x4287f5);
-#maybe change checkbox image
+#maybe use this somewhere, new Color(0x4287f5);
 
 +=======+
 |_LATER_|

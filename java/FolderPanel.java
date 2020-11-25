@@ -314,6 +314,11 @@ public class FolderPanel extends JPanel {
 					return;
 				}
 
+				if(MainWindow.isInvalidFileName(name)) {
+					JOptionPane.showMessageDialog(null, "Rename failed! Invalid name");
+					return;
+				}
+
 				String invalidStripped = 
 					name.replaceAll("[\\\\/:*?\"<>|]", "_");
 				if(!name.equals(invalidStripped)) {
@@ -384,6 +389,11 @@ public class FolderPanel extends JPanel {
 				if(name.equals("")) {
 					JOptionPane.showMessageDialog(null, "Can't have empty name");
 					
+					return;
+				}
+
+				if(MainWindow.isInvalidFileName(name)) {
+					JOptionPane.showMessageDialog(null, "Rename failed! Invalid name");	
 					return;
 				}
 
