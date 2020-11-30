@@ -39,14 +39,17 @@ public class FolderPanel extends JPanel {
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.setColor(Color.CYAN);
-
+		
 		int px = Math.min(x, x2);
 		int py = Math.min(y, y2);
 		int pw = Math.abs(x-x2);
 		int ph = Math.abs(y-y2);
-		g.drawRect(px, py, pw, ph);		
+	
+		g.setColor(Color.CYAN);
 		g.fillRect(px, py, pw, ph);
+
+		g.setColor(Color.WHITE);
+		g.drawRect(px, py, pw, ph);		
 	}
 
 	public FolderPanel() {
