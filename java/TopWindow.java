@@ -16,7 +16,8 @@ public class TopWindow extends JPanel {
 	private static final String ICONPATH = FileExplorer.getIconPath();
 	private static String windowsTopName = Tree.getWindowsTopName();
 
-	private static final int navHeight = 26;
+	private static final int exitPanelHeight = 33;
+	private static final int navHeight = 25;
 
 	private static JButton buttonBack, buttonForward;
 	private static JTextFieldIcon searchField, navigationField;
@@ -29,12 +30,14 @@ public class TopWindow extends JPanel {
 		JPanel exitPanel = new MotionPanel(FileExplorer.getFrame());
 		exitPanel.setBorder(new EmptyBorder(0, 5, 5, 5));
 		exitPanel.setBackground(FileExplorer.exitPanelBackgroundColor);
+		exitPanel.setPreferredSize(new Dimension(exitPanelHeight, exitPanelHeight));
 
 		exitPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		exitPanel.setComponentOrientation(
 			ComponentOrientation.RIGHT_TO_LEFT);
 
-		ImageIcon img = new ImageIcon(FileExplorer.class.getResource(ICONPATH + "other/close.png"));
+		ImageIcon img = new ImageIcon(FileExplorer.class.getResource(
+			ICONPATH + "other/close.png"));
 		Image pict = img.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
 		img = new ImageIcon(pict);
 
@@ -52,9 +55,23 @@ public class TopWindow extends JPanel {
 			@Override
 			public void mouseExited(MouseEvent event) {}
 			@Override
-			public void mousePressed(MouseEvent event) {}
+			public void mousePressed(MouseEvent event) {
+				ImageIcon img = new ImageIcon(FileExplorer.class.getResource(
+					ICONPATH + "other/checked.png"));
+				Image pict = img.getImage().getScaledInstance(20, 20, 
+					Image.SCALE_DEFAULT);
+				img = new ImageIcon(pict);
+				button.setIcon(img);
+			}
 			@Override
-			public void mouseReleased(MouseEvent event) {}
+			public void mouseReleased(MouseEvent event) {
+				ImageIcon img = new ImageIcon(FileExplorer.class.getResource(
+					ICONPATH + "other/close.png"));
+				Image pict = img.getImage().getScaledInstance(20, 20, 
+					Image.SCALE_DEFAULT);
+				img = new ImageIcon(pict);
+				button.setIcon(img);			
+			}
 		});
 
 		exitPanel.add(button);
