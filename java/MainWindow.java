@@ -228,7 +228,13 @@ public class MainWindow extends JPanel {
 
 		Iterator itr=list.iterator();
 		while(itr.hasNext()) {
-			boolean isFound = fileName.indexOf((String) itr.next()) != -1 ? true : false;
+			String next = (String) itr.next();
+			boolean isFound = fileName.indexOf(next) != -1 ? true : false;
+			if(isFound) {
+				return true;
+			}
+			
+			isFound = fileName.indexOf(next.toLowerCase()) != -1 ? true : false;
 			if(isFound) {
 				return true;
 			}
