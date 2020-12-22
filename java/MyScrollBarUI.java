@@ -24,12 +24,16 @@ public class MyScrollBarUI extends BasicScrollBarUI {
 	@Override
 	protected void paintTrack(Graphics g, JComponent c, Rectangle r) {
 		Graphics2D g2d = (Graphics2D)g.create();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+							RenderingHints.VALUE_ANTIALIAS_ON);
 
-		g2d.setPaint(Color.GRAY);
-//		g2d.fillRoundRect(r.x, r.y, r.width, r.height, 10, 10);
-
+		g2d.setPaint(FileExplorer.folderBackgroundColor);
 		g2d.fill(r);
 		g2d.draw(r);
+
+		g2d.setPaint(Color.GRAY);
+		g2d.fillRoundRect(r.x, r.y, r.width, r.height, 10, 10);
+
 		g2d.dispose();
 	}
 
@@ -44,7 +48,7 @@ public class MyScrollBarUI extends BasicScrollBarUI {
 			return;
 		}
 		else {
-			color = new Color(0, 255, 255);
+			color = new Color(0, 200, 200);
 		}
 		g2.setPaint(color);
 		g2.fillRoundRect(r.x, r.y, r.width - 1, r.height, 10, 10);
