@@ -963,7 +963,7 @@ public class MainWindow extends JPanel {
 			bar.setValue(used);			
 
 			bar.setBackground(FileExplorer.folderBackgroundColor);
-			if(used>70)
+			if(used>90)
 				bar.setForeground(Color.RED);
 			else
 				bar.setForeground(Color.CYAN);
