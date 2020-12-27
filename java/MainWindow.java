@@ -951,9 +951,28 @@ public class MainWindow extends JPanel {
 		label = new JLabel("\nFree Space: " + avail_space); 
 		label.setForeground(Color.WHITE);
 		label.setFont(bigFont);
-		if(avail_space.length()!=0)
+		if(avail_space.length()!=0) {
 			panel.add(label);
-			
+
+			panel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+			long free = file.getFreeSpace();
+			long total = file.getTotalSpace();
+			int used = (int) (((total-free)*100)/total);
+			JProgressBar bar = new JProgressBar(0, 100);
+			bar.setValue(used);			
+
+			bar.setBackground(FileExplorer.folderBackgroundColor);
+			if(used>70)
+				bar.setForeground(Color.RED);
+			else
+				bar.setForeground(Color.CYAN);
+
+			bar.setBorderPainted(false);
+
+			panel.add(bar);
+		}
+
 		dialog.pack();
 
 		if(!calculated) {

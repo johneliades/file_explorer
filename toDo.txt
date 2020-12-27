@@ -21,7 +21,6 @@
 
 #tree rename and delete
 #dropdown for search with settings
-#disks free space bar
 #zip/unzip
 #drag n drop
 #ftp
