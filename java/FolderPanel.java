@@ -1018,7 +1018,7 @@ public class FolderPanel extends JPanel {
 
 		panel.getActionMap().put("select all", new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
-					selectPanel(panel, false);
+					clearPanelSelection();
 					for(JPanel current : mapPanelNode.keySet())
 						selectPanel(current, false);
 				}
