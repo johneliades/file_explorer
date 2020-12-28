@@ -131,6 +131,9 @@ public class FolderPanel extends JPanel {
 							selectedList.add((JPanel) current);
 
 							for(JPanel element : selectedList) {
+								for (i = 0; i < element.getComponentCount(); i++) {
+									element.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
+								}
 								element.setBackground(FileExplorer.panelSelectionColor);
 								element.setBorder(BorderFactory.createLineBorder(Color.white));
 							}	
@@ -176,13 +179,16 @@ public class FolderPanel extends JPanel {
 							selectedList.add((JPanel) current);
 
 							for(JPanel element : selectedList) {
+								for (i = 0; i < element.getComponentCount(); i++) {
+									element.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
+								}
 								element.setBackground(FileExplorer.panelSelectionColor);
 								element.setBorder(BorderFactory.createLineBorder(Color.white));
 							}	
 						}
 					}
 				}
-            }
+			}
 
 			public boolean overlaps(Rectangle z, Rectangle r) {
 				return z.x < r.x + r.width && z.x + z.width > r.x && 
@@ -196,6 +202,9 @@ public class FolderPanel extends JPanel {
 							selectedList.add(current);
 
 					for(JPanel element : selectedList) {
+						for (int i = 0; i < element.getComponentCount(); i++) {
+							element.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
+						}
 						element.setBackground(FileExplorer.panelSelectionColor);
 						element.setBorder(BorderFactory.createLineBorder(Color.white));
 					}	
@@ -905,7 +914,7 @@ public class FolderPanel extends JPanel {
 		ImageIcon img=null;
 		Set<String> set = new HashSet<>();
 		File panelFile = (File) panelNode.getUserObject();
-		String name = panelFile.getName(), path;
+		String name = panelFile.getName(), path="";
 		String extension = Utility.getExtension(panelFile.getName());
 
 		if(name.trim().length() == 0) {
@@ -976,14 +985,17 @@ public class FolderPanel extends JPanel {
 
 		JPanel panel = new JPanel(new BorderLayout());
 		
+		// top empty space
 		label = new JLabel("", JLabel.CENTER);
 		label.setPreferredSize(new Dimension(150, 10));
 		panel.add(label,  BorderLayout.NORTH);
 
+		// right empty space
 		label = new JLabel("", JLabel.CENTER);
 		label.setPreferredSize(new Dimension(10, 40));
 		panel.add(label,  BorderLayout.EAST);
 
+		// left empty space
 		label = new JLabel("", JLabel.CENTER);
 		label.setPreferredSize(new Dimension(10, 40));
 		panel.add(label,  BorderLayout.WEST);
@@ -994,12 +1006,50 @@ public class FolderPanel extends JPanel {
 		//label.setBorder(b);
 		panel.add(label,  BorderLayout.CENTER);
 
+		JPanel bottomPanel = new JPanel(new BorderLayout());
+
+		if(!path.equals("")) {
+			// top empty space
+			label = new JLabel("", JLabel.CENTER);
+			label.setPreferredSize(new Dimension(150, 10));
+			bottomPanel.add(label,  BorderLayout.NORTH);
+
+			// right empty space
+			label = new JLabel("", JLabel.CENTER);
+			label.setPreferredSize(new Dimension(10, 10));
+			bottomPanel.add(label,  BorderLayout.EAST);
+
+			// left empty space
+			label = new JLabel("", JLabel.CENTER);
+			label.setPreferredSize(new Dimension(10, 10));
+			bottomPanel.add(label,  BorderLayout.WEST);
+
+			long free = currentFile.getFreeSpace();
+			long total = currentFile.getTotalSpace();
+			int used = (int) (((total-free)*100)/total);
+			JProgressBar bar = new JProgressBar(0, 100);
+			bar.setValue(used);	
+
+			bar.setBackground(FileExplorer.topBackgroundColor);
+			if(used>90)
+				bar.setForeground(Color.RED);
+			else
+				bar.setForeground(Color.CYAN);
+
+			bar.setBorderPainted(false);
+
+			bottomPanel.add(bar,  BorderLayout.CENTER);
+		}
+
 		panel.getActionMap().put("select all", new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
 					for(JPanel current : mapPanelNode.keySet())
 							selectedList.add(current);
 
 					for(JPanel element : selectedList) {
+						for (int i = 0; i < element.getComponentCount(); i++) {
+							element.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
+						}
 						element.setBackground(FileExplorer.panelSelectionColor);
 						element.setBorder(BorderFactory.createLineBorder(Color.white));
 					}	
@@ -1126,7 +1176,10 @@ public class FolderPanel extends JPanel {
 		label.setPreferredSize(new Dimension(150, 30));
 		label.setForeground (Color.white);
 		label.setBorder(new EmptyBorder(0, 10, 0, 10));
-		panel.add(label, BorderLayout.SOUTH);
+		bottomPanel.add(label, BorderLayout.SOUTH);
+		bottomPanel.setBackground(FileExplorer.folderBackgroundColor);
+
+		panel.add(bottomPanel, BorderLayout.SOUTH);
 
 		panel.setName(name);
 		panel.setBorder(BorderFactory.createLineBorder(FileExplorer.folderBackgroundColor));
@@ -1137,13 +1190,21 @@ public class FolderPanel extends JPanel {
 			public void mouseClicked(MouseEvent event) {}
 			@Override
 			public void mouseEntered(MouseEvent event) {		
-				if(!selectedList.contains(panel))
+				if(!selectedList.contains(panel)) {
+					for (int i = 0; i < panel.getComponentCount(); i++) {
+						panel.getComponent(i).setBackground(FileExplorer.panelHoverColor);
+					}
 					panel.setBackground(FileExplorer.panelHoverColor);
+				}
 			}
 			@Override
 			public void mouseExited(MouseEvent event) {
-				if(!selectedList.contains(panel))
+				if(!selectedList.contains(panel)) {
+					for (int i = 0; i < panel.getComponentCount(); i++) {
+						panel.getComponent(i).setBackground(FileExplorer.folderBackgroundColor);
+					}
 					panel.setBackground(FileExplorer.folderBackgroundColor);
+				}
 			}
 			@Override
 			public void mousePressed(MouseEvent event) {
@@ -1207,12 +1268,18 @@ public class FolderPanel extends JPanel {
 
 		if(clear) {
 			clearPanelSelection();
+			for (int i = 0; i < panel.getComponentCount(); i++) {
+				panel.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
+			}
 			panel.setBackground(FileExplorer.panelSelectionColor);
-			panel.setBorder(BorderFactory.createLineBorder(Color.white));	
+			panel.setBorder(BorderFactory.createLineBorder(Color.white));
 			selectedList.add(panel);
 		}
 		else {
 			if(selectedList.contains(panel)) {
+				for (int i = 0; i < panel.getComponentCount(); i++) {
+					panel.getComponent(i).setBackground(FileExplorer.folderBackgroundColor);
+				}
 				panel.setBackground(FileExplorer.folderBackgroundColor);
 				panel.setBorder(BorderFactory.createLineBorder(
 					FileExplorer.folderBackgroundColor));	
@@ -1222,6 +1289,9 @@ public class FolderPanel extends JPanel {
 				selectedList.add(panel);
 
 			for(JPanel element : selectedList) {
+				for (int i = 0; i < element.getComponentCount(); i++) {
+					element.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
+				}
 				element.setBackground(FileExplorer.panelSelectionColor);
 				element.setBorder(BorderFactory.createLineBorder(Color.white));
 			}
@@ -1233,6 +1303,9 @@ public class FolderPanel extends JPanel {
 
 	static public void clearPanelSelection() {
 		for(JPanel element : selectedList) {
+			for (int i = 0; i < element.getComponentCount(); i++) {
+				element.getComponent(i).setBackground(FileExplorer.folderBackgroundColor);
+			}
 			element.setBackground(FileExplorer.folderBackgroundColor);
 			element.setBorder(BorderFactory.createLineBorder(
 				FileExplorer.folderBackgroundColor));
