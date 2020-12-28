@@ -127,17 +127,8 @@ public class FolderPanel extends JPanel {
 
 						Rectangle rect2 = new Rectangle(px, py, pw, ph);
 
-						if(overlaps(rect1, rect2)) {
-							selectedList.add((JPanel) current);
-
-							for(JPanel element : selectedList) {
-								for (i = 0; i < element.getComponentCount(); i++) {
-									element.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
-								}
-								element.setBackground(FileExplorer.panelSelectionColor);
-								element.setBorder(BorderFactory.createLineBorder(Color.white));
-							}	
-						}
+						if(overlaps(rect1, rect2))
+							selectPanel((JPanel) current, false);
 					}
 					x = y = x2 = y2 = -1; 
 					repaint();
@@ -176,15 +167,7 @@ public class FolderPanel extends JPanel {
 						Rectangle rect2 = new Rectangle(px, py, pw, ph);
 
 						if(overlaps(rect1, rect2)) {
-							selectedList.add((JPanel) current);
-
-							for(JPanel element : selectedList) {
-								for (i = 0; i < element.getComponentCount(); i++) {
-									element.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
-								}
-								element.setBackground(FileExplorer.panelSelectionColor);
-								element.setBorder(BorderFactory.createLineBorder(Color.white));
-							}	
+							selectPanel((JPanel) current, false);
 						}
 					}
 				}
@@ -199,15 +182,7 @@ public class FolderPanel extends JPanel {
 		this.getActionMap().put("select all", new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
 					for(JPanel current : mapPanelNode.keySet())
-							selectedList.add(current);
-
-					for(JPanel element : selectedList) {
-						for (int i = 0; i < element.getComponentCount(); i++) {
-							element.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
-						}
-						element.setBackground(FileExplorer.panelSelectionColor);
-						element.setBorder(BorderFactory.createLineBorder(Color.white));
-					}	
+						selectPanel(current, false);
 				}
 			});
 
@@ -1043,16 +1018,9 @@ public class FolderPanel extends JPanel {
 
 		panel.getActionMap().put("select all", new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
+					selectPanel(panel, false);
 					for(JPanel current : mapPanelNode.keySet())
-							selectedList.add(current);
-
-					for(JPanel element : selectedList) {
-						for (int i = 0; i < element.getComponentCount(); i++) {
-							element.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
-						}
-						element.setBackground(FileExplorer.panelSelectionColor);
-						element.setBorder(BorderFactory.createLineBorder(Color.white));
-					}	
+						selectPanel(current, false);
 				}
 			});
 
@@ -1313,6 +1281,9 @@ public class FolderPanel extends JPanel {
 		selectedList.clear();
 
 		if(lastPanelSelected!=null) {
+			for (int i = 0; i < lastPanelSelected.getComponentCount(); i++) {
+				lastPanelSelected.getComponent(i).setBackground(FileExplorer.folderBackgroundColor);
+			}
 			lastPanelSelected.setBackground(FileExplorer.folderBackgroundColor);
 			lastPanelSelected.setBorder(BorderFactory.createLineBorder(
 				FileExplorer.folderBackgroundColor));
