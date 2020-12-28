@@ -47,31 +47,17 @@ public class TopWindow extends JPanel {
 
 		button.addMouseListener(new MouseListener() {
 			@Override
-			public void mouseClicked(MouseEvent event) {
-				System.exit(0);
-			}
+			public void mouseClicked(MouseEvent event) {}
 			@Override
 			public void mouseEntered(MouseEvent event) {}
 			@Override
 			public void mouseExited(MouseEvent event) {}
 			@Override
 			public void mousePressed(MouseEvent event) {
-				ImageIcon img = new ImageIcon(FileExplorer.class.getResource(
-					ICONPATH + "other/checked.png"));
-				Image pict = img.getImage().getScaledInstance(20, 20, 
-					Image.SCALE_DEFAULT);
-				img = new ImageIcon(pict);
-				button.setIcon(img);
+				System.exit(0);
 			}
 			@Override
-			public void mouseReleased(MouseEvent event) {
-				ImageIcon img = new ImageIcon(FileExplorer.class.getResource(
-					ICONPATH + "other/close.png"));
-				Image pict = img.getImage().getScaledInstance(20, 20, 
-					Image.SCALE_DEFAULT);
-				img = new ImageIcon(pict);
-				button.setIcon(img);			
-			}
+			public void mouseReleased(MouseEvent event) {}
 		});
 
 		exitPanel.add(button);
