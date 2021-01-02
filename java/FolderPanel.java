@@ -573,7 +573,7 @@ public class FolderPanel extends JPanel {
 	}
 
 	static public JPopupMenu getFilePopupMenu(
-		DefaultMutableTreeNode panelNode, JPanel panel) {
+		DefaultMutableTreeNode panelNode) {
 
 		File panelFile = (File) panelNode.getUserObject();
 
@@ -1208,7 +1208,7 @@ public class FolderPanel extends JPanel {
 					MainWindow.focusLast();
 				}
 				else if(event.getButton() == MouseEvent.BUTTON3) {
-					JPopupMenu menu = getFilePopupMenu(panelNode, panel);
+					JPopupMenu menu = getFilePopupMenu(panelNode);
 					menu.show(event.getComponent(), event.getX(), event.getY());
 				}
 			}

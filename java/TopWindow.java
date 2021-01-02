@@ -266,21 +266,30 @@ public class TopWindow extends JPanel {
 						}
 					});
 					table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+					table.setSelectionBackground(Color.CYAN);
 
 					table.addMouseListener(new MouseAdapter() {
-						public void mouseClicked(MouseEvent e) {
+						public void mousePressed(MouseEvent e) {
 							JTree tree = MainWindow.getTree();
 							JPanel folder = MainWindow.getFolder();
-										
-							if (e.getClickCount() == 2 && 
-										e.getButton() == MouseEvent.BUTTON1) {
-								JTable target = (JTable) e.getSource();
-								int row = target.getSelectedRow();
-								int column = target.getSelectedColumn();
 
-								DefaultMutableTreeNode node = 
-									(DefaultMutableTreeNode)
-										 target.getValueAt(row, column);
+							JTable target = (JTable) e.getSource();
+							int row = target.rowAtPoint( e.getPoint() );
+							int column = target.columnAtPoint( e.getPoint() );
+
+							if (row >= 0 && row < table.getRowCount()) {
+								table.setRowSelectionInterval(row, row);
+							} 
+							else {
+								table.clearSelection();
+							}
+
+							DefaultMutableTreeNode node = 
+								(DefaultMutableTreeNode)
+									 target.getValueAt(row, column);
+
+							if (e.getClickCount()%2==0 && 
+										e.getButton() == MouseEvent.BUTTON1) {
 
 								File file = (File) node.getUserObject();
 								if(file.isDirectory()) {
@@ -296,7 +305,8 @@ public class TopWindow extends JPanel {
 								}
 							}
 							else if(e.getButton() == MouseEvent.BUTTON3) {
-								System.out.println("right click");
+								JPopupMenu menu = FolderPanel.getFilePopupMenu(node);
+								menu.show(e.getComponent(), e.getX(), e.getY());
 							}						
 						}
 					});
@@ -378,8 +388,6 @@ public class TopWindow extends JPanel {
 		for(int i=0; i<numChild; i++) {	  
 			current = (DefaultMutableTreeNode) tree.getModel().getChild(top, i);
 			File element = (File) current.getUserObject();
-
-			System.out.println(element.getName());
 
 			if(element.getName().contains(searchQuery)) {
 				model.addRow(new Object[] { current });
