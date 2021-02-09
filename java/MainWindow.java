@@ -71,7 +71,49 @@ public class MainWindow extends JPanel {
 
 		//Create the scroll pane and add the tree to it. 
 		JScrollPane treeView = new JScrollPane(tree);
-		treeView.getVerticalScrollBar().setUI(new MyScrollBarUI());
+
+		MyScrollBarUI scrollbar = new MyScrollBarUI();
+		treeView.getVerticalScrollBar().setUI(scrollbar);
+			treeView.getVerticalScrollBar().addMouseListener(new MouseAdapter() {
+			boolean pressed = false, entered = false;
+
+			@Override
+			public void mousePressed(final java.awt.event.MouseEvent evt) {
+				pressed = true;
+				treeView.getVerticalScrollBar().setPreferredSize(new Dimension(11, 0));
+				treeView.getVerticalScrollBar().revalidate();
+				treeView.getVerticalScrollBar().repaint();
+			}
+
+			@Override
+			public void mouseReleased(final java.awt.event.MouseEvent evt) {
+				pressed = false;
+				if(!entered) {
+					treeView.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
+					treeView.getVerticalScrollBar().revalidate();
+					treeView.getVerticalScrollBar().repaint();
+				}
+			}
+
+			@Override
+			public void mouseEntered(final java.awt.event.MouseEvent evt) {
+				entered = true;
+				treeView.getVerticalScrollBar().setPreferredSize(new Dimension(11, 0));
+				treeView.getVerticalScrollBar().revalidate();
+				treeView.getVerticalScrollBar().repaint();
+			}
+
+			@Override
+			public void mouseExited(final java.awt.event.MouseEvent evt) {
+				entered = false;
+				if(!pressed) {
+					treeView.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
+					treeView.getVerticalScrollBar().revalidate();
+					treeView.getVerticalScrollBar().repaint();
+				}
+			}
+		});
+
 		treeView.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
 		treeView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 8));
 		treeView.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -79,7 +121,50 @@ public class MainWindow extends JPanel {
 
 		folder = new FolderPanel();
 		JScrollPane folderView = new JScrollPane(folder);
-		folderView.getVerticalScrollBar().setUI(new MyScrollBarUI());
+		
+		scrollbar = new MyScrollBarUI();
+		folderView.getVerticalScrollBar().setUI(scrollbar);
+		folderView.getVerticalScrollBar().addMouseListener(new MouseAdapter() {
+			boolean pressed = false;
+			boolean entered = false;
+
+			@Override
+			public void mousePressed(final java.awt.event.MouseEvent evt) {
+				pressed = true;
+				folderView.getVerticalScrollBar().setPreferredSize(new Dimension(11, 0));
+				folderView.getVerticalScrollBar().revalidate();
+				folderView.getVerticalScrollBar().repaint();
+			}
+
+			@Override
+			public void mouseReleased(final java.awt.event.MouseEvent evt) {
+				pressed = false;
+				if(!entered) {
+					folderView.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
+					folderView.getVerticalScrollBar().revalidate();
+					folderView.getVerticalScrollBar().repaint();
+				}
+			}
+
+			@Override
+			public void mouseEntered(final java.awt.event.MouseEvent evt) {
+				entered = true;
+				folderView.getVerticalScrollBar().setPreferredSize(new Dimension(11, 0));
+				folderView.getVerticalScrollBar().revalidate();
+				folderView.getVerticalScrollBar().repaint();
+			}
+
+			@Override
+			public void mouseExited(final java.awt.event.MouseEvent evt) {
+				entered = false;
+				if(!pressed) {
+					folderView.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
+					folderView.getVerticalScrollBar().revalidate();
+					folderView.getVerticalScrollBar().repaint();
+				}
+			}
+		});
+
 		folderView.getVerticalScrollBar().setUnitIncrement(16);
 		folderView.getVerticalScrollBar().setPreferredSize(new Dimension(8, 0));
 		folderView.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 8));

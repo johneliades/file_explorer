@@ -60,13 +60,7 @@ public class FolderPanel extends JPanel {
 
 		this.setBackground(FileExplorer.folderBackgroundColor);
 
-		this.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseClicked(MouseEvent event) {}
-			@Override
-			public void mouseEntered(MouseEvent event) {}
-			@Override
-			public void mouseExited(MouseEvent event) {}
+		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent event) {
 				DefaultMutableTreeNode lastTreeNodeOpened = Tree.
@@ -1153,9 +1147,7 @@ public class FolderPanel extends JPanel {
 		panel.setBorder(BorderFactory.createLineBorder(FileExplorer.folderBackgroundColor));
 		panel.setBackground(FileExplorer.folderBackgroundColor);
 
-		panel.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseClicked(MouseEvent event) {}
+		panel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent event) {		
 				if(!selectedList.contains(panel)) {
@@ -1212,8 +1204,6 @@ public class FolderPanel extends JPanel {
 					menu.show(event.getComponent(), event.getX(), event.getY());
 				}
 			}
-			@Override
-			public void mouseReleased(MouseEvent event) {}
 		});
 
 		panel.addFocusListener(new FocusListener() {

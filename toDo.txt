@@ -8,7 +8,7 @@
 #cut, copy, paste
 
 +=======+
-|EZ_FAST|
+|EZ FAST|
 +=======+
 
 #indication of how many files selected
@@ -16,7 +16,7 @@
 #maybe use this somewhere, new Color(0x4287f5);
 
 +=======+
-|_LATER_|
+| LATER |
 +=======+
 
 #tree rename and delete

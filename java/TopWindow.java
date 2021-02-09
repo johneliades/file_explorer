@@ -45,19 +45,11 @@ public class TopWindow extends JPanel {
 		button.setBorder(new EmptyBorder(0, 0, 0, 0));
 		button.setContentAreaFilled(false);
 
-		button.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseClicked(MouseEvent event) {}
-			@Override
-			public void mouseEntered(MouseEvent event) {}
-			@Override
-			public void mouseExited(MouseEvent event) {}
+		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent event) {
 				System.exit(0);
 			}
-			@Override
-			public void mouseReleased(MouseEvent event) {}
 		});
 
 		exitPanel.add(button);
@@ -188,20 +180,12 @@ public class TopWindow extends JPanel {
 		buttonField.setPreferredSize(new Dimension(navigationField.
 					getPreferredSize().width, navHeight));
 
-		buttonField.addMouseListener(new MouseListener() {
+		buttonField.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
 				toggleNavigation();
 				navigationField.requestFocusInWindow();
 			}
-			@Override
-			public void mouseEntered(MouseEvent event) {}
-			@Override
-			public void mouseExited(MouseEvent event) {}
-			@Override
-			public void mousePressed(MouseEvent event) {}
-			@Override
-			public void mouseReleased(MouseEvent event) {}
 		});
 
 		topPanel.add(buttonField, c);
@@ -510,9 +494,7 @@ public class TopWindow extends JPanel {
 			button.setForeground(FileExplorer.textSelectionColor);
 			button.setPreferredSize(new Dimension(button.
 				getPreferredSize().width, navHeight));
-			button.addMouseListener(new MouseListener() {
-				@Override
-				public void mouseClicked(MouseEvent event) {}
+			button.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseEntered(MouseEvent event) {
 					button.setForeground(Color.WHITE);
@@ -521,8 +503,6 @@ public class TopWindow extends JPanel {
 				public void mouseExited(MouseEvent event) {
 					button.setForeground(FileExplorer.textSelectionColor);
 				}
-				@Override
-				public void mousePressed(MouseEvent event) {}
 				@Override
 				public void mouseReleased(MouseEvent event) {
 					MainWindow.historyPush(Tree.getLastTreeNodeOpened());

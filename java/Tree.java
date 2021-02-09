@@ -136,15 +136,9 @@ public class Tree extends JTree implements TreeSelectionListener {
 			}
 		});
 
-		this.addMouseListener(new MouseListener() {
+		this.addMouseListener(new MouseAdapter() {
 			DefaultMutableTreeNode last;
 
-			@Override
-			public void mouseClicked(MouseEvent e) {}
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-			@Override
-			public void mouseExited(MouseEvent e) {}
 			@Override
 			public void mousePressed(MouseEvent e) {
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
@@ -187,8 +181,6 @@ public class Tree extends JTree implements TreeSelectionListener {
 					}
 				}
 			}
-			@Override
-			public void mouseReleased(MouseEvent e) {}
 		});
 
 		this.getActionMap().put("history back", new AbstractAction() {
