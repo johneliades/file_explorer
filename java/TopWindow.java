@@ -62,7 +62,7 @@ public class TopWindow extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 		topPanel.setBackground(FileExplorer.topBackgroundColor);
 		topPanel.setBorder(
-			BorderFactory.createMatteBorder(6, 3, 6, 3, FileExplorer.topBackgroundColor));
+			BorderFactory.createMatteBorder(6, 6, 6, 3, FileExplorer.topBackgroundColor));
 
 		c.weightx = 0.005;
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -453,28 +453,14 @@ public class TopWindow extends JPanel {
 
 	public static void clearNavButtons() {
 		buttonField.removeAll();
+		buttonField.add(Box.createRigidArea(new Dimension(6, 0)));
 		buttonField.revalidate();
 		buttonField.repaint();
-
-		JLabel myLabel = new JLabel(Utility.getImageFast(
-			FileExplorer.getIconPath() + "other/pc.png", 
-				navHeight, navHeight, true));
-		myLabel.setBorder(new EmptyBorder(0, 5, 0, 5));
-		buttonField.add(myLabel);
 	}
 
 	public static void addNavButton(DefaultMutableTreeNode node) {
 		File file = (File) node.getUserObject();
-		String name;
 
-		name = file.getName();
-		if(name.trim().length() == 0) {
-			if(file.getPath().equals("/"))
-				name = file.getPath();
-			else
-				name = "Local Disk (" + file.getPath().replace("\\", "") + ")";
-		}
-		
 		LookAndFeel previousLF = UIManager.getLookAndFeel();
 		try {
 			for (javax.swing.UIManager.LookAndFeelInfo info : 
@@ -486,7 +472,18 @@ public class TopWindow extends JPanel {
 				}
 			}
 
-			JButton button = new JButton(name);
+			JButton button;
+
+			String name = file.getName();
+			if(name.trim().length() == 0 || name.equals("/")) {
+				button = new JButton(Utility.getImageFast(
+					FileExplorer.getIconPath() + "other/pc.png", 
+					navHeight-4, navHeight-7, true));	
+			}
+			else {
+				button = new JButton(name);	
+			}
+
 			UIManager.setLookAndFeel(previousLF);
 
 			button.setFocusPainted(false);
