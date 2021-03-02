@@ -475,8 +475,8 @@ public class TopWindow extends JPanel {
 			JButton button;
 
 			String name = file.getName();
-			if(name.trim().length() == 0) {
-				if(file.getPath().equals("/") || file.getPath().equals(windowsTopName)) {
+			if(name.trim().length() == 0 || name.equals(windowsTopName)) {
+				if(file.getPath().equals("/") || name.equals(windowsTopName)) {
 					button = new JButton(Utility.getImageFast(
 						FileExplorer.getIconPath() + "other/pc.png", 
 						navHeight-4, navHeight-7, true));	
