@@ -8,6 +8,7 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.JTextArea;
+import javax.swing.plaf.basic.BasicProgressBarUI;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -996,14 +997,25 @@ public class FolderPanel extends JPanel {
 			long free = currentFile.getFreeSpace();
 			long total = currentFile.getTotalSpace();
 			int used = (int) (((total-free)*100)/total);
+
 			JProgressBar bar = new JProgressBar(0, 100);
 			bar.setValue(used);	
+			bar.setStringPainted(true);
+			bar.setString(MainWindow.convertBytes(free, false) + " free");
 
 			bar.setBackground(FileExplorer.topBackgroundColor);
-			if(used>90)
+			if(used>90) {
 				bar.setForeground(Color.RED);
-			else
+				bar.setUI(new BasicProgressBarUI() {
+					protected Color getSelectionForeground() { return Color.WHITE; }
+				});
+			}
+			else {
 				bar.setForeground(Color.CYAN);
+				bar.setUI(new BasicProgressBarUI() {
+					protected Color getSelectionForeground() { return Color.BLACK; }
+				});
+			}
 
 			bar.setBorderPainted(false);
 

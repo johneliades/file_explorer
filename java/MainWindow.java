@@ -633,7 +633,7 @@ public class MainWindow extends JPanel {
 		return "";
 	}
 
-	private static String convertBytes(long bytes) {
+	public static String convertBytes(long bytes, boolean show_bytes) {
 		long fileSizeInKB=0, fileSizeInMB=0, fileSizeInGB=0;
 		if(bytes!=0) {
 			fileSizeInKB = bytes / 1024;
@@ -648,20 +648,23 @@ public class MainWindow extends JPanel {
 
 		if(fileSizeInKB!=0) {
 			double tempSize = (double) bytes/1024;
-			size = String.format("%.2f", tempSize) + " KB "
-				+ " ( " + bytes + " B )";
+			size = String.format("%.2f", tempSize) + " KB";
+			if(show_bytes)
+				size += "  ( " + bytes + " B )";
 		}
 		
 		if(fileSizeInMB!=0) {
 			double tempSize = (double) bytes/1024/1024;
-			size = String.format("%.2f", tempSize) + " MB "
-				+ " ( " + bytes + " B )";
+			size = String.format("%.2f", tempSize) + " MB ";
+			if(show_bytes)
+				size += "  ( " + bytes + " B )";
 		}
 
 		if(fileSizeInGB!=0) {
 			double tempSize = (double) bytes/1024/1024/1024;
-			size = String.format("%.2f", tempSize) + " GB "
-				+ " ( " + bytes + " B )";
+			size = String.format("%.2f", tempSize) + " GB ";
+			if(show_bytes)
+				size += "  ( " + bytes + " B )";
 		}
 
 		return size;
@@ -1016,13 +1019,13 @@ public class MainWindow extends JPanel {
 
 		if(!file.isDirectory()) {
 			bytes = file.length();
-			size = convertBytes(bytes);
+			size = convertBytes(bytes, true);
 			calculated = true;
 			panel.add(Box.createRigidArea(new Dimension(0, 20)));
 		}
 		else if(file.getName().trim().length() == 0) {
-			avail_space = convertBytes(file.getFreeSpace());
-			size = convertBytes(file.getTotalSpace());
+			avail_space = convertBytes(file.getFreeSpace(), true);
+			size = convertBytes(file.getTotalSpace(), true);
 			calculated = true;
 			panel.add(Box.createRigidArea(new Dimension(0, 20)));
 		}
@@ -1080,7 +1083,7 @@ public class MainWindow extends JPanel {
 
 					String size="0";
 					if(bytes!=0)
-						size = convertBytes(bytes);
+						size = convertBytes(bytes, true);
 
 					panel.remove(label);
 					dialog.pack();
