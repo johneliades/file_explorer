@@ -263,7 +263,15 @@ public class FileExplorer {
 		if(roots.length==1)
 			top = new DefaultMutableTreeNode(roots[0]);
 		else {
-			top = new DefaultMutableTreeNode(new MyFile(windowsTopName));
+			top = new DefaultMutableTreeNode(new File(windowsTopName) {
+				@Override
+				public String toString() {
+					if(this.getPath().compareTo("/")!=0)
+						return this.getName();
+					else
+						return this.getPath();
+				}
+			});
 			for (File root : roots) {
 				top.add(new DefaultMutableTreeNode(root));
 			}
@@ -2782,7 +2790,28 @@ public class FileExplorer {
 				return super.isCellEditable(event);
 			}
 		});
+
 		newPanel.setCellRenderer(new DefaultTreeCellRenderer() {
+			private HashMap<File, FsvCache> descriptions = new HashMap<File, FsvCache>();
+
+			class FsvCache {
+				private String description;
+				private String name;
+
+				FsvCache(String description, String name) {
+					this.description = description;
+					this.name = name;
+				}
+
+				String getDescription() {
+					return description;
+				}
+
+				String getName() {
+					return name;
+				}
+			}
+
 			public Component getTreeCellRendererComponent ( JTree tree, 
 				Object value, boolean sel, boolean expanded, boolean leaf,
 				int row, boolean hasFocus ) {
@@ -2815,8 +2844,22 @@ public class FileExplorer {
 
 					String path = ICONPATH + "other/harddisk.png";
 
-					String description = fsv.getSystemTypeDescription(file);
-					name = fsv.getSystemDisplayName(file);
+					/* Dear john-from-the-future, this is john-from-the-past. You
+					almost certainly think I messed up here and that the code could be
+					cleaned up. Well don't! It’s like this for a reason! */
+
+					FsvCache info = descriptions.get(file);
+					String description;
+
+					if(info!=null) {
+						description = info.getDescription();
+						name  = info.getName();
+					}
+					else {
+						description = fsv.getSystemTypeDescription(file);
+						name = fsv.getSystemDisplayName(file);
+						descriptions.put(file, new FsvCache(description, name));
+					}
 
 					if(description.equals("CD Drive")) {
 						path = ICONPATH + "other/cd.png";
@@ -3148,8 +3191,16 @@ public class FileExplorer {
 			
 			DefaultMutableTreeNode currentNode=null;
 			if(!isNodeInSubtree(top, element)) {
-				currentNode = new DefaultMutableTreeNode(new MyFile(
-					element.getPath()));
+				currentNode = new DefaultMutableTreeNode(new File(
+					element.getPath()) {
+					@Override
+					public String toString() {
+						if(this.getPath().compareTo("/")!=0)
+							return this.getName();
+						else
+							return this.getPath();
+					}
+				});
 				
 				model.insertNodeInto(currentNode, top, top.getChildCount());
 				sortNode(top);
@@ -3183,8 +3234,16 @@ public class FileExplorer {
 
 				DefaultMutableTreeNode firstChild;
 				if(!isNodeInSubtree(currentNode, current)) {
-					firstChild = new DefaultMutableTreeNode(new MyFile(
-						current.getPath()));
+					firstChild = new DefaultMutableTreeNode(new File(
+						current.getPath()) {
+						@Override
+						public String toString() {
+							if(this.getPath().compareTo("/")!=0)
+								return this.getName();
+							else
+								return this.getPath();
+						}
+					});
 
 					model.insertNodeInto(firstChild, currentNode, 
 						currentNode.getChildCount());
