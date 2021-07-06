@@ -3338,7 +3338,7 @@ public class FileExplorer {
 	public static JPanel getTopWindow() {
 		JPanel newPanel = new JPanel();
 		newPanel.setLayout(new BorderLayout());
-
+		
 		JPanel exitPanel = new MotionPanel(FileExplorer.getFrame());
 		exitPanel.setBorder(new EmptyBorder(0, 5, 5, 5));
 		exitPanel.setBackground(FileExplorer.exitPanelBackgroundColor);
@@ -3347,6 +3347,36 @@ public class FileExplorer {
 		exitPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		exitPanel.setComponentOrientation(
 			ComponentOrientation.RIGHT_TO_LEFT);
+
+		exitPanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent event) {
+				ImageIcon img;
+				
+				if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
+					if((frame.getExtendedState() | 
+						JFrame.MAXIMIZED_BOTH) != frame.getExtendedState()) {
+						
+						img = Utility.getImageFast(
+							FileExplorer.getIconPath() + "other/fullscreen1.png", 
+							20, 20, true);
+						
+						frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+					}
+					else {
+						img = Utility.getImageFast(
+							FileExplorer.getIconPath() + "other/fullscreen2.png", 
+							20, 20, true);
+						
+						frame.setExtendedState(frame.getExtendedState() & ~JFrame.MAXIMIZED_BOTH);
+					}			
+					
+					Component[] components = exitPanel.getComponents();
+
+					((JButton)components[1]).setIcon(img);
+				}
+			}
+		});
 
 		ImageIcon img = Utility.getImageFast(
 			FileExplorer.getIconPath() + "other/close.png", 
@@ -3374,29 +3404,25 @@ public class FileExplorer {
 		button.setContentAreaFilled(false);
 
 		button.addMouseListener(new MouseAdapter() {
-			boolean alternate = true;
-			int state;
-
 			@Override
 			public void mousePressed(MouseEvent event) {
 				ImageIcon img;
 
-				if(alternate) {
-					img = Utility.getImageFast(
+				if((frame.getExtendedState() | 
+					JFrame.MAXIMIZED_BOTH) != frame.getExtendedState()) {
+
+						img = Utility.getImageFast(
 						FileExplorer.getIconPath() + "other/fullscreen1.png", 
 						20, 20, true);
 					
-					state = frame.getExtendedState();
 					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 				}
 				else {
 					img = Utility.getImageFast(
 						FileExplorer.getIconPath() + "other/fullscreen2.png", 
 						20, 20, true);
-					frame.setExtendedState(state);
+					frame.setExtendedState(frame.getExtendedState() & ~JFrame.MAXIMIZED_BOTH);
 				}			
-				
-				alternate = !alternate;
 
 				((JButton)event.getSource()).setIcon(img);
 			}
