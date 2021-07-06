@@ -3350,7 +3350,7 @@ public class FileExplorer {
 
 		exitPanel.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent event) {
+			public void mouseClicked(MouseEvent event) {
 				ImageIcon img;
 				
 				if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
