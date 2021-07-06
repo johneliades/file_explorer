@@ -34,7 +34,7 @@ public class FileExplorer {
 	public static final Color panelHoverColor = new Color(0, 170, 170);
 	public static final Color panelSelectionColor = new Color(0, 100, 100);
 	public static final Color textSelectionColor = new Color(0, 255, 255);
-	public static final Color propertiesColor = new Color(0, 0, 0);
+	public static final Color propertiesColor = new Color(35, 35, 35);
 
 	private static final String windowsTopName="This PC";
 
@@ -933,7 +933,7 @@ public class FileExplorer {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 		Border outerborder = BorderFactory.createMatteBorder(
-			3, 3, 3, 3, topBackgroundColor);
+			3, 3, 3, 3, Color.BLACK);
 		Border innerborrder = new EmptyBorder(10, 10, 10, 10);
 
 		Border compound = BorderFactory.createCompoundBorder(
@@ -3348,10 +3348,9 @@ public class FileExplorer {
 		exitPanel.setComponentOrientation(
 			ComponentOrientation.RIGHT_TO_LEFT);
 
-		ImageIcon img = new ImageIcon(FileExplorer.class.getResource(
-			ICONPATH + "other/close.png"));
-		Image pict = img.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-		img = new ImageIcon(pict);
+		ImageIcon img = Utility.getImageFast(
+			FileExplorer.getIconPath() + "other/close.png", 
+			20, 20, true);
 
 		JButton button = new JButton(img);
 		button.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -3361,6 +3360,62 @@ public class FileExplorer {
 			@Override
 			public void mousePressed(MouseEvent event) {
 				System.exit(0);
+			}
+		});
+
+		exitPanel.add(button);
+
+		img = Utility.getImageFast(
+			FileExplorer.getIconPath() + "other/fullscreen2.png", 
+			20, 20, true);
+
+		button = new JButton(img);
+		button.setBorder(new EmptyBorder(0, 0, 0, 0));
+		button.setContentAreaFilled(false);
+
+		button.addMouseListener(new MouseAdapter() {
+			boolean alternate = true;
+			int state;
+
+			@Override
+			public void mousePressed(MouseEvent event) {
+				ImageIcon img;
+
+				if(alternate) {
+					img = Utility.getImageFast(
+						FileExplorer.getIconPath() + "other/fullscreen1.png", 
+						20, 20, true);
+					
+					state = frame.getExtendedState();
+					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+				}
+				else {
+					img = Utility.getImageFast(
+						FileExplorer.getIconPath() + "other/fullscreen2.png", 
+						20, 20, true);
+					frame.setExtendedState(state);
+				}			
+				
+				alternate = !alternate;
+
+				((JButton)event.getSource()).setIcon(img);
+			}
+		});
+		
+		exitPanel.add(button);
+
+		img = Utility.getImageFast(
+			FileExplorer.getIconPath() + "other/minimize.png", 
+			20, 20, true);
+
+		button = new JButton(img);
+		button.setBorder(new EmptyBorder(0, 0, 0, 0));
+		button.setContentAreaFilled(false);
+
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent event) {
+				frame.setState(Frame.ICONIFIED);
 			}
 		});
 
