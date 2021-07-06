@@ -14,7 +14,6 @@
 +=======+
 
 #better exit button, minimise button and full screen button
-#properties exit button and visual improvements
 #show size instead of calculating on properties
 #indication of how many files selected
 #border around preview images
