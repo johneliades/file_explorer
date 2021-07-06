@@ -931,11 +931,40 @@ public class FileExplorer {
 
 		JPanel panel = new MotionPanel(dialog); 
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+		Border outerborder = BorderFactory.createMatteBorder(
+			3, 3, 3, 3, topBackgroundColor);
+		Border innerborrder = new EmptyBorder(10, 10, 10, 10);
+
+		Border compound = BorderFactory.createCompoundBorder(
+			outerborder, innerborrder);
+
+		panel.setBorder(compound);
+
+		ImageIcon close = Utility.getImageFast(ICONPATH + 
+					"other/close.png", 20, 20, true);
+		JLabel label = new JLabel(close); 
+		label.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent event) {
+				dialog.setVisible(false);
+			}
+		});
+
+		JPanel exitPanel = new MotionPanel(dialog);
+		exitPanel.setBackground(FileExplorer.propertiesColor);
+
+		exitPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		exitPanel.setComponentOrientation(
+			ComponentOrientation.RIGHT_TO_LEFT);
+
+		exitPanel.add(label);
+
+		panel.add(exitPanel);
 
 		ImageIcon img = Utility.getImageFast(ICONPATH + 
 					"other/info.png", 50, 50, true);
-		JLabel label = new JLabel(img); 
+		label = new JLabel(img); 
 
 		Font currentFont = label.getFont();
 		Font bigFont = new Font(currentFont.getName(), 
@@ -950,14 +979,6 @@ public class FileExplorer {
 		dialog.setResizable(false);
 		dialog.setSize(200, 200); 
 		dialog.setAlwaysOnTop(true);
-		dialog.addWindowFocusListener(new WindowFocusListener() {
-			public void windowGainedFocus(WindowEvent e) {
-			}
-
-			public void windowLostFocus(WindowEvent e) {
-				dialog.setVisible(false);
-			}
-		});
 
 		String fileName = file.getName();
 		if(fileName==null || fileName.compareTo("")==0)
