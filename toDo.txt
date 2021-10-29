@@ -6,8 +6,6 @@
 #better focus order, at startup focus folder
 #when going lower scroll with arrows
 #cut, copy, paste
-#icon rendered before text on search on windows
-#navbuttons reload slowly when navigating on windows
 
 +=======+
 |EZ FAST|
@@ -16,7 +14,6 @@
 #show size instead of calculating on properties
 #indication of how many files selected
 #border around preview images
-#maybe use this somewhere, new Color(0x4287f5);
 
 +=======+
 | LATER |
