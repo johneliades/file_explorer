@@ -3,13 +3,14 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
+import java.awt.geom.RoundRectangle2D;
+import javax.swing.*;
 
 /**
  *  The ComponentResizer allows you to resize a component by dragging a border
  *  of the component.
  */
-public class ComponentResizer extends MouseAdapter
-{
+public class ComponentResizer extends MouseAdapter {
 	private final static Dimension MINIMUM_SIZE = new Dimension(10, 10);
 	private final static Dimension MAXIMUM_SIZE =
 		new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
@@ -48,8 +49,7 @@ public class ComponentResizer extends MouseAdapter
 	 *  Convenience contructor. All borders are resizable in increments of
 	 *  a single pixel. Components must be registered separately.
 	 */
-	public ComponentResizer()
-	{
+	public ComponentResizer() {
 		this(new Insets(5, 5, 5, 5), new Dimension(1, 1));
 	}
 
@@ -60,8 +60,7 @@ public class ComponentResizer extends MouseAdapter
 	 *
 	 *  @param components components to be automatically registered
 	 */
-	public ComponentResizer(Component... components)
-	{
+	public ComponentResizer(Component... components) {
 		this(new Insets(5, 5, 5, 5), new Dimension(1, 1), components);
 	}
 
@@ -74,8 +73,7 @@ public class ComponentResizer extends MouseAdapter
 	 *                    resized.
 	 *  @param components components to be automatically registered
 	 */
-	public ComponentResizer(Insets dragInsets, Component... components)
-	{
+	public ComponentResizer(Insets dragInsets, Component... components) {
 		this(dragInsets, new Dimension(1, 1), components);
 	}
 
@@ -88,8 +86,7 @@ public class ComponentResizer extends MouseAdapter
 	 *                  when being dragged. Snapping occurs at the halfway mark.
 	 *  @param components components to be automatically registered
 	 */
-	public ComponentResizer(Insets dragInsets, Dimension snapSize, Component... components)
-	{
+	public ComponentResizer(Insets dragInsets, Dimension snapSize, Component... components) {
 		setDragInsets( dragInsets );
 		setSnapSize( snapSize );
 		registerComponent( components );
@@ -100,8 +97,7 @@ public class ComponentResizer extends MouseAdapter
 	 *
 	 *  @return  the drag insets
 	 */
-	public Insets getDragInsets()
-	{
+	public Insets getDragInsets() {
 		return dragInsets;
 	}
 
@@ -404,6 +400,10 @@ public class ComponentResizer extends MouseAdapter
 			drag = getDragBounded(drag, snapSize.height, height, minimumSize.height, maximum);
 			height += drag;
 		}
+
+		int roundness = FileExplorer.frameRoundness;
+		((JFrame) source).setShape(new RoundRectangle2D.Double(0, 0, width,
+			height, roundness, roundness));
 
 		source.setBounds(x, y, width, height);
 		source.validate();

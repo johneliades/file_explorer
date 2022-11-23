@@ -14,6 +14,7 @@ import javax.swing.JTextArea;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.RoundRectangle2D;
 import java.util.*;
 import java.util.concurrent.*;
 import java.nio.file.Files;
@@ -25,7 +26,7 @@ import java.lang.management.ManagementFactory;
 public class FileExplorer {
 	private static final String ICONPATH="/icons/";
 	private static final boolean showHiddenFiles = false;
-	private static File fileToOpen=null;
+	private static File fileToOpen = null;
 
 	public static final Color folderBackgroundColor = new Color(49, 49, 49);
 	public static final Color treeBackgroundColor = new Color(32, 32, 32);
@@ -35,6 +36,8 @@ public class FileExplorer {
 	public static final Color panelSelectionColor = new Color(0, 100, 100);
 	public static final Color textSelectionColor = new Color(0, 255, 255);
 	public static final Color propertiesColor = new Color(35, 35, 35);
+
+	public static final int frameRoundness = 25;
 
 	private static final String windowsTopName="This PC";
 
@@ -85,12 +88,12 @@ public class FileExplorer {
 
 	static Set<String> iconSet = FileExplorer.addExtensions();
 
-	private static JPanel lastPanelSelected; 
-	private static HashMap<JPanel, DefaultMutableTreeNode> mapPanelNode = 
-		new HashMap<JPanel, DefaultMutableTreeNode>();
+	private static PanelRound lastPanelSelected; 
+	private static HashMap<PanelRound, DefaultMutableTreeNode> mapPanelNode = 
+		new HashMap<PanelRound, DefaultMutableTreeNode>();
 
-	private static java.util.List<JPanel> selectedList = 
-		new java.util.ArrayList<JPanel>();
+	private static java.util.List<PanelRound> selectedList = 
+		new java.util.ArrayList<PanelRound>();
 	
 	private static java.util.List<DefaultMutableTreeNode> clipboard = 
 		new java.util.ArrayList<DefaultMutableTreeNode>();
@@ -144,7 +147,6 @@ public class FileExplorer {
 
 		ComponentResizer cr = new ComponentResizer();
 		cr.registerComponent(frame);
-		cr.setSnapSize(new Dimension(10, 10));
 
 		java.net.URL imgURL = FileExplorer.class.getResource(ICONPATH + "other/folder.png");
 		frame.setIconImage(new ImageIcon(imgURL).getImage());
@@ -153,15 +155,18 @@ public class FileExplorer {
 		//Gets screen's Dimensions
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-		int windowHeight=(int) screenSize.getHeight()*3/4;
-		int windowWidth=(int) screenSize.getWidth()*3/4;
+		int windowHeight = (int) screenSize.getHeight()*3/4;
+		int windowWidth = (int) screenSize.getWidth()*3/4;
 
 		//Set Window's dimensions
 		frame.setSize(windowWidth, windowHeight);
 
+		frame.setShape(new RoundRectangle2D.Double(0, 0, windowWidth, windowHeight,
+			frameRoundness, frameRoundness));
+
 		//Set Window's location
 		frame.setLocation((screenSize.width-windowWidth)/2, 
-					(screenSize.height-windowHeight)/2);
+			(screenSize.height-windowHeight)/2);
 
 		//Set window layout manager
 		frame.setLayout(new BorderLayout());
@@ -178,7 +183,7 @@ public class FileExplorer {
 		FileExplorer.setBackground(topBackgroundColor);
 
 		frame.add(FileExplorer, BorderLayout.CENTER);
-	
+
 		//Display the window.
 		frame.setVisible(true);
 	}
@@ -250,7 +255,7 @@ public class FileExplorer {
 	*/
 
 	static JPanel getMainWindow(File fileToOpen) {
-		JPanel newPanel = new JPanel(new GridLayout(1, 0));
+		JPanel newPanel = new JPanel(new BorderLayout());
 
 		UIManager UI=new UIManager();
 		UI.put("OptionPane.background", FileExplorer.propertiesColor);
@@ -459,7 +464,14 @@ public class FileExplorer {
 		}
 
 		//Add the split pane to this panel.
-		newPanel.add(splitPane);
+		newPanel.add(splitPane, BorderLayout.CENTER);
+
+		PanelRound infoPanel = new PanelRound(new FlowLayout(FlowLayout.RIGHT), 
+			0, 0, 25, 25, topBackgroundColor);
+
+		infoPanel.setPreferredSize(new Dimension(0, 20));
+		
+		newPanel.add(infoPanel, BorderLayout.SOUTH);
 
 		return newPanel;
 	}
@@ -583,7 +595,7 @@ public class FileExplorer {
 		if(current!=null)
 			for(Component comp : folder.getComponents()) {
 				if(current.getName().equals(comp.getName())) {
-					FileExplorer.selectPanel((JPanel) comp, true);
+					FileExplorer.selectPanel((PanelRound) comp, true);
 					break;
 				}
 			}
@@ -1504,8 +1516,8 @@ public class FileExplorer {
 
 	public static JPanel getFolderPanel() {
 		JPanel newPanel = new JPanel(new WrapLayout(FlowLayout.LEFT, 10, 10)) {
-            @Override
-            public void paintComponent(Graphics g) {
+			@Override
+			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				
 				int px = Math.min(x, x2);
@@ -1518,7 +1530,7 @@ public class FileExplorer {
 
 				g.setColor(Color.WHITE);
 				g.drawRect(px, py, pw, ph);	
-            }
+			}
 		};
 
 		x = y = x2 = y2 = -1;
@@ -1587,7 +1599,7 @@ public class FileExplorer {
 						Rectangle rect2 = new Rectangle(px, py, pw, ph);
 
 						if(overlaps(rect1, rect2))
-							selectPanel((JPanel) current, false);
+							selectPanel((PanelRound) current, false);
 					}
 					x = y = x2 = y2 = -1; 
 					newPanel.repaint();
@@ -1626,7 +1638,7 @@ public class FileExplorer {
 						Rectangle rect2 = new Rectangle(px, py, pw, ph);
 
 						if(overlaps(rect1, rect2)) {
-							selectPanel((JPanel) current, false);
+							selectPanel((PanelRound) current, false);
 						}
 					}
 				}
@@ -1640,7 +1652,7 @@ public class FileExplorer {
 
 		newPanel.getActionMap().put("select all", new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
-					for(JPanel current : mapPanelNode.keySet())
+					for(PanelRound current : mapPanelNode.keySet())
 						selectPanel(current, false);
 				}
 			});
@@ -1680,7 +1692,7 @@ public class FileExplorer {
 
 		newPanel.getActionMap().put("select first", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				JPanel panel = (JPanel) WrapLayout.getComponent(0);
+				PanelRound panel = (PanelRound) WrapLayout.getComponent(0);
 				selectPanel(panel, true);
 			}
 		});
@@ -2137,7 +2149,7 @@ public class FileExplorer {
 			public void actionPerformed(ActionEvent event) {
 				clipboard.clear();
 
-				for(JPanel currentPanel : selectedList) 
+				for(PanelRound currentPanel : selectedList) 
 					clipboard.add(mapPanelNode.get(currentPanel));
 
 				operation = "cut";
@@ -2156,7 +2168,7 @@ public class FileExplorer {
 			public void actionPerformed(ActionEvent event) {
 				clipboard.clear();
 
-				for(JPanel currentPanel : selectedList)
+				for(PanelRound currentPanel : selectedList)
 					clipboard.add(mapPanelNode.get(currentPanel));
 
 				operation = "copy";
@@ -2284,7 +2296,7 @@ public class FileExplorer {
 					if(showHiddenFiles ?  true : !currentFile.isHidden() || 
 						!currentFile.getName().startsWith(".")) {
 					
-						JPanel newPanel = getPanel(currentFile, currentNode);
+						PanelRound newPanel = getPanel(currentFile, currentNode);
 
 						mapPanelNode.put(newPanel, currentNode);
 						folder.add(newPanel);
@@ -2310,7 +2322,7 @@ public class FileExplorer {
 					if(showHiddenFiles ? true : !element.isHidden() || 
 										!element.getName().startsWith(".")) {
 						
-						JPanel newPanel;
+						PanelRound newPanel;
 						newPanel = getPanel(element, new DefaultMutableTreeNode(element));
 		
 						mapPanelNode.put(newPanel, 
@@ -2345,7 +2357,7 @@ public class FileExplorer {
 	 }
 	*/
 
-	static JPanel getPanel(File currentFile, DefaultMutableTreeNode panelNode) {
+	static PanelRound getPanel(File currentFile, DefaultMutableTreeNode panelNode) {
 		JLabel label;
 		ImageIcon img=null;
 		Set<String> set = new HashSet<>();
@@ -2419,37 +2431,17 @@ public class FileExplorer {
 		}
 		*/
 
-		JPanel panel = new JPanel(new BorderLayout());
+		PanelRound panel = new PanelRound(new BorderLayout(), 40, 40, 0, 0, folderBackgroundColor);
 		
-		// top empty space
-		label = new JLabel("", JLabel.CENTER);
-		label.setPreferredSize(new Dimension(150, 10));
-		panel.add(label,  BorderLayout.NORTH);
-
-		// right empty space
-		label = new JLabel("", JLabel.CENTER);
-		label.setPreferredSize(new Dimension(10, 40));
-		panel.add(label,  BorderLayout.EAST);
-
-		// left empty space
-		label = new JLabel("", JLabel.CENTER);
-		label.setPreferredSize(new Dimension(10, 40));
-		panel.add(label,  BorderLayout.WEST);
+		panel.setPreferredSize(new Dimension(150, 120));
 
 		label = new JLabel(img, JLabel.CENTER);
 		label.setPreferredSize(new Dimension(60, 60));
-		//Border b = new BevelBorder(BevelBorder.RAISED, Color.LIGHT_GRAY, Color.DARK_GRAY);
-		//label.setBorder(b);
 		panel.add(label,  BorderLayout.CENTER);
 
 		JPanel bottomPanel = new JPanel(new BorderLayout());
 
 		if(!path.equals("")) {
-			// top empty space
-			label = new JLabel("", JLabel.CENTER);
-			label.setPreferredSize(new Dimension(150, 10));
-			bottomPanel.add(label,  BorderLayout.NORTH);
-
 			// right empty space
 			label = new JLabel("", JLabel.CENTER);
 			label.setPreferredSize(new Dimension(10, 10));
@@ -2465,6 +2457,8 @@ public class FileExplorer {
 			int used = (int) (((total-free)*100)/total);
 
 			JProgressBar bar = new JProgressBar(0, 100);
+
+			bar.setPreferredSize(new Dimension(80, 17));
 			bar.setValue(used);	
 			bar.setStringPainted(true);
 			bar.setString(FileExplorer.convertBytes(free, false) + " free");
@@ -2491,7 +2485,7 @@ public class FileExplorer {
 		panel.getActionMap().put("select all", new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
 					clearPanelSelection();
-					for(JPanel current : mapPanelNode.keySet())
+					for(PanelRound current : mapPanelNode.keySet())
 						selectPanel(current, false);
 				}
 			});
@@ -2541,21 +2535,21 @@ public class FileExplorer {
 		panel.getActionMap().put("select left", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				int position = WrapLayout.getIndex(lastPanelSelected);
-				selectPanel((JPanel) WrapLayout.getComponent(position - 1), true);
+				selectPanel((PanelRound) WrapLayout.getComponent(position - 1), true);
 			}
 		});
 
 		panel.getActionMap().put("select right", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				int position = WrapLayout.getIndex(lastPanelSelected);
-				selectPanel((JPanel) WrapLayout.getComponent(position + 1), true);
+				selectPanel((PanelRound) WrapLayout.getComponent(position + 1), true);
 			}
 		});
 
 		panel.getActionMap().put("select down", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				int position = WrapLayout.getIndex(lastPanelSelected);
-				selectPanel((JPanel) WrapLayout.
+				selectPanel((PanelRound) WrapLayout.
 					getComponent(position + WrapLayout.getRowLength()), true);
 			}
 		});
@@ -2563,7 +2557,7 @@ public class FileExplorer {
 		panel.getActionMap().put("select up", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				int position = WrapLayout.getIndex(lastPanelSelected);
-				selectPanel((JPanel) WrapLayout.
+				selectPanel((PanelRound) WrapLayout.
 					getComponent(position - WrapLayout.getRowLength()), true);
 			}
 		});
@@ -2615,14 +2609,13 @@ public class FileExplorer {
 		label = new JLabel(name, JLabel.CENTER);
 		label.setPreferredSize(new Dimension(150, 30));
 		label.setForeground (Color.white);
-		label.setBorder(new EmptyBorder(0, 10, 0, 10));
 		bottomPanel.add(label, BorderLayout.SOUTH);
 		bottomPanel.setBackground(FileExplorer.folderBackgroundColor);
 
 		panel.add(bottomPanel, BorderLayout.SOUTH);
 
 		panel.setName(name);
-		panel.setBorder(BorderFactory.createLineBorder(FileExplorer.folderBackgroundColor));
+		panel.setCornerColor(FileExplorer.folderBackgroundColor);
 		panel.setBackground(FileExplorer.folderBackgroundColor);
 
 		panel.addMouseListener(new MouseAdapter() {
@@ -2697,7 +2690,7 @@ public class FileExplorer {
 		return panel;
 	}
 
-	static public void selectPanel(JPanel panel, Boolean clear) {
+	static public void selectPanel(PanelRound panel, Boolean clear) {
 		
 		if(panel==null)
 			return;
@@ -2708,7 +2701,7 @@ public class FileExplorer {
 				panel.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
 			}
 			panel.setBackground(FileExplorer.panelSelectionColor);
-			panel.setBorder(BorderFactory.createLineBorder(Color.white));
+			panel.setCornerColor(Color.RED);
 			selectedList.add(panel);
 		}
 		else {
@@ -2717,19 +2710,19 @@ public class FileExplorer {
 					panel.getComponent(i).setBackground(FileExplorer.folderBackgroundColor);
 				}
 				panel.setBackground(FileExplorer.folderBackgroundColor);
-				panel.setBorder(BorderFactory.createLineBorder(
-					FileExplorer.folderBackgroundColor));	
+				panel.setCornerColor(FileExplorer.folderBackgroundColor);
+
 				selectedList.remove(panel);
 			}
 			else
 				selectedList.add(panel);
 
-			for(JPanel element : selectedList) {
+			for(PanelRound element : selectedList) {
 				for (int i = 0; i < element.getComponentCount(); i++) {
 					element.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
 				}
 				element.setBackground(FileExplorer.panelSelectionColor);
-				element.setBorder(BorderFactory.createLineBorder(Color.white));
+				element.setCornerColor(Color.RED);
 			}
 		}
 
@@ -2738,13 +2731,12 @@ public class FileExplorer {
 	}
 
 	static public void clearPanelSelection() {
-		for(JPanel element : selectedList) {
+		for(PanelRound element : selectedList) {
 			for (int i = 0; i < element.getComponentCount(); i++) {
 				element.getComponent(i).setBackground(FileExplorer.folderBackgroundColor);
 			}
 			element.setBackground(FileExplorer.folderBackgroundColor);
-			element.setBorder(BorderFactory.createLineBorder(
-				FileExplorer.folderBackgroundColor));
+			element.setCornerColor(FileExplorer.folderBackgroundColor);
 		}
 		selectedList.clear();
 
@@ -2753,8 +2745,7 @@ public class FileExplorer {
 				lastPanelSelected.getComponent(i).setBackground(FileExplorer.folderBackgroundColor);
 			}
 			lastPanelSelected.setBackground(FileExplorer.folderBackgroundColor);
-			lastPanelSelected.setBorder(BorderFactory.createLineBorder(
-				FileExplorer.folderBackgroundColor));
+			lastPanelSelected.setCornerColor(FileExplorer.folderBackgroundColor);
 		}
 		lastPanelSelected = null;
 	}
