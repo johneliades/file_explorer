@@ -3497,6 +3497,8 @@ public class FileExplorer {
 			Utility.getImageFast(FileExplorer.getIconPath() + "other/pc.png", 
 				15, 15, true));
 
+		navigationField.setBorderColor(FileExplorer.folderBackgroundColor);
+
 		navigationField.setCaretColor(Color.RED);
 		navigationField.setBackground(FileExplorer.treeBackgroundColor);
 		navigationField.setForeground(FileExplorer.textSelectionColor);
@@ -3577,6 +3579,8 @@ public class FileExplorer {
 		searchField = new JTextFieldIcon(new JTextField(), 
 			Utility.getImageFast(FileExplorer.getIconPath() + 
 				"other/magnifyingglass.png", 15, 15, true));
+
+		searchField.setBorderColor(FileExplorer.folderBackgroundColor);
 
 		searchField.setCaretColor(Color.RED);
 		searchField.setBackground(FileExplorer.topBackgroundColor);
@@ -3758,11 +3762,14 @@ public class FileExplorer {
 			public void focusGained(FocusEvent e) {
 				searchField.setText("");
 				searchField.setBackground(FileExplorer.treeBackgroundColor);
+				searchField.setBorderColor(Color.RED);
 			}
 			public void focusLost(FocusEvent e) {
 				DefaultMutableTreeNode node = FileExplorer.getLastTreeNodeOpened();
 				String fileName = ((File) node.getUserObject()).getName();
-		
+				
+				searchField.setBorderColor(FileExplorer.folderBackgroundColor);
+
 				searchField.setBackground(FileExplorer.topBackgroundColor);
 
 				if(fileName.equals("") || fileName==null) {

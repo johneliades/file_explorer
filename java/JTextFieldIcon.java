@@ -7,6 +7,7 @@ public class JTextFieldIcon extends JTextField {
 	private JTextField jtf;
 	private Icon icon;
 	private Insets dummyInsets;
+	private Color borderColor = Color.WHITE;
 
 	public JTextFieldIcon(JTextField jtf, ImageIcon icon){
 		this.jtf = jtf;
@@ -19,6 +20,12 @@ public class JTextFieldIcon extends JTextField {
 
 	public void setIcon(Icon newIcon){
 		this.icon = newIcon;
+		repaint();
+	}
+
+	public void setBorderColor(Color borderColor) {
+		this.borderColor = borderColor;
+		repaint();
 	}
 
 	@Override
@@ -56,7 +63,7 @@ public class JTextFieldIcon extends JTextField {
 	}
 
 	protected void paintBorder(Graphics g) {
-		g.setColor(FileExplorer.folderBackgroundColor);
+		g.setColor(borderColor);
 		g.drawRect(0, 0, getWidth()-1, getHeight()-1);
 	}
 }
