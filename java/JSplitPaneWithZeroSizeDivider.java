@@ -42,6 +42,7 @@ public class JSplitPaneWithZeroSizeDivider
 	 * The size of the transparent drag area.
 	 */
 	private int dividerDragSize = 9;
+	private Color splitPaneColor = Color.RED;
 
 	/**
 	 * The offset of the transparent drag area relative to the visible divider line.
@@ -60,6 +61,11 @@ public class JSplitPaneWithZeroSizeDivider
 		super( orientation );
 		setContinuousLayout( true );
 		setDividerSize( 0 );
+	}
+
+	public void setSplitPaneColor(Color splitPaneColor) {
+		this.splitPaneColor = splitPaneColor;
+		revalidate();
 	}
 
 	public int getDividerDragSize() {
@@ -133,7 +139,7 @@ public class JSplitPaneWithZeroSizeDivider
 
 		@Override
 		public void paint( Graphics g ) {
-			g.setColor( FileExplorer.topBackgroundColor );
+			g.setColor(splitPaneColor);
 			if( orientation == HORIZONTAL_SPLIT )
 				g.drawLine( dividerDragOffset, 0, dividerDragOffset, getHeight() - 1 );
 			else

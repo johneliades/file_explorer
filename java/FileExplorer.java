@@ -437,6 +437,8 @@ public class FileExplorer {
 		JSplitPaneWithZeroSizeDivider splitPane = new 
 					JSplitPaneWithZeroSizeDivider(
 						JSplitPaneWithZeroSizeDivider.HORIZONTAL_SPLIT);
+		
+		splitPane.setSplitPaneColor(FileExplorer.exitPanelBackgroundColor);
 		splitPane.setLeftComponent(treeView);
 		splitPane.setRightComponent(folderView);
 		splitPane.setBorder(new EmptyBorder(0, 0, 0, 0));
