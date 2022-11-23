@@ -3352,14 +3352,14 @@ public class FileExplorer {
 							FileExplorer.getIconPath() + "other/fullscreen1.png", 
 							20, 20, true);
 						
-						frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+						//frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 					}
 					else {
 						img = Utility.getImageFast(
 							FileExplorer.getIconPath() + "other/fullscreen2.png", 
 							20, 20, true);
 						
-						frame.setExtendedState(frame.getExtendedState() & ~JFrame.MAXIMIZED_BOTH);
+						//frame.setExtendedState(frame.getExtendedState() & ~JFrame.MAXIMIZED_BOTH);
 					}			
 					
 					Component[] components = exitPanel.getComponents();
@@ -3406,13 +3406,13 @@ public class FileExplorer {
 						FileExplorer.getIconPath() + "other/fullscreen1.png", 
 						20, 20, true);
 					
-					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+					//frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 				}
 				else {
 					img = Utility.getImageFast(
 						FileExplorer.getIconPath() + "other/fullscreen2.png", 
 						20, 20, true);
-					frame.setExtendedState(frame.getExtendedState() & ~JFrame.MAXIMIZED_BOTH);
+					//frame.setExtendedState(frame.getExtendedState() & ~JFrame.MAXIMIZED_BOTH);
 				}			
 
 				((JButton)event.getSource()).setIcon(img);
