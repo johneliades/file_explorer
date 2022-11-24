@@ -4,6 +4,7 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 
 public class MyScrollBarUI extends BasicScrollBarUI {
 	private final Dimension d = new Dimension();
+	private Color cornerColor = Color.RED;
 
 	@Override protected JButton createDecreaseButton(int orientation) {
 		return new JButton() {
@@ -21,13 +22,17 @@ public class MyScrollBarUI extends BasicScrollBarUI {
 		};
 	}
 
+	protected void setCornerColor(Color cornerColor) {
+		this.cornerColor = cornerColor;
+	}
+
 	@Override
 	protected void paintTrack(Graphics g, JComponent c, Rectangle r) {
 		Graphics2D g2d = (Graphics2D)g.create();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 							RenderingHints.VALUE_ANTIALIAS_ON);
 
-		g2d.setPaint(FileExplorer.folderBackgroundColor);
+		g2d.setPaint(cornerColor);
 		g2d.fill(r);
 		g2d.draw(r);
 

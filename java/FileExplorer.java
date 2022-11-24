@@ -299,6 +299,7 @@ public class FileExplorer {
 		JScrollPane treeView = new JScrollPane(tree);
 
 		MyScrollBarUI scrollbar = new MyScrollBarUI();
+		scrollbar.setCornerColor(FileExplorer.folderBackgroundColor);
 		treeView.getVerticalScrollBar().setUI(scrollbar);
 			treeView.getVerticalScrollBar().addMouseListener(new MouseAdapter() {
 			boolean pressed = false, entered = false;
@@ -349,6 +350,7 @@ public class FileExplorer {
 		JScrollPane folderView = new JScrollPane(folder);
 		
 		scrollbar = new MyScrollBarUI();
+		scrollbar.setCornerColor(FileExplorer.folderBackgroundColor);
 		folderView.getVerticalScrollBar().setUI(scrollbar);
 		folderView.getVerticalScrollBar().addMouseListener(new MouseAdapter() {
 			boolean pressed = false;
@@ -2433,7 +2435,7 @@ public class FileExplorer {
 		}
 		*/
 
-		RoundPanel panel = new RoundPanel(new BorderLayout(), 40, 40, 0, 0, folderBackgroundColor);
+		RoundPanel panel = new RoundPanel(new BorderLayout(), 15, 15, 0, 0, folderBackgroundColor);
 		
 		panel.setPreferredSize(new Dimension(150, 120));
 
@@ -2703,6 +2705,8 @@ public class FileExplorer {
 				panel.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
 			}
 			panel.setBackground(FileExplorer.panelSelectionColor);
+			panel.setRoundTopLeft(40);
+			panel.setRoundTopRight(40);
 			panel.setCornerColor(Color.RED);
 			selectedList.add(panel);
 		}
@@ -2712,6 +2716,8 @@ public class FileExplorer {
 					panel.getComponent(i).setBackground(FileExplorer.folderBackgroundColor);
 				}
 				panel.setBackground(FileExplorer.folderBackgroundColor);
+				panel.setRoundTopLeft(15);
+				panel.setRoundTopRight(15);
 				panel.setCornerColor(FileExplorer.folderBackgroundColor);
 
 				selectedList.remove(panel);
@@ -2724,6 +2730,8 @@ public class FileExplorer {
 					element.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
 				}
 				element.setBackground(FileExplorer.panelSelectionColor);
+				element.setRoundTopLeft(40);
+				element.setRoundTopRight(40);
 				element.setCornerColor(Color.RED);
 			}
 		}
@@ -2738,6 +2746,8 @@ public class FileExplorer {
 				element.getComponent(i).setBackground(FileExplorer.folderBackgroundColor);
 			}
 			element.setBackground(FileExplorer.folderBackgroundColor);
+			element.setRoundTopLeft(15);
+			element.setRoundTopRight(15);
 			element.setCornerColor(FileExplorer.folderBackgroundColor);
 		}
 		selectedList.clear();
@@ -2747,6 +2757,8 @@ public class FileExplorer {
 				lastPanelSelected.getComponent(i).setBackground(FileExplorer.folderBackgroundColor);
 			}
 			lastPanelSelected.setBackground(FileExplorer.folderBackgroundColor);
+			lastPanelSelected.setRoundTopLeft(15);
+			lastPanelSelected.setRoundTopRight(15);
 			lastPanelSelected.setCornerColor(FileExplorer.folderBackgroundColor);
 		}
 		lastPanelSelected = null;
