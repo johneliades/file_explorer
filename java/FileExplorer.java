@@ -3354,32 +3354,58 @@ public class FileExplorer {
 			ComponentOrientation.RIGHT_TO_LEFT);
 
 		exitPanel.addMouseListener(new MouseAdapter() {
+			//Gets screen's Dimensions
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			int windowHeight = (int) screenSize.getHeight()*3/4;
+			int windowWidth = (int) screenSize.getWidth()*3/4;
+
+			Rectangle backupBounds = new Rectangle(windowWidth, windowHeight);
+			Point backupLocation = new Point((screenSize.width-windowWidth)/2,
+				(screenSize.height-windowHeight)/2);
+
 			@Override
 			public void mouseClicked(MouseEvent event) {
 				ImageIcon img;
-				
-				if(event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1) {
-					if((frame.getExtendedState() | 
-						JFrame.MAXIMIZED_BOTH) != frame.getExtendedState()) {
-						
-						img = Utility.getImageFast(
-							FileExplorer.getIconPath() + "other/fullscreen1.png", 
-							20, 20, true);
-						
-						//frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-					}
-					else {
-						img = Utility.getImageFast(
-							FileExplorer.getIconPath() + "other/fullscreen2.png", 
-							20, 20, true);
-						
-						//frame.setExtendedState(frame.getExtendedState() & ~JFrame.MAXIMIZED_BOTH);
-					}			
-					
-					Component[] components = exitPanel.getComponents();
 
-					((JButton)components[1]).setIcon(img);
+				GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
+				if((frame.getBounds().getWidth() != env.getMaximumWindowBounds().getWidth() ||
+					frame.getBounds().getHeight() != env.getMaximumWindowBounds().getHeight())
+					&& event.getClickCount()%2==0 && event.getButton() == MouseEvent.BUTTON1) {
+					
+					img = Utility.getImageFast(
+						FileExplorer.getIconPath() + "other/fullscreen1.png", 
+						20, 20, true);
+				
+					backupBounds = frame.getBounds();
+					backupLocation = frame.getLocation();
+
+					Rectangle bounds = env.getMaximumWindowBounds();
+				
+					//Set Window's dimensions
+					frame.setShape(new RoundRectangle2D.Double(0, 0, (int) bounds.getWidth(),
+						(int) bounds.getHeight(), 0, 0));
+					frame.setSize((int) bounds.getWidth(), (int) bounds.getHeight());
+					frame.setLocation(0, 0);
 				}
+				else if(event.getClickCount()%2!=0) {
+					return;
+				}
+				else {
+				 	img = Utility.getImageFast(
+				 		FileExplorer.getIconPath() + "other/fullscreen2.png", 
+				 		20, 20, true);
+	
+					//Set Window's dimensions
+					frame.setShape(new RoundRectangle2D.Double(0, 0, backupBounds.width,
+						backupBounds.height, frameRoundness, frameRoundness));
+					frame.setSize(backupBounds.width, backupBounds.height);
+					frame.setLocation(backupLocation.x, backupLocation.y);
+				}			
+					
+				Component[] components = exitPanel.getComponents();
+
+				((JButton)components[1]).setIcon(img);
 			}
 		});
 
@@ -3409,24 +3435,49 @@ public class FileExplorer {
 		button.setContentAreaFilled(false);
 
 		button.addMouseListener(new MouseAdapter() {
+			//Gets screen's Dimensions
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			int windowHeight = (int) screenSize.getHeight()*3/4;
+			int windowWidth = (int) screenSize.getWidth()*3/4;
+
+			Rectangle backupBounds = new Rectangle(windowWidth, windowHeight);
+			Point backupLocation = new Point((screenSize.width-windowWidth)/2,
+				(screenSize.height-windowHeight)/2);
+
+			GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
 			@Override
 			public void mousePressed(MouseEvent event) {
 				ImageIcon img;
 
-				if((frame.getExtendedState() | 
-					JFrame.MAXIMIZED_BOTH) != frame.getExtendedState()) {
+				if(frame.getBounds().getWidth() != env.getMaximumWindowBounds().getWidth() ||
+					frame.getBounds().getHeight() != env.getMaximumWindowBounds().getHeight()) {
+				
+					img = Utility.getImageFast(
+					FileExplorer.getIconPath() + "other/fullscreen1.png", 
+					20, 20, true);
+				
+					backupBounds = frame.getBounds();
+					backupLocation = frame.getLocation();
 
-						img = Utility.getImageFast(
-						FileExplorer.getIconPath() + "other/fullscreen1.png", 
-						20, 20, true);
-					
-					//frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+					Rectangle bounds = env.getMaximumWindowBounds();
+				
+					//Set Window's dimensions
+					frame.setShape(new RoundRectangle2D.Double(0, 0, (int) bounds.getWidth(),
+						(int) bounds.getHeight(), 0, 0));
+					frame.setSize((int) bounds.getWidth(), (int) bounds.getHeight());
+					frame.setLocation(0, 0);
 				}
 				else {
 					img = Utility.getImageFast(
 						FileExplorer.getIconPath() + "other/fullscreen2.png", 
 						20, 20, true);
-					//frame.setExtendedState(frame.getExtendedState() & ~JFrame.MAXIMIZED_BOTH);
+					
+					//Set Window's dimensions
+					frame.setShape(new RoundRectangle2D.Double(0, 0, backupBounds.width,
+						backupBounds.height, frameRoundness, frameRoundness));
+					frame.setSize(backupBounds.width, backupBounds.height);
+					frame.setLocation(backupLocation.x, backupLocation.y);
 				}			
 
 				((JButton)event.getSource()).setIcon(img);
