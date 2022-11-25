@@ -3,6 +3,11 @@ import java.awt.Image;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ *  A class that stores already loaded
+ *  images and icons for later use.
+ */
+
 public class ImageHandler {
 	private static Set<ScaledIcon> explorer_icons = 
 		ConcurrentHashMap.newKeySet();

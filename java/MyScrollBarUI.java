@@ -2,6 +2,10 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 
+/**
+ *  Just a circular scrollbar.
+ */
+
 public class MyScrollBarUI extends BasicScrollBarUI {
 	private final Dimension d = new Dimension();
 	private Color cornerColor = Color.RED;

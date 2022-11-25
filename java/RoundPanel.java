@@ -9,6 +9,10 @@ import java.awt.geom.RoundRectangle2D;
 import javax.swing.JPanel;
 import java.awt.*;
 
+/**
+ *  Just a JPanel with round edges.
+ */
+
 public class RoundPanel extends JPanel {
 	private int roundTopLeft = 0;
 	private int roundTopRight = 0;
