@@ -113,6 +113,19 @@ public class FileExplorer {
 
 	private static DefaultMutableTreeNode lastTreeNodeOpened=null;
 
+	static String getExtension(String fileName) {
+		String extension = "";
+
+		int i = fileName.lastIndexOf('.');
+		int p = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
+
+		if (i > p) {
+			extension = fileName.substring(i+1);
+		}
+
+		return extension;
+	}
+
 	public static void main(String[] args) {
 
 		if(args.length>1)
@@ -290,9 +303,9 @@ public class FileExplorer {
 		BasicTreeUI basicTreeUI = (BasicTreeUI) tree.getUI();
 		basicTreeUI.setLeftChildIndent(0);
 		basicTreeUI.setRightChildIndent(12);
-		basicTreeUI.setCollapsedIcon(Utility.getImageFast(ICONPATH + 
+		basicTreeUI.setCollapsedIcon(ImageHandler.getImageFast(ICONPATH + 
 								"other/collapsed.png", 9, 9, true));
-		basicTreeUI.setExpandedIcon(Utility.getImageFast(ICONPATH + 
+		basicTreeUI.setExpandedIcon(ImageHandler.getImageFast(ICONPATH + 
 			"other/expanded.png", 9, 9, true));
 
 		//Create the scroll pane and add the tree to it. 
@@ -570,7 +583,7 @@ public class FileExplorer {
 	static void refresh(DefaultMutableTreeNode node) {
 		JTree tree = FileExplorer.getTree();
 
-		Utility.clearPathIcons(((File) node.getUserObject()).getPath());
+		ImageHandler.clearPathIcons(((File) node.getUserObject()).getPath());
 		node.removeAllChildren();
 		DefaultTreeModel defMod1 = (DefaultTreeModel) tree.getModel();	
 		defMod1.reload();
@@ -630,7 +643,7 @@ public class FileExplorer {
 		File f = new File(filePath + "/" + nameOld);
 
 		if(f.exists() && f.canWrite()) {
-			img = Utility.getImageFast(ICONPATH + "other/rename.png", 50, 50, true);
+			img = ImageHandler.getImageFast(ICONPATH + "other/rename.png", 50, 50, true);
 
 			nameNew=(String) JOptionPane.showInputDialog(null, "Enter New Name",
 									"Rename", JOptionPane.INFORMATION_MESSAGE,
@@ -714,7 +727,7 @@ public class FileExplorer {
 
 		File f = new File(filePath + "/" + name);
 
-		img = Utility.getImageFast(ICONPATH + "other/delete.png", 50, 50, true);
+		img = ImageHandler.getImageFast(ICONPATH + "other/delete.png", 50, 50, true);
 
 		if(f.exists() && f.isFile() && f.canWrite()){
 			int input = JOptionPane.showConfirmDialog(null, "Deleting file \"" + 
@@ -957,7 +970,7 @@ public class FileExplorer {
 
 		panel.setBorder(compound);
 
-		ImageIcon close = Utility.getImageFast(ICONPATH + 
+		ImageIcon close = ImageHandler.getImageFast(ICONPATH + 
 					"other/close.png", 20, 20, true);
 		JLabel label = new JLabel(close); 
 		label.addMouseListener(new MouseAdapter() {
@@ -978,7 +991,7 @@ public class FileExplorer {
 
 		panel.add(exitPanel);
 
-		ImageIcon img = Utility.getImageFast(ICONPATH + 
+		ImageIcon img = ImageHandler.getImageFast(ICONPATH + 
 					"other/info.png", 50, 50, true);
 		label = new JLabel(img); 
 
@@ -1021,19 +1034,19 @@ public class FileExplorer {
 		panel.add(Box.createRigidArea(new Dimension(0, 20)));
 		
 		JCheckBox execute = new JCheckBox("Execute", file.canExecute());
-		execute.setIcon(Utility.getImageFast(
+		execute.setIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/unchecked.png", 15, 15, true));
-		execute.setSelectedIcon(Utility.getImageFast(
+		execute.setSelectedIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/checked.png", 15, 15, true));
-		execute.setDisabledIcon(Utility.getImageFast(
+		execute.setDisabledIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/unchecked_disabled.png", 15, 15, true));
-		execute.setDisabledSelectedIcon(Utility.getImageFast(
+		execute.setDisabledSelectedIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/checked_disabled.png", 15, 15, true));
-		execute.setPressedIcon(Utility.getImageFast(
+		execute.setPressedIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/half_checked.png", 15, 15, true));
 	
@@ -1056,19 +1069,19 @@ public class FileExplorer {
 		});
 		
 		JCheckBox read = new JCheckBox("Read", file.canRead());
-		read.setIcon(Utility.getImageFast(
+		read.setIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/unchecked.png", 15, 15, true));
-		read.setSelectedIcon(Utility.getImageFast(
+		read.setSelectedIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/checked.png", 15, 15, true));
-		read.setDisabledIcon(Utility.getImageFast(
+		read.setDisabledIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/unchecked_disabled.png", 15, 15, true));
-		read.setDisabledSelectedIcon(Utility.getImageFast(
+		read.setDisabledSelectedIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/checked_disabled.png", 15, 15, true));
-		read.setPressedIcon(Utility.getImageFast(
+		read.setPressedIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/half_checked.png", 15, 15, true));
 
@@ -1091,19 +1104,19 @@ public class FileExplorer {
 		});
 
 		JCheckBox write = new JCheckBox("Write", file.canWrite());
-		write.setIcon(Utility.getImageFast(
+		write.setIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/unchecked.png", 15, 15, true));
-		write.setSelectedIcon(Utility.getImageFast(
+		write.setSelectedIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/checked.png", 15, 15, true));
-		write.setDisabledIcon(Utility.getImageFast(
+		write.setDisabledIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/unchecked_disabled.png", 15, 15, true));
-		write.setDisabledSelectedIcon(Utility.getImageFast(
+		write.setDisabledSelectedIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/checked_disabled.png", 15, 15, true));
-		write.setPressedIcon(Utility.getImageFast(
+		write.setPressedIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/half_checked.png", 15, 15, true));
 
@@ -1452,7 +1465,7 @@ public class FileExplorer {
 
 		if(history.empty() || (!history.empty() && history.peek()!=node)) {
 			history.push(node);
-			FileExplorer.getButtonBack().setIcon(Utility.getImageFast(
+			FileExplorer.getButtonBack().setIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/backarrow.png", 23, 23, true));
 		}
@@ -1461,7 +1474,7 @@ public class FileExplorer {
 	public static DefaultMutableTreeNode historyPop() {
 		if(!history.empty()) {
 			if(history.size()==1) {
-				FileExplorer.getButtonBack().setIcon(Utility.getImageFast(
+				FileExplorer.getButtonBack().setIcon(ImageHandler.getImageFast(
 					FileExplorer.getIconPath() + 
 						"other/grayedback.png", 23, 23, true));
 			}
@@ -1474,7 +1487,7 @@ public class FileExplorer {
 
 	public static void clearFuture() {
 		futureHistory.clear();
-		FileExplorer.getButtonForward().setIcon(Utility.getImageFast(
+		FileExplorer.getButtonForward().setIcon(ImageHandler.getImageFast(
 			FileExplorer.getIconPath() + 
 				"other/grayedforward.png", 23, 23, true));
 	}
@@ -1488,7 +1501,7 @@ public class FileExplorer {
 
 		if(futureHistory.peek()!=node) {
 			futureHistory.push(node);
-			FileExplorer.getButtonForward().setIcon(Utility.getImageFast(
+			FileExplorer.getButtonForward().setIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/forwardarrow.png", 23, 23, true));
 		}
@@ -1503,7 +1516,7 @@ public class FileExplorer {
 
 		node = futureHistory.pop();
 		if(futureHistory.empty()) {
-			FileExplorer.getButtonForward().setIcon(Utility.getImageFast(
+			FileExplorer.getButtonForward().setIcon(ImageHandler.getImageFast(
 				FileExplorer.getIconPath() + 
 					"other/grayedforward.png", 23, 23, true));		
 		}
@@ -1741,7 +1754,7 @@ public class FileExplorer {
 
 		menuItem = new JMenuItem("  Text Document");
 		menuItem.setIcon(
-			Utility.getImageFast(ICONPATH + "extensions/txt.png", 17, 17, true));
+			ImageHandler.getImageFast(ICONPATH + "extensions/txt.png", 17, 17, true));
 
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -1763,7 +1776,7 @@ public class FileExplorer {
 					return;
 				}
 
-				img = Utility.getImageFast(ICONPATH + "extensions/txt.png", 
+				img = ImageHandler.getImageFast(ICONPATH + "extensions/txt.png", 
 											50, 50, true);
 				name = (String) JOptionPane.showInputDialog(null, 
 					"Enter File Name", "New Text Document", 
@@ -1791,7 +1804,7 @@ public class FileExplorer {
 					name = invalidStripped;
 				}
 
-				if(Utility.getExtension(name).equals("txt"))
+				if(getExtension(name).equals("txt"))
 					f = new File(filePath + "/" + name);
 				else
 					f = new File(filePath + "/" + name + ".txt");
@@ -1820,7 +1833,7 @@ public class FileExplorer {
 
 
 		menuItem = new JMenuItem("  Folder");
-		menuItem.setIcon(Utility.getImageFast(
+		menuItem.setIcon(ImageHandler.getImageFast(
 			ICONPATH + "other/folder.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -1841,7 +1854,7 @@ public class FileExplorer {
 					return;
 				}
 
-				img = Utility.getImageFast(
+				img = ImageHandler.getImageFast(
 					ICONPATH + "other/folder.png", 50, 50, true);
 				name = (String) JOptionPane.showInputDialog(null, 
 					"Enter Folder Name", "New Folder", 
@@ -1896,7 +1909,7 @@ public class FileExplorer {
 		sectionsMenu.add(menuItem);
 	
 
-		sectionsMenu.setIcon(Utility.getImageFast(
+		sectionsMenu.setIcon(ImageHandler.getImageFast(
 					ICONPATH + "other/plus.png", 17, 17, true));	
 
 		if(selected.exists() && selected.canWrite()) {
@@ -1909,7 +1922,7 @@ public class FileExplorer {
 		//Refresh option
 
 		menuItem = new JMenuItem("  Refresh");
-		menuItem.setIcon(Utility.getImageFast(
+		menuItem.setIcon(ImageHandler.getImageFast(
 			ICONPATH + "other/refresh.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -1924,7 +1937,7 @@ public class FileExplorer {
 		popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem("  Paste");
-		menuItem.setIcon(Utility.getImageFast(
+		menuItem.setIcon(ImageHandler.getImageFast(
 			ICONPATH + "other/paste.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -1950,7 +1963,7 @@ public class FileExplorer {
 		}
 
 		menuItem = new JMenuItem("  OS Explorer");
-		menuItem.setIcon(Utility.getImageFast(ICONPATH + 
+		menuItem.setIcon(ImageHandler.getImageFast(ICONPATH + 
 								"other/osexplorer.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -1979,7 +1992,7 @@ public class FileExplorer {
 		popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem("  New Window");
-		menuItem.setIcon(Utility.
+		menuItem.setIcon(ImageHandler.
 				getImageFast(ICONPATH + "other/folder.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -2063,7 +2076,7 @@ public class FileExplorer {
 			multiple = true;
 
 		menuItem = new JMenuItem("  Open");
-		img = Utility.getImageFast(ICONPATH + "other/open.png", 17, 17, true);
+		img = ImageHandler.getImageFast(ICONPATH + "other/open.png", 17, 17, true);
 		menuItem.setIcon(img);
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -2083,7 +2096,7 @@ public class FileExplorer {
 			popupMenu.add(menuItem);
 	
 		menuItem = new JMenuItem("  New Window");
-		menuItem.setIcon(Utility.getImageFast(ICONPATH + 
+		menuItem.setIcon(ImageHandler.getImageFast(ICONPATH + 
 			"other/folder.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -2146,7 +2159,7 @@ public class FileExplorer {
 			popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem("  Cut");
-		menuItem.setIcon(Utility.getImageFast(
+		menuItem.setIcon(ImageHandler.getImageFast(
 			ICONPATH + "other/cut.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -2165,7 +2178,7 @@ public class FileExplorer {
 			popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem("  Copy");
-		menuItem.setIcon(Utility.getImageFast(
+		menuItem.setIcon(ImageHandler.getImageFast(
 			ICONPATH + "other/copy.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -2183,7 +2196,7 @@ public class FileExplorer {
 			popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem("  Paste");
-		menuItem.setIcon(Utility.getImageFast(
+		menuItem.setIcon(ImageHandler.getImageFast(
 			ICONPATH + "other/paste.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -2208,7 +2221,7 @@ public class FileExplorer {
 			popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem("  Rename");
-		menuItem.setIcon(Utility.getImageFast(
+		menuItem.setIcon(ImageHandler.getImageFast(
 			ICONPATH + "other/rename.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -2223,7 +2236,7 @@ public class FileExplorer {
 			popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem("  Delete");
-		menuItem.setIcon(Utility.getImageFast(
+		menuItem.setIcon(ImageHandler.getImageFast(
 			ICONPATH + "other/delete.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -2239,7 +2252,7 @@ public class FileExplorer {
 
 		menuItem = new JMenuItem("  Properties");
 		menuItem.setIcon(
-			Utility.getImageFast(ICONPATH + "other/properties.png", 17, 17, true));
+			ImageHandler.getImageFast(ICONPATH + "other/properties.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -2367,7 +2380,7 @@ public class FileExplorer {
 		Set<String> set = new HashSet<>();
 		File panelFile = (File) panelNode.getUserObject();
 		String name = panelFile.getName(), path="";
-		String extension = Utility.getExtension(panelFile.getName());
+		String extension = getExtension(panelFile.getName());
 
 		if(name.trim().length() == 0) {
 			FileSystemView fsv = FileSystemView.getFileSystemView();
@@ -2389,7 +2402,7 @@ public class FileExplorer {
 				path = ICONPATH + "other/usbfolder.png";			
 			}
 
-			img = Utility.getImageFast(path, 60, 60, true);
+			img = ImageHandler.getImageFast(path, 60, 60, true);
 		}
 
 		// Bad check for images
@@ -2398,25 +2411,25 @@ public class FileExplorer {
 		set.add("png");
 		set.add("gif");
 		if(set.contains(extension)) {
-			img = Utility.getImageFast(panelFile.getPath(), 60, 60, false);
+			img = ImageHandler.getImageFast(panelFile.getPath(), 60, 60, false);
 		}
 
 		if(img==null) {
 			if(currentFile.isDirectory()) {
 				if(panelFile.list()!=null && panelFile.list().length==0)
-					img = Utility.getImageFast(FileExplorer.getIconPath() 
+					img = ImageHandler.getImageFast(FileExplorer.getIconPath() 
 						+ "other/folderempty.png", 60, 60, true);
 				else {
-					img = Utility.getImageFast(ICONPATH 
+					img = ImageHandler.getImageFast(ICONPATH 
 						+ "other/folder.png", 60, 60, true);
 				}
 			}
 			else {
-				img = Utility.getImageFast(ICONPATH + "extensions/" + 
-					Utility.getExtension(currentFile.getName()) + ".png", 60, 60, true);
+				img = ImageHandler.getImageFast(ICONPATH + "extensions/" + 
+					getExtension(currentFile.getName()) + ".png", 60, 60, true);
 
 				if(img==null) {
-					img = Utility.getImageFast(ICONPATH 
+					img = ImageHandler.getImageFast(ICONPATH 
 						+ "other/question.png", 60, 60, true);
 				}
 			}
@@ -2860,7 +2873,7 @@ public class FileExplorer {
 				//top,left,bottom,right
 
 				if(nodo==root) {
-					setIcon(Utility.getImageFast(ICONPATH + 
+					setIcon(ImageHandler.getImageFast(ICONPATH + 
 								"other/pc.png", 25, 25, true));
 					label.setBorder(new EmptyBorder(15, 0, 0, 0)); 
 					//top,left,bottom,right
@@ -2900,18 +2913,18 @@ public class FileExplorer {
 					}
 					
 					setText(name);
-					setIcon(Utility.getImageFast(path, 25, 25, true));
+					setIcon(ImageHandler.getImageFast(path, 25, 25, true));
 				}
 				else if(file.list()!=null && file.list().length==0) {
-					setIcon(Utility.getImageFast(
+					setIcon(ImageHandler.getImageFast(
 						ICONPATH + "other/folderempty.png", 25, 25, true));
 				}
 				else if(expanded) {
-					setIcon(Utility.getImageFast(
+					setIcon(ImageHandler.getImageFast(
 						ICONPATH + "other/folderopen.png", 25, 25, true));
 				}
 				else {
-					setIcon(Utility.getImageFast(
+					setIcon(ImageHandler.getImageFast(
 						ICONPATH + "other/folder.png", 25, 25, true));
 				}
 
@@ -3060,7 +3073,7 @@ public class FileExplorer {
 		ImageIcon img=null;
 
 		menuItem = new JMenuItem("  New Window");
-		menuItem.setIcon(Utility.getImageFast(ICONPATH + 
+		menuItem.setIcon(ImageHandler.getImageFast(ICONPATH + 
 			"other/folder.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -3122,7 +3135,7 @@ public class FileExplorer {
 
 		/*
 		menuItem = new JMenuItem("  Rename");
-		menuItem.setIcon(Utility.getImageFast(
+		menuItem.setIcon(ImageHandler.getImageFast(
 			ICONPATH + "other/rename.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -3136,7 +3149,7 @@ public class FileExplorer {
 			popupMenu.add(menuItem);
 
 		menuItem = new JMenuItem("  Delete");
-		menuItem.setIcon(Utility.getImageFast(
+		menuItem.setIcon(ImageHandler.getImageFast(
 			ICONPATH + "other/delete.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
@@ -3152,7 +3165,7 @@ public class FileExplorer {
 
 		menuItem = new JMenuItem("  Properties");
 		menuItem.setIcon(
-			Utility.getImageFast(ICONPATH + "other/properties.png", 17, 17, true));
+			ImageHandler.getImageFast(ICONPATH + "other/properties.png", 17, 17, true));
 		menuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -3373,7 +3386,7 @@ public class FileExplorer {
 					frame.getBounds().getHeight() != env.getMaximumWindowBounds().getHeight())
 					&& event.getClickCount()%2==0 && event.getButton() == MouseEvent.BUTTON1) {
 					
-					img = Utility.getImageFast(
+					img = ImageHandler.getImageFast(
 						FileExplorer.getIconPath() + "other/fullscreen1.png", 
 						20, 20, true);
 				
@@ -3392,7 +3405,7 @@ public class FileExplorer {
 					return;
 				}
 				else {
-				 	img = Utility.getImageFast(
+				 	img = ImageHandler.getImageFast(
 				 		FileExplorer.getIconPath() + "other/fullscreen2.png", 
 				 		20, 20, true);
 	
@@ -3409,7 +3422,7 @@ public class FileExplorer {
 			}
 		});
 
-		ImageIcon img = Utility.getImageFast(
+		ImageIcon img = ImageHandler.getImageFast(
 			FileExplorer.getIconPath() + "other/close.png", 
 			20, 20, true);
 
@@ -3426,7 +3439,7 @@ public class FileExplorer {
 
 		exitPanel.add(button);
 
-		img = Utility.getImageFast(
+		img = ImageHandler.getImageFast(
 			FileExplorer.getIconPath() + "other/fullscreen2.png", 
 			20, 20, true);
 
@@ -3453,7 +3466,7 @@ public class FileExplorer {
 				if(frame.getBounds().getWidth() != env.getMaximumWindowBounds().getWidth() ||
 					frame.getBounds().getHeight() != env.getMaximumWindowBounds().getHeight()) {
 				
-					img = Utility.getImageFast(
+					img = ImageHandler.getImageFast(
 					FileExplorer.getIconPath() + "other/fullscreen1.png", 
 					20, 20, true);
 				
@@ -3469,7 +3482,7 @@ public class FileExplorer {
 					frame.setLocation(0, 0);
 				}
 				else {
-					img = Utility.getImageFast(
+					img = ImageHandler.getImageFast(
 						FileExplorer.getIconPath() + "other/fullscreen2.png", 
 						20, 20, true);
 					
@@ -3486,7 +3499,7 @@ public class FileExplorer {
 		
 		exitPanel.add(button);
 
-		img = Utility.getImageFast(
+		img = ImageHandler.getImageFast(
 			FileExplorer.getIconPath() + "other/minimize.png", 
 			20, 20, true);
 
@@ -3518,7 +3531,7 @@ public class FileExplorer {
 		c.gridx = 0;
 		c.gridy = 0;
 
-		buttonBack = new JButton(Utility.getImageFast(
+		buttonBack = new JButton(ImageHandler.getImageFast(
 			FileExplorer.getIconPath() + 
 				"other/grayedback.png", navHeight, navHeight, true));
 		buttonBack.setBorder(BorderFactory.createEmptyBorder());
@@ -3538,7 +3551,7 @@ public class FileExplorer {
 		c.gridx = 1;
 		c.gridy = 0;
 
-		buttonForward = new JButton(Utility.getImageFast(
+		buttonForward = new JButton(ImageHandler.getImageFast(
 			FileExplorer.getIconPath() + 
 				"other/grayedforward.png", navHeight, navHeight, true));
 		buttonForward.setBorder(BorderFactory.createEmptyBorder());
@@ -3559,7 +3572,7 @@ public class FileExplorer {
 		c.gridy = 0;
 
 		navigationField = new JTextFieldIcon(new JTextField(), 
-			Utility.getImageFast(FileExplorer.getIconPath() + "other/pc.png", 
+			ImageHandler.getImageFast(FileExplorer.getIconPath() + "other/pc.png", 
 				15, 15, true));
 
 		navigationField.setBorderColor(FileExplorer.folderBackgroundColor);
@@ -3642,7 +3655,7 @@ public class FileExplorer {
 		topPanel.add(buttonField, c);
 
 		searchField = new JTextFieldIcon(new JTextField(), 
-			Utility.getImageFast(FileExplorer.getIconPath() + 
+			ImageHandler.getImageFast(FileExplorer.getIconPath() + 
 				"other/magnifyingglass.png", 15, 15, true));
 
 		searchField.setBorderColor(FileExplorer.folderBackgroundColor);
@@ -3697,9 +3710,8 @@ public class FileExplorer {
 							setText(file.getPath());
 							if(file.isDirectory())
 								setIcon(getSmallIcon("folder.png", file));
-							else if(file.isFile() && iconSet.contains(Utility.getExtension(file.getName())))
-								setIcon(getSmallIcon(Utility.
-									getExtension(file.getName()) + ".png", file));
+							else if(file.isFile() && iconSet.contains(getExtension(file.getName())))
+								setIcon(getSmallIcon(getExtension(file.getName()) + ".png", file));
 							else
 								setIcon(getSmallIcon("question.png", file));
 
@@ -3720,7 +3732,7 @@ public class FileExplorer {
 							set.add("jpg");
 							set.add("png");
 							set.add("gif");
-							if(set.contains(Utility.getExtension(file.getName()))) {
+							if(set.contains(getExtension(file.getName()))) {
 								path = file.getPath();
 							}
 
@@ -3739,7 +3751,7 @@ public class FileExplorer {
 									path = ICONPATH + "extensions/" + name;
 							}
 
-							img = Utility.getImageFast(path, 35, 35, true);
+							img = ImageHandler.getImageFast(path, 35, 35, true);
 
 							return img;
 						}
@@ -3993,7 +4005,7 @@ public class FileExplorer {
 			String name = file.getName();
 			if(name.trim().length() == 0 || name.equals(windowsTopName)) {
 				if(file.getPath().equals("/") || name.equals(windowsTopName)) {
-					button = new JButton(Utility.getImageFast(
+					button = new JButton(ImageHandler.getImageFast(
 						FileExplorer.getIconPath() + "other/pc.png", 
 						navHeight-4, navHeight-7, true));	
 				}

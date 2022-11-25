@@ -3,25 +3,12 @@ import java.awt.Image;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Utility {
+public class ImageHandler {
 	private static Set<ScaledIcon> explorer_icons = 
 		ConcurrentHashMap.newKeySet();
 	private static Set<ScaledIcon> images = 
 		ConcurrentHashMap.newKeySet();
 	private static ScaledIcon last=null;
-
-	static String getExtension(String fileName) {
-		String extension = "";
-
-		int i = fileName.lastIndexOf('.');
-		int p = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
-
-		if (i > p) {
-			extension = fileName.substring(i+1);
-		}
-
-		return extension;
-	}
 
 	static ImageIcon getImageFast(String path, int x, int y, boolean explorer) {
 		if(last!=null && last.getPath().equals(path) 
@@ -40,8 +27,10 @@ public class Utility {
 			ScaledIcon element = (ScaledIcon) it.next();
 
 			if(element.getPath().equals(path) && element.getX()==x 
-													&& element.getY()==y)
+				&& element.getY()==y) {
+				
 				return element.getIcon();
+			}
 		}
 
 		ImageIcon icon;
@@ -55,7 +44,7 @@ public class Utility {
 			icon = new ImageIcon(path);
 
 		Image img = icon.getImage().getScaledInstance(x, y, 
-					Image.SCALE_SMOOTH);
+			Image.SCALE_SMOOTH);
 
 		icon = new ImageIcon(img);
 		ScaledIcon scaled = new ScaledIcon(path, icon, x, y);
