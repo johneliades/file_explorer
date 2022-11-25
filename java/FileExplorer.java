@@ -86,18 +86,9 @@ public class FileExplorer {
 
 	*/
 
-	static Set<String> iconSet = FileExplorer.addExtensions();
-
-	private static RoundPanel lastPanelSelected; 
-	private static HashMap<RoundPanel, DefaultMutableTreeNode> mapPanelNode = 
-		new HashMap<RoundPanel, DefaultMutableTreeNode>();
-
-	private static java.util.List<RoundPanel> selectedList = 
-		new java.util.ArrayList<RoundPanel>();
-	
-	private static java.util.List<DefaultMutableTreeNode> clipboard = 
+	public static java.util.List<DefaultMutableTreeNode> clipboard = 
 		new java.util.ArrayList<DefaultMutableTreeNode>();
-	private static String operation = "";
+	public static String operation = "";
 
 	private static Executor executor = Executors.newSingleThreadExecutor();
 
@@ -112,19 +103,6 @@ public class FileExplorer {
 	*/
 
 	private static DefaultMutableTreeNode lastTreeNodeOpened=null;
-
-	static String getExtension(String fileName) {
-		String extension = "";
-
-		int i = fileName.lastIndexOf('.');
-		int p = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
-
-		if (i > p) {
-			extension = fileName.substring(i+1);
-		}
-
-		return extension;
-	}
 
 	public static void main(String[] args) {
 
@@ -212,52 +190,6 @@ public class FileExplorer {
 	public static JFrame getFrame() {
 		return frame;
 	}
-
-	private static ArrayList<String> getResourceFiles(String path) throws IOException {
-		ArrayList<String> filenames = new ArrayList<>();
-
-		try (
-			InputStream in = getResourceAsStream(path);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
-			String resource;
-
-			while ((resource = br.readLine()) != null) {
-				filenames.add(resource);
-			}
-		}
-
-		return filenames;
-	}
-
-	private static InputStream getResourceAsStream(String resource) {
-		final InputStream in = getContextClassLoader().getResourceAsStream(resource);
-
-		return in == null ? FileExplorer.class.getResourceAsStream(resource) : in;
-	}
-
-	private static ClassLoader getContextClassLoader() {
-		return Thread.currentThread().getContextClassLoader();
-	}
-
-	public static Set<String> addExtensions() {
-		Set<String> set = new HashSet<>(); 
-	
-		try {
-			ArrayList<String> icons = getResourceFiles(ICONPATH + "extensions");
-
-			for(String temp : icons) {
-				String name = temp.replace(".png", "");
-				set.add(name);
-			}
-
-			return set;
-		}
-		catch(Exception e) {}
-
-		return null;
-
-	}
-
 
 	/*
 	
@@ -607,15 +539,15 @@ public class FileExplorer {
 		selectDirectory(node);
 
 		JPanel folder = getFolder();
-		JPanel current = FileExplorer.getLastPanelSelected();
+		JPanel current = FilePanel.getLastSelectedPanel();
 
-		if(current!=null)
-			for(Component comp : folder.getComponents()) {
-				if(current.getName().equals(comp.getName())) {
-					FileExplorer.selectPanel((RoundPanel) comp, true);
-					break;
-				}
-			}
+		// if(current!=null)
+		// 	for(Component comp : folder.getComponents()) {
+		// 		if(current.getName().equals(comp.getName())) {
+		// 			FilePanel.selectPanel((RoundPanel) comp, true);
+		// 			break;
+		// 		}
+		// 	}
 	}
 
 	static void rename(DefaultMutableTreeNode panelNode) {
@@ -801,7 +733,7 @@ public class FileExplorer {
 					success = pasteFile(srcFile, newFile, op);
 					
 					File destFile = new File(newFile, file);
-					if(!hashFile(srcFile, "MD5").equals(hashFile(destFile, "MD5"))) {
+					if(!Utility.hashFile(srcFile, "MD5").equals(Utility.hashFile(destFile, "MD5"))) {
 						System.out.println("copy failed " + srcFile.toPath() + " " + destFile.toPath());
 						return false;
 					}
@@ -809,7 +741,7 @@ public class FileExplorer {
 			}
 			else {
 				Files.copy(source.toPath(), newFile.toPath());
-				if(!hashFile(newFile, "MD5").equals(hashFile(source, "MD5"))) {
+				if(!Utility.hashFile(newFile, "MD5").equals(Utility.hashFile(source, "MD5"))) {
 					System.out.println("copy failed " + source.toPath() + " " + newFile.toPath());
 					return false;
 				}
@@ -817,139 +749,6 @@ public class FileExplorer {
 		}
 
 		return success;
-	}
-
-	public static String hashStream(BufferedInputStream bis, String type) {
-		byte[] buffer= new byte[4096];
-		int count;
-
-		try {
-			MessageDigest digest = MessageDigest.getInstance(type);
-			
-			while ((count = bis.read(buffer)) > 0) {
-				digest.update(buffer, 0, count);
-			}
-			bis.close();
-
-			byte[] hash = digest.digest();
-	
-			// Conver hash to hex string
-			char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
-
-			char[] hexChars = new char[hash.length * 2];
-			for (int j = 0; j < hash.length; j++) {
-				int v = hash[j] & 0xFF;
-				hexChars[j * 2] = HEX_ARRAY[v >>> 4];
-				hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
-			}
-			return new String(hexChars);
-		}
-		catch(Exception exc) {
-
-		}
-
-		return null;
-	}
-
-	public static String hashFile(File file, String type) {
-
-		if(file.isDirectory()) {
-			File[] files = file.listFiles();
-			if(files == null)
-				return "";
-			
-			String total = "";
-
-			Arrays.sort(files);
-
-			for(File current : files)
-				total += hashFile(current, type);
-
-			InputStream stream = new ByteArrayInputStream(
-				total.getBytes(StandardCharsets.UTF_8));
-
-			BufferedInputStream bis = new BufferedInputStream(stream);
-			return hashStream(bis, type);
-		}
-		else {
-			try {
-				BufferedInputStream bis = new BufferedInputStream(new 
-					FileInputStream(file));
-
-				return hashStream(bis, type);
-			}
-			catch(Exception e) {
-
-			}
-		}
-		return "";
-	}
-
-	public static String convertBytes(long bytes, boolean show_bytes) {
-		long fileSizeInKB=0, fileSizeInMB=0, fileSizeInGB=0;
-		if(bytes!=0) {
-			fileSizeInKB = bytes / 1024;
-			fileSizeInMB = fileSizeInKB / 1024;
-			fileSizeInGB = fileSizeInMB / 1024;
-		}
-
-		String size="";
-		if(bytes!=0) {
-			size = bytes + " B";
-		}
-
-		if(fileSizeInKB!=0) {
-			double tempSize = (double) bytes/1024;
-			size = String.format("%.2f", tempSize) + " KB";
-			if(show_bytes)
-				size += "  ( " + bytes + " B )";
-		}
-		
-		if(fileSizeInMB!=0) {
-			double tempSize = (double) bytes/1024/1024;
-			size = String.format("%.2f", tempSize) + " MB ";
-			if(show_bytes)
-				size += "  ( " + bytes + " B )";
-		}
-
-		if(fileSizeInGB!=0) {
-			double tempSize = (double) bytes/1024/1024/1024;
-			size = String.format("%.2f", tempSize) + " GB ";
-			if(show_bytes)
-				size += "  ( " + bytes + " B )";
-		}
-
-		return size;
-	}
-
-	public static long[] folderSize(File directory) {
-		long[] total = new long[3];
-		total[0] = 0; //length
-		total[1] = 0; //files
-		total[2] = 0; //folders
-
-		try {
-			for (File file : directory.listFiles()) {
-				if(!Files.isSymbolicLink(file.toPath())) {
-					if(file.isFile()) {
-						total[0] += file.length();
-						total[1] += 1;
-					}
-					else {
-						long[] temp = folderSize(file);
-	
-						total[0] += temp[0];
-						total[1] += temp[1];
-						total[2] += temp[2] + 1;
-					}
-				}
-			}
-		}
-		catch(Exception e) {
-			return total;
-		}
-
-		return total;
 	}
 
 	public static void properties(File file) {
@@ -1173,7 +972,7 @@ public class FileExplorer {
 					Executor calcMD5 = Executors.newSingleThreadExecutor();
 					calcMD5.execute(new Runnable() {
 						public void run() { 
-							String hash=hashFile(file, "MD5");
+							String hash=Utility.hashFile(file, "MD5");
 							if(hash==null)
 								hash="";
 							JTextField field = new JTextField(hash);
@@ -1216,7 +1015,7 @@ public class FileExplorer {
 					Executor calcSHA = Executors.newSingleThreadExecutor();
 					calcSHA.execute(new Runnable() {
 						public void run() { 
-							String hash=hashFile(file, "SHA-1");
+							String hash=Utility.hashFile(file, "SHA-1");
 							if(hash==null)
 								hash="";
 							JTextField field = new JTextField(hash);
@@ -1259,7 +1058,7 @@ public class FileExplorer {
 					Executor calcSHA = Executors.newSingleThreadExecutor();
 					calcSHA.execute(new Runnable() {
 						public void run() { 
-							String hash=hashFile(file, "SHA-256");
+							String hash=Utility.hashFile(file, "SHA-256");
 							if(hash==null)
 								hash="";
 							JTextField field = new JTextField(hash);
@@ -1292,13 +1091,13 @@ public class FileExplorer {
 
 		if(!file.isDirectory()) {
 			bytes = file.length();
-			size = convertBytes(bytes, true);
+			size = Utility.convertBytes(bytes, true);
 			calculated = true;
 			panel.add(Box.createRigidArea(new Dimension(0, 20)));
 		}
 		else if(file.getName().trim().length() == 0) {
-			avail_space = convertBytes(file.getFreeSpace(), true);
-			size = convertBytes(file.getTotalSpace(), true);
+			avail_space = Utility.convertBytes(file.getFreeSpace(), true);
+			size = Utility.convertBytes(file.getTotalSpace(), true);
 			calculated = true;
 			panel.add(Box.createRigidArea(new Dimension(0, 20)));
 		}
@@ -1348,7 +1147,7 @@ public class FileExplorer {
 					dialog.pack();
 
 					long[] total;
-					total = folderSize(file);
+					total = Utility.folderSize(file);
 
 					long bytes = total[0];
 					long files = total[1];
@@ -1356,7 +1155,7 @@ public class FileExplorer {
 
 					String size="0";
 					if(bytes!=0)
-						size = convertBytes(bytes, true);
+						size = Utility.convertBytes(bytes, true);
 
 					panel.remove(label);
 					dialog.pack();
@@ -1579,7 +1378,7 @@ public class FileExplorer {
 				}
 
 				if(event.getButton() == MouseEvent.BUTTON1) {
-					clearPanelSelection();
+					FilePanel.clearPanelSelection();
 				}
 				else if(event.getButton() == MouseEvent.BUTTON3) {	
 					JPopupMenu menu = getBackgroundPopupMenu();
@@ -1587,7 +1386,7 @@ public class FileExplorer {
 						menu.show(event.getComponent(), event.getX(), 
 													event.getY());
 
-					clearPanelSelection();
+					FilePanel.clearPanelSelection();
 				}
 			}
 			@Override
@@ -1597,7 +1396,7 @@ public class FileExplorer {
 					y2 = event.getY();
 					newPanel.repaint();
 
-					clearPanelSelection();
+					FilePanel.clearPanelSelection();
 
 					for (int i = 0; i < FileExplorer.getFolder().getComponentCount(); i++) {
 						Component current = FileExplorer.getFolder().getComponent(i);
@@ -1615,8 +1414,9 @@ public class FileExplorer {
 
 						Rectangle rect2 = new Rectangle(px, py, pw, ph);
 
-						if(overlaps(rect1, rect2))
-							selectPanel((RoundPanel) current, false);
+						if(overlaps(rect1, rect2)) {
+							FilePanel.findFilePanel((RoundPanel) current).selectPanel(false);
+						}
 					}
 					x = y = x2 = y2 = -1; 
 					newPanel.repaint();
@@ -1636,7 +1436,7 @@ public class FileExplorer {
 					y2 = event.getY();
 					newPanel.repaint();
 		
-					clearPanelSelection();
+					FilePanel.clearPanelSelection();
 
 					for (int i = 0; i < FileExplorer.getFolder().getComponentCount(); i++) {
 						Component current = FileExplorer.getFolder().getComponent(i);
@@ -1655,7 +1455,7 @@ public class FileExplorer {
 						Rectangle rect2 = new Rectangle(px, py, pw, ph);
 
 						if(overlaps(rect1, rect2)) {
-							selectPanel((RoundPanel) current, false);
+							FilePanel.findFilePanel((RoundPanel) current).selectPanel(false);
 						}
 					}
 				}
@@ -1669,8 +1469,9 @@ public class FileExplorer {
 
 		newPanel.getActionMap().put("select all", new AbstractAction() {
 				public void actionPerformed(ActionEvent e) {
-					for(RoundPanel current : mapPanelNode.keySet())
-						selectPanel(current, false);
+					for(FilePanel current : FilePanel.filePanelList) {
+						current.selectPanel(false);
+					}
 				}
 			});
 
@@ -1710,7 +1511,8 @@ public class FileExplorer {
 		newPanel.getActionMap().put("select first", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				RoundPanel panel = (RoundPanel) WrapLayout.getComponent(0);
-				selectPanel(panel, true);
+
+				FilePanel.findFilePanel(panel).selectPanel(true);
 			}
 		});
 		
@@ -1804,7 +1606,7 @@ public class FileExplorer {
 					name = invalidStripped;
 				}
 
-				if(getExtension(name).equals("txt"))
+				if(Utility.getExtension(name).equals("txt"))
 					f = new File(filePath + "/" + name);
 				else
 					f = new File(filePath + "/" + name + ".txt");
@@ -2062,8 +1864,7 @@ public class FileExplorer {
 		return popupMenu;
 	}
 
-	static public JPopupMenu getFilePopupMenu(
-		DefaultMutableTreeNode panelNode) {
+	static public JPopupMenu getFilePopupMenu(DefaultMutableTreeNode panelNode) {
 
 		File panelFile = (File) panelNode.getUserObject();
 
@@ -2072,7 +1873,7 @@ public class FileExplorer {
 		ImageIcon img=null;
 
 		Boolean multiple = false;
-		if(selectedList.size()>1)
+		if(FilePanel.selectedList.size()>1)
 			multiple = true;
 
 		menuItem = new JMenuItem("  Open");
@@ -2166,8 +1967,8 @@ public class FileExplorer {
 			public void actionPerformed(ActionEvent event) {
 				clipboard.clear();
 
-				for(RoundPanel currentPanel : selectedList) 
-					clipboard.add(mapPanelNode.get(currentPanel));
+				for(FilePanel currentPanel : FilePanel.selectedList) 
+					clipboard.add(currentPanel.getNode());
 
 				operation = "cut";
 			}
@@ -2185,8 +1986,8 @@ public class FileExplorer {
 			public void actionPerformed(ActionEvent event) {
 				clipboard.clear();
 
-				for(RoundPanel currentPanel : selectedList)
-					clipboard.add(mapPanelNode.get(currentPanel));
+				for(FilePanel currentPanel : FilePanel.selectedList)
+					clipboard.add(currentPanel.getNode());
 
 				operation = "copy";
 			}
@@ -2301,7 +2102,7 @@ public class FileExplorer {
 					FileExplorer.addNavButton(current);
 				}
 
-				mapPanelNode.clear();
+				FilePanel.filePanelList.clear();
 				folder.removeAll();
 				folder.repaint();
 				folder.revalidate();
@@ -2313,9 +2114,11 @@ public class FileExplorer {
 					if(showHiddenFiles ?  true : !currentFile.isHidden() || 
 						!currentFile.getName().startsWith(".")) {
 					
-						RoundPanel newPanel = getPanel(currentFile, currentNode);
+						FilePanel panel = new FilePanel(currentFile, currentNode);
+						FilePanel.filePanelList.add(panel);
 
-						mapPanelNode.put(newPanel, currentNode);
+						RoundPanel newPanel = panel.getPanel();
+
 						folder.add(newPanel);
 					}
 					
@@ -2338,12 +2141,12 @@ public class FileExplorer {
 
 					if(showHiddenFiles ? true : !element.isHidden() || 
 										!element.getName().startsWith(".")) {
+
+						FilePanel panel = new FilePanel(element, new DefaultMutableTreeNode(element));
+						FilePanel.filePanelList.add(panel);
 						
-						RoundPanel newPanel;
-						newPanel = getPanel(element, new DefaultMutableTreeNode(element));
+						RoundPanel newPanel = panel.getPanel();
 		
-						mapPanelNode.put(newPanel, 
-							new DefaultMutableTreeNode(element));
 						folder.add(newPanel);
 					}
 					folder.repaint();
@@ -2373,413 +2176,6 @@ public class FileExplorer {
 	   }
 	 }
 	*/
-
-	static RoundPanel getPanel(File currentFile, DefaultMutableTreeNode panelNode) {
-		JLabel label;
-		ImageIcon img=null;
-		Set<String> set = new HashSet<>();
-		File panelFile = (File) panelNode.getUserObject();
-		String name = panelFile.getName(), path="";
-		String extension = getExtension(panelFile.getName());
-
-		if(name.trim().length() == 0) {
-			FileSystemView fsv = FileSystemView.getFileSystemView();
-
-			String description = fsv.getSystemTypeDescription(panelFile);
-			name = fsv.getSystemDisplayName(panelFile);
-			
-			path = ICONPATH + "other/harddiskfolder.png";
-
-			if(description.equals("CD Drive")) {
-				path = ICONPATH + "other/cdfolder.png";
-				name = description + " (" + panelFile.getPath().replace("\\", "") + ")";
-			}
-			else if(description.equals("DVD Drive")) {
-				path = ICONPATH + "other/dvd.png";
-				name = description + " (" + panelFile.getPath().replace("\\", "") + ")";
-			}
-			else if(description.equals("USB Drive")) {
-				path = ICONPATH + "other/usbfolder.png";			
-			}
-
-			img = ImageHandler.getImageFast(path, 60, 60, true);
-		}
-
-		// Bad check for images
-		set.add("jpeg");
-		set.add("jpg");
-		set.add("png");
-		set.add("gif");
-		if(set.contains(extension)) {
-			img = ImageHandler.getImageFast(panelFile.getPath(), 60, 60, false);
-		}
-
-		if(img==null) {
-			if(currentFile.isDirectory()) {
-				if(panelFile.list()!=null && panelFile.list().length==0)
-					img = ImageHandler.getImageFast(FileExplorer.getIconPath() 
-						+ "other/folderempty.png", 60, 60, true);
-				else {
-					img = ImageHandler.getImageFast(ICONPATH 
-						+ "other/folder.png", 60, 60, true);
-				}
-			}
-			else {
-				img = ImageHandler.getImageFast(ICONPATH + "extensions/" + 
-					getExtension(currentFile.getName()) + ".png", 60, 60, true);
-
-				if(img==null) {
-					img = ImageHandler.getImageFast(ICONPATH 
-						+ "other/question.png", 60, 60, true);
-				}
-			}
-		}
-
-		//Image folderImg = img.getImage().getScaledInstance(150, 60, 
-		//		Image.SCALE_DEFAULT);
-
-		/* You get small resolution system icons. Waiting for official better 
-		way	Icon icon;
-
-		if(!iconSet.contains(extension) && iconName!="folder.png") {
-			icon = FileSystemView.getFileSystemView().getSystemIcon(file);
-			folderImg = iconToImage(icon).getScaledInstance(60, 60, 
-				Image.SCALE_DEFAULT);
-		}
-		*/
-
-		RoundPanel panel = new RoundPanel(new BorderLayout(), 15, 15, 0, 0, folderBackgroundColor);
-		
-		panel.setPreferredSize(new Dimension(150, 120));
-
-		label = new JLabel(img, JLabel.CENTER);
-		label.setPreferredSize(new Dimension(60, 60));
-		panel.add(label,  BorderLayout.CENTER);
-
-		JPanel bottomPanel = new JPanel(new BorderLayout());
-
-		if(!path.equals("")) {
-			// right empty space
-			label = new JLabel("", JLabel.CENTER);
-			label.setPreferredSize(new Dimension(10, 10));
-			bottomPanel.add(label,  BorderLayout.EAST);
-
-			// left empty space
-			label = new JLabel("", JLabel.CENTER);
-			label.setPreferredSize(new Dimension(10, 10));
-			bottomPanel.add(label,  BorderLayout.WEST);
-
-			long free = currentFile.getFreeSpace();
-			long total = currentFile.getTotalSpace();
-			int used = (int) (((total-free)*100)/total);
-
-			JProgressBar bar = new JProgressBar(0, 100);
-
-			bar.setPreferredSize(new Dimension(80, 17));
-			bar.setValue(used);	
-			bar.setStringPainted(true);
-			bar.setString(FileExplorer.convertBytes(free, false) + " free");
-
-			bar.setBackground(FileExplorer.topBackgroundColor);
-			if(used>90) {
-				bar.setForeground(Color.RED);
-				bar.setUI(new BasicProgressBarUI() {
-					protected Color getSelectionForeground() { return Color.WHITE; }
-				});
-			}
-			else {
-				bar.setForeground(Color.CYAN);
-				bar.setUI(new BasicProgressBarUI() {
-					protected Color getSelectionForeground() { return Color.BLACK; }
-				});
-			}
-
-			bar.setBorderPainted(false);
-
-			bottomPanel.add(bar,  BorderLayout.CENTER);
-		}
-
-		panel.getActionMap().put("select all", new AbstractAction() {
-				public void actionPerformed(ActionEvent e) {
-					clearPanelSelection();
-					for(RoundPanel current : mapPanelNode.keySet())
-						selectPanel(current, false);
-				}
-			});
-
-		panel.getActionMap().put("cut", new AbstractAction() {
-				public void actionPerformed(ActionEvent e) {
-					clipboard.clear();
-
-					for(JPanel currentPanel : selectedList) 
-						clipboard.add(mapPanelNode.get(currentPanel));
-
-					operation = "cut";	
-				}
-			});
-
-		panel.getActionMap().put("copy", new AbstractAction() {
-				public void actionPerformed(ActionEvent e) {
-					clipboard.clear();
-
-					for(JPanel currentPanel : selectedList) 
-						clipboard.add(mapPanelNode.get(currentPanel));
-
-					operation = "copy";
-				}
-			});
-
-		panel.getActionMap().put("rename", new AbstractAction() {
-				public void actionPerformed(ActionEvent e) {
-					if(selectedList.size()==1)
-						FileExplorer.rename(panelNode);		
-				}
-			});
-
-		panel.getActionMap().put("refresh", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				FileExplorer.refresh(FileExplorer.getLastTreeNodeOpened());
-				FileExplorer.focusLast();
-			}
-		});
-
-		panel.getActionMap().put("delete", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				FileExplorer.delete(panelNode);		
-			}
-		});
-
-		panel.getActionMap().put("select left", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				int position = WrapLayout.getIndex(lastPanelSelected);
-				selectPanel((RoundPanel) WrapLayout.getComponent(position - 1), true);
-			}
-		});
-
-		panel.getActionMap().put("select right", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				int position = WrapLayout.getIndex(lastPanelSelected);
-				selectPanel((RoundPanel) WrapLayout.getComponent(position + 1), true);
-			}
-		});
-
-		panel.getActionMap().put("select down", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				int position = WrapLayout.getIndex(lastPanelSelected);
-				selectPanel((RoundPanel) WrapLayout.
-					getComponent(position + WrapLayout.getRowLength()), true);
-			}
-		});
-
-		panel.getActionMap().put("select up", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				int position = WrapLayout.getIndex(lastPanelSelected);
-				selectPanel((RoundPanel) WrapLayout.
-					getComponent(position - WrapLayout.getRowLength()), true);
-			}
-		});
-
-		panel.getActionMap().put("history back", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				FileExplorer.historyBack(); 
-				FileExplorer.focusLast();
-			}
-		});
-
-		panel.getActionMap().put("history forward", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				FileExplorer.historyForward(); 
-				FileExplorer.focusLast();
-			}
-		});
-
-		panel.getActionMap().put("enter", new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				if(selectedList.size()==1) {
-					FileExplorer.historyPush(FileExplorer.getLastTreeNodeOpened());
-					FileExplorer.clearFuture();
-					if(panelNode!=null)
-						FileExplorer.enterOrOpen(panelNode);
-					else
-						FileExplorer.enterOrOpen(new DefaultMutableTreeNode(panelFile));
-					FileExplorer.focusLast();
-				}
-			}
-		});
-
-		InputMap inputMap = panel.getInputMap();
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK), "select all");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK), "cut");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK), "copy");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0), "rename");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "refresh");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "delete");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "select left");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "select right");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "select down");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "select up");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "history back");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.ALT_DOWN_MASK), "history back");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.ALT_DOWN_MASK), "history forward");
-		inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "enter");
-
-		label = new JLabel(name, JLabel.CENTER);
-		label.setPreferredSize(new Dimension(150, 30));
-		label.setForeground (Color.white);
-		bottomPanel.add(label, BorderLayout.SOUTH);
-		bottomPanel.setBackground(FileExplorer.folderBackgroundColor);
-
-		panel.add(bottomPanel, BorderLayout.SOUTH);
-
-		panel.setName(name);
-		panel.setCornerColor(FileExplorer.folderBackgroundColor);
-		panel.setBackground(FileExplorer.folderBackgroundColor);
-
-		panel.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent event) {		
-				if(!selectedList.contains(panel)) {
-					for (int i = 0; i < panel.getComponentCount(); i++) {
-						panel.getComponent(i).setBackground(FileExplorer.panelHoverColor);
-					}
-					panel.setBackground(FileExplorer.panelHoverColor);
-				}
-			}
-			@Override
-			public void mouseExited(MouseEvent event) {
-				if(!selectedList.contains(panel)) {
-					for (int i = 0; i < panel.getComponentCount(); i++) {
-						panel.getComponent(i).setBackground(FileExplorer.folderBackgroundColor);
-					}
-					panel.setBackground(FileExplorer.folderBackgroundColor);
-				}
-			}
-			@Override
-			public void mousePressed(MouseEvent event) {
-				if(!panelFile.exists()) {
-					FileExplorer.findExistingParent(panelFile);
-					return;
-				}
-
-				FileExplorer.setFocusExplorer();
-
-				/* No control pressed */
-				if(!event.isControlDown()) {
-					/* Left Mouse Button */
-
-					if(SwingUtilities.isLeftMouseButton(event) || 
-						(SwingUtilities.isRightMouseButton(event) 
-							&& !selectedList.contains(panel))) {
-						
-						selectPanel(panel, true);
-					}
-				}
-				else if(event.isControlDown() && SwingUtilities.isLeftMouseButton(event) 
-					&& event.getClickCount() == 1) {
-
-					selectPanel(panel, false);
-				}
-
-				if(event.getClickCount()%2==0 && event.getButton() == MouseEvent.BUTTON1) {
-					FileExplorer.historyPush(FileExplorer.getLastTreeNodeOpened());
-					FileExplorer.clearFuture();
-					FileExplorer.enterOrOpen(panelNode);
-
-					FileExplorer.focusLast();
-				}
-				else if(event.getButton() == MouseEvent.BUTTON3) {
-					JPopupMenu menu = getFilePopupMenu(panelNode);
-					menu.show(event.getComponent(), event.getX(), event.getY());
-				}
-			}
-		});
-
-		panel.addFocusListener(new FocusListener() {
-			@Override
-			public void focusGained(FocusEvent e) {
-
-			}
-			public void focusLost(FocusEvent e) {
-
-			}
-		});
-
-		return panel;
-	}
-
-	static public void selectPanel(RoundPanel panel, Boolean clear) {
-		
-		if(panel==null)
-			return;
-
-		if(clear) {
-			clearPanelSelection();
-			for (int i = 0; i < panel.getComponentCount(); i++) {
-				panel.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
-			}
-			panel.setBackground(FileExplorer.panelSelectionColor);
-			panel.setRoundTopLeft(40);
-			panel.setRoundTopRight(40);
-			panel.setCornerColor(Color.RED);
-			selectedList.add(panel);
-		}
-		else {
-			if(selectedList.contains(panel)) {
-				for (int i = 0; i < panel.getComponentCount(); i++) {
-					panel.getComponent(i).setBackground(FileExplorer.folderBackgroundColor);
-				}
-				panel.setBackground(FileExplorer.folderBackgroundColor);
-				panel.setRoundTopLeft(15);
-				panel.setRoundTopRight(15);
-				panel.setCornerColor(FileExplorer.folderBackgroundColor);
-
-				selectedList.remove(panel);
-			}
-			else
-				selectedList.add(panel);
-
-			for(RoundPanel element : selectedList) {
-				for (int i = 0; i < element.getComponentCount(); i++) {
-					element.getComponent(i).setBackground(FileExplorer.panelSelectionColor);
-				}
-				element.setBackground(FileExplorer.panelSelectionColor);
-				element.setRoundTopLeft(40);
-				element.setRoundTopRight(40);
-				element.setCornerColor(Color.RED);
-			}
-		}
-
-		panel.requestFocusInWindow();
-		lastPanelSelected = panel;
-	}
-
-	static public void clearPanelSelection() {
-		for(RoundPanel element : selectedList) {
-			for (int i = 0; i < element.getComponentCount(); i++) {
-				element.getComponent(i).setBackground(FileExplorer.folderBackgroundColor);
-			}
-			element.setBackground(FileExplorer.folderBackgroundColor);
-			element.setRoundTopLeft(15);
-			element.setRoundTopRight(15);
-			element.setCornerColor(FileExplorer.folderBackgroundColor);
-		}
-		selectedList.clear();
-
-		if(lastPanelSelected!=null) {
-			for (int i = 0; i < lastPanelSelected.getComponentCount(); i++) {
-				lastPanelSelected.getComponent(i).setBackground(FileExplorer.folderBackgroundColor);
-			}
-			lastPanelSelected.setBackground(FileExplorer.folderBackgroundColor);
-			lastPanelSelected.setRoundTopLeft(15);
-			lastPanelSelected.setRoundTopRight(15);
-			lastPanelSelected.setCornerColor(FileExplorer.folderBackgroundColor);
-		}
-		lastPanelSelected = null;
-	}
-
-	public static JPanel getLastPanelSelected() {
-		return lastPanelSelected;
-	}
 
 	public static Executor getExecutor() {
 		return executor;
@@ -2866,33 +2262,35 @@ public class FileExplorer {
 				DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) value;
 				File file = (File) nodo.getUserObject();
 				String name = file.getName();
-
+				
 				TreeModel tmodel = tree.getModel();
 				Object root = tmodel.getRoot();
 				label.setBorder(new EmptyBorder(0, 0, 0, 0)); 
 				//top,left,bottom,right
 
 				if(nodo==root) {
-					setIcon(ImageHandler.getImageFast(ICONPATH + 
-								"other/pc.png", 25, 25, true));
 					label.setBorder(new EmptyBorder(15, 0, 0, 0)); 
-					//top,left,bottom,right
+					setIcon(ImageHandler.getImageFast(ICONPATH + 
+						"other/pc.png", 25, 25, true));
 				}
 				else if(name.trim().length() == 0 && nodo.getParent()==root) {
 					FileSystemView fsv = FileSystemView.getFileSystemView();
 
-					String path = ICONPATH + "other/harddisk.png";
+					setIcon(ImageHandler.getImageFast(
+						ICONPATH + "other/harddisk.png", 25, 25, true));
 
 					/* Dear john-from-the-future, this is john-from-the-past. You
 					almost certainly think I messed up here and that the code could be
 					cleaned up. Well don't! It’s like this for a reason! */
 
+					/* This ensures that there will be no lags cause of repeatedly
+						calling this slow function on resize */
 					FsvCache info = descriptions.get(file);
 					String description;
 
 					if(info!=null) {
 						description = info.getDescription();
-						name  = info.getName();
+						name = info.getName();
 					}
 					else {
 						description = fsv.getSystemTypeDescription(file);
@@ -2900,32 +2298,14 @@ public class FileExplorer {
 						descriptions.put(file, new FsvCache(description, name));
 					}
 
-					if(description.equals("CD Drive")) {
-						path = ICONPATH + "other/cd.png";
+					if(description.equals("CD Drive") || description.equals("DVD Drive")) {
 						name = description + " (" + file.getPath().replace("\\", "") + ")";
 					}
-					else if(description.equals("DVD Drive")) {
-						path = ICONPATH + "other/dvd.png";
-						name = description + " (" + file.getPath().replace("\\", "") + ")";
-					}
-					else if(description.equals("USB Drive")) {
-						path = ICONPATH + "other/usb.png";			
-					}
-					
+
 					setText(name);
-					setIcon(ImageHandler.getImageFast(path, 25, 25, true));
-				}
-				else if(file.list()!=null && file.list().length==0) {
-					setIcon(ImageHandler.getImageFast(
-						ICONPATH + "other/folderempty.png", 25, 25, true));
-				}
-				else if(expanded) {
-					setIcon(ImageHandler.getImageFast(
-						ICONPATH + "other/folderopen.png", 25, 25, true));
 				}
 				else {
-					setIcon(ImageHandler.getImageFast(
-						ICONPATH + "other/folder.png", 25, 25, true));
+					setIcon(Utility.chooseIcon(file, 25));
 				}
 
 				return label;
@@ -3705,55 +3085,16 @@ public class FileExplorer {
 							super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 							DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+							
 							File file = (File) node.getUserObject();
-
 							setText(file.getPath());
-							if(file.isDirectory())
-								setIcon(getSmallIcon("folder.png", file));
-							else if(file.isFile() && iconSet.contains(getExtension(file.getName())))
-								setIcon(getSmallIcon(getExtension(file.getName()) + ".png", file));
-							else
-								setIcon(getSmallIcon("question.png", file));
+							ImageIcon img = Utility.chooseIcon(file, 35);
+							setIcon(img);
 
 							setBorder(new EmptyBorder(0, 10, 0, 0));
 							setIconTextGap(10);
 
 							return this;
-						}
-
-						public ImageIcon getSmallIcon(String name, File file) {
-							JLabel label = new JLabel();
-							ImageIcon img=null;
-							Set<String> set = new HashSet<>(); 
-							String path = null;
-
-							// Bad check for images
-							set.add("jpeg");
-							set.add("jpg");
-							set.add("png");
-							set.add("gif");
-							if(set.contains(getExtension(file.getName()))) {
-								path = file.getPath();
-							}
-
-							if(path==null) {
-								if(name=="folder.png") {
-									if(file.list()!=null && file.list().length==0)
-										path = ICONPATH + "other/" + "folderempty.png";
-									else {
-										path = ICONPATH + "other/" + "folder.png";
-									}
-								}
-								else if(name=="question.png") {
-									path = ICONPATH + "other/" + "question.png";
-								}
-								else
-									path = ICONPATH + "extensions/" + name;
-							}
-
-							img = ImageHandler.getImageFast(path, 35, 35, true);
-
-							return img;
 						}
 					});
 
@@ -3916,7 +3257,7 @@ public class FileExplorer {
 		DefaultMutableTreeNode previous,
 						lastTreeNodeOpened = FileExplorer.getLastTreeNodeOpened();
 
-		FileExplorer.clearPanelSelection();
+		FilePanel.clearPanelSelection();
 
 		previous = FileExplorer.historyPop();
 		if(previous==null) {
