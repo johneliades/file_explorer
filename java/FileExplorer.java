@@ -114,55 +114,46 @@ public class FileExplorer {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				createAndShowGUI(fileToOpen);
+				//Create and set up the window.
+				frame = new JFrame("File Explorer");
+				frame.setBackground(folderBackgroundColor);
+				frame.getRootPane().setBorder(new EmptyBorder(0, 0, 0, 0));
+
+				java.net.URL imgURL = FileExplorer.class.getResource(ICONPATH + "other/folder.png");
+				frame.setIconImage(new ImageIcon(imgURL).getImage());
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+				//Gets screen's Dimensions
+				Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+				int windowHeight = (int) screenSize.getHeight()*3/4;
+				int windowWidth = (int) screenSize.getWidth()*3/4;
+
+				//Set Window's dimensions
+				frame.setSize(windowWidth, windowHeight);
+
+				//Set Window's location
+				frame.setLocation((screenSize.width-windowWidth)/2, 
+					(screenSize.height-windowHeight)/2);
+
+				//Set window layout manager
+				frame.setLayout(new BorderLayout());
+
+				JPanel topWindow = getTopWindow();
+				topWindow.setBorder(new EmptyBorder(5, 5, 5, 5));
+				topWindow.setBackground(topBackgroundColor);
+
+				//Add content to the window.
+				frame.add(topWindow, BorderLayout.NORTH);
+
+				JPanel FileExplorer = getMainWindow(fileToOpen);
+
+				frame.add(FileExplorer, BorderLayout.CENTER);
+
+				//Display the window.
+				frame.setVisible(true);
 			}
 		});
-	}
-
-	/**
-	 * Create the GUI and show it.	For thread safety,
-	 * this method should be invoked from the
-	 * event dispatch thread.
-	 */
-	private static void createAndShowGUI(File file) {
-		//Create and set up the window.
-		frame = new JFrame("File Explorer");
-		frame.setBackground(folderBackgroundColor);
-		frame.getRootPane().setBorder(new EmptyBorder(0, 0, 0, 0));
-
-		java.net.URL imgURL = FileExplorer.class.getResource(ICONPATH + "other/folder.png");
-		frame.setIconImage(new ImageIcon(imgURL).getImage());
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		//Gets screen's Dimensions
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-		int windowHeight = (int) screenSize.getHeight()*3/4;
-		int windowWidth = (int) screenSize.getWidth()*3/4;
-
-		//Set Window's dimensions
-		frame.setSize(windowWidth, windowHeight);
-
-		//Set Window's location
-		frame.setLocation((screenSize.width-windowWidth)/2, 
-			(screenSize.height-windowHeight)/2);
-
-		//Set window layout manager
-		frame.setLayout(new BorderLayout());
-
-		JPanel topWindow = getTopWindow();
-		topWindow.setBorder(new EmptyBorder(5, 5, 5, 5));
-		topWindow.setBackground(topBackgroundColor);
-
-		//Add content to the window.
-		frame.add(topWindow, BorderLayout.NORTH);
-
-		JPanel FileExplorer = getMainWindow(file);
-
-		frame.add(FileExplorer, BorderLayout.CENTER);
-
-		//Display the window.
-		frame.setVisible(true);
 	}
 
 	public static String getIconPath() {
