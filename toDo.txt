@@ -2,27 +2,26 @@
 |BUGLIST|
 +=======+
 
-#create cancellable runnable for folder threads
-#better focus order, at startup focus folder
-#when going lower scroll with arrows
-#cut, copy, paste
+# create cancellable runnable for folder threads
+# better focus order, at startup focus folder
+# when going lower scroll with arrows
+# cut, copy, paste
 
 +=======+
 |EZ FAST|
 +=======+
 
-#show size instead of calculating on properties
-#indication of how many files selected
-#border around preview images
+# show size instead of calculating on properties
+# border around preview images
 
 +=======+
 | LATER |
 +=======+
 
-#tree rename and delete
-#dropdown for search with settings
-#zip/unzip
-#drag n drop
-#ftp
-#open as
-#consider auto refresh
+# tree rename and delete
+# dropdown for search with settings
+# zip/unzip
+# drag n drop
+# ftp
+# open as
+# consider auto refresh
