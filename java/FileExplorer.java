@@ -14,7 +14,6 @@ import javax.swing.JTextArea;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.RoundRectangle2D;
 import java.util.*;
 import java.util.concurrent.*;
 import java.nio.file.Files;
@@ -31,7 +30,6 @@ public class FileExplorer {
 	public static final Color folderBackgroundColor = new Color(49, 49, 49);
 	public static final Color treeBackgroundColor = new Color(32, 32, 32);
 	public static final Color topBackgroundColor = new Color(25, 25, 25);
-	public static final Color exitPanelBackgroundColor = new Color(10, 10, 10);
 	public static final Color panelHoverColor = new Color(0, 170, 170);
 	public static final Color panelSelectionColor = new Color(0, 100, 100);
 	public static final Color textSelectionColor = new Color(0, 255, 255);
@@ -51,7 +49,6 @@ public class FileExplorer {
 
 	*/
 
-	private static final int exitPanelHeight = 33;
 	private static final int navHeight = 25;
 
 	private static JButton buttonBack, buttonForward;
@@ -134,11 +131,6 @@ public class FileExplorer {
 		frame.setBackground(folderBackgroundColor);
 		frame.getRootPane().setBorder(new EmptyBorder(0, 0, 0, 0));
 
-		frame.setUndecorated(true);
-
-		ComponentResizer cr = new ComponentResizer();
-		cr.registerComponent(frame);
-
 		java.net.URL imgURL = FileExplorer.class.getResource(ICONPATH + "other/folder.png");
 		frame.setIconImage(new ImageIcon(imgURL).getImage());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -152,9 +144,6 @@ public class FileExplorer {
 		//Set Window's dimensions
 		frame.setSize(windowWidth, windowHeight);
 
-		frame.setShape(new RoundRectangle2D.Double(0, 0, windowWidth, windowHeight,
-			frameRoundness, frameRoundness));
-
 		//Set Window's location
 		frame.setLocation((screenSize.width-windowWidth)/2, 
 			(screenSize.height-windowHeight)/2);
@@ -163,15 +152,13 @@ public class FileExplorer {
 		frame.setLayout(new BorderLayout());
 
 		JPanel topWindow = getTopWindow();
-		topWindow.setBorder(new EmptyBorder(5, 0, 0, 0));
-		topWindow.setBackground(exitPanelBackgroundColor);
+		topWindow.setBorder(new EmptyBorder(5, 5, 5, 5));
+		topWindow.setBackground(topBackgroundColor);
 
 		//Add content to the window.
 		frame.add(topWindow, BorderLayout.NORTH);
 
 		JPanel FileExplorer = getMainWindow(file);
-		FileExplorer.setBorder(new EmptyBorder(0, 5, 5, 5));
-		FileExplorer.setBackground(topBackgroundColor);
 
 		frame.add(FileExplorer, BorderLayout.CENTER);
 
@@ -385,7 +372,7 @@ public class FileExplorer {
 					JSplitPaneWithZeroSizeDivider(
 						JSplitPaneWithZeroSizeDivider.HORIZONTAL_SPLIT);
 		
-		splitPane.setSplitPaneColor(FileExplorer.exitPanelBackgroundColor);
+		splitPane.setSplitPaneColor(Color.CYAN);
 		splitPane.setLeftComponent(treeView);
 		splitPane.setRightComponent(folderView);
 		splitPane.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -779,6 +766,7 @@ public class FileExplorer {
 			}
 		});
 
+		/* This is the close panel for the properties */
 		JPanel exitPanel = new MotionPanel(dialog);
 		exitPanel.setBackground(FileExplorer.propertiesColor);
 
@@ -2734,170 +2722,6 @@ public class FileExplorer {
 	*/
 
 	public static JPanel getTopWindow() {
-		JPanel newPanel = new JPanel();
-		newPanel.setLayout(new BorderLayout());
-		
-		JPanel exitPanel = new MotionPanel(FileExplorer.getFrame());
-		exitPanel.setBorder(new EmptyBorder(0, 5, 5, 5));
-		exitPanel.setBackground(FileExplorer.exitPanelBackgroundColor);
-		exitPanel.setPreferredSize(new Dimension(exitPanelHeight, exitPanelHeight));
-
-		exitPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		exitPanel.setComponentOrientation(
-			ComponentOrientation.RIGHT_TO_LEFT);
-
-		exitPanel.addMouseListener(new MouseAdapter() {
-			//Gets screen's Dimensions
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			int windowHeight = (int) screenSize.getHeight()*3/4;
-			int windowWidth = (int) screenSize.getWidth()*3/4;
-
-			Rectangle backupBounds = new Rectangle(windowWidth, windowHeight);
-			Point backupLocation = new Point((screenSize.width-windowWidth)/2,
-				(screenSize.height-windowHeight)/2);
-
-			@Override
-			public void mouseClicked(MouseEvent event) {
-				ImageIcon img;
-
-				GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-
-				if((frame.getBounds().getWidth() != env.getMaximumWindowBounds().getWidth() ||
-					frame.getBounds().getHeight() != env.getMaximumWindowBounds().getHeight())
-					&& event.getClickCount()%2==0 && event.getButton() == MouseEvent.BUTTON1) {
-					
-					img = ImageHandler.getImageFast(
-						FileExplorer.getIconPath() + "other/fullscreen1.png", 
-						20, 20, true);
-				
-					backupBounds = frame.getBounds();
-					backupLocation = frame.getLocation();
-
-					Rectangle bounds = env.getMaximumWindowBounds();
-				
-					//Set Window's dimensions
-					frame.setShape(new RoundRectangle2D.Double(0, 0, (int) bounds.getWidth(),
-						(int) bounds.getHeight(), 0, 0));
-					frame.setSize((int) bounds.getWidth(), (int) bounds.getHeight());
-					frame.setLocation(0, 0);
-				}
-				else if(event.getClickCount()%2!=0) {
-					return;
-				}
-				else {
-				 	img = ImageHandler.getImageFast(
-				 		FileExplorer.getIconPath() + "other/fullscreen2.png", 
-				 		20, 20, true);
-	
-					//Set Window's dimensions
-					frame.setShape(new RoundRectangle2D.Double(0, 0, backupBounds.width,
-						backupBounds.height, frameRoundness, frameRoundness));
-					frame.setSize(backupBounds.width, backupBounds.height);
-					frame.setLocation(backupLocation.x, backupLocation.y);
-				}			
-					
-				Component[] components = exitPanel.getComponents();
-
-				((JButton)components[1]).setIcon(img);
-			}
-		});
-
-		ImageIcon img = ImageHandler.getImageFast(
-			FileExplorer.getIconPath() + "other/close.png", 
-			20, 20, true);
-
-		JButton button = new JButton(img);
-		button.setBorder(new EmptyBorder(0, 0, 0, 0));
-		button.setContentAreaFilled(false);
-
-		button.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent event) {
-				System.exit(0);
-			}
-		});
-
-		exitPanel.add(button);
-
-		img = ImageHandler.getImageFast(
-			FileExplorer.getIconPath() + "other/fullscreen2.png", 
-			20, 20, true);
-
-		button = new JButton(img);
-		button.setBorder(new EmptyBorder(0, 0, 0, 0));
-		button.setContentAreaFilled(false);
-
-		button.addMouseListener(new MouseAdapter() {
-			//Gets screen's Dimensions
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			int windowHeight = (int) screenSize.getHeight()*3/4;
-			int windowWidth = (int) screenSize.getWidth()*3/4;
-
-			Rectangle backupBounds = new Rectangle(windowWidth, windowHeight);
-			Point backupLocation = new Point((screenSize.width-windowWidth)/2,
-				(screenSize.height-windowHeight)/2);
-
-			GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-
-			@Override
-			public void mousePressed(MouseEvent event) {
-				ImageIcon img;
-
-				if(frame.getBounds().getWidth() != env.getMaximumWindowBounds().getWidth() ||
-					frame.getBounds().getHeight() != env.getMaximumWindowBounds().getHeight()) {
-				
-					img = ImageHandler.getImageFast(
-					FileExplorer.getIconPath() + "other/fullscreen1.png", 
-					20, 20, true);
-				
-					backupBounds = frame.getBounds();
-					backupLocation = frame.getLocation();
-
-					Rectangle bounds = env.getMaximumWindowBounds();
-				
-					//Set Window's dimensions
-					frame.setShape(new RoundRectangle2D.Double(0, 0, (int) bounds.getWidth(),
-						(int) bounds.getHeight(), 0, 0));
-					frame.setSize((int) bounds.getWidth(), (int) bounds.getHeight());
-					frame.setLocation(0, 0);
-				}
-				else {
-					img = ImageHandler.getImageFast(
-						FileExplorer.getIconPath() + "other/fullscreen2.png", 
-						20, 20, true);
-					
-					//Set Window's dimensions
-					frame.setShape(new RoundRectangle2D.Double(0, 0, backupBounds.width,
-						backupBounds.height, frameRoundness, frameRoundness));
-					frame.setSize(backupBounds.width, backupBounds.height);
-					frame.setLocation(backupLocation.x, backupLocation.y);
-				}			
-
-				((JButton)event.getSource()).setIcon(img);
-			}
-		});
-		
-		exitPanel.add(button);
-
-		img = ImageHandler.getImageFast(
-			FileExplorer.getIconPath() + "other/minimize.png", 
-			20, 20, true);
-
-		button = new JButton(img);
-		button.setBorder(new EmptyBorder(0, 0, 0, 0));
-		button.setContentAreaFilled(false);
-
-		button.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent event) {
-				frame.setState(Frame.ICONIFIED);
-			}
-		});
-
-		exitPanel.add(button);
-
-		newPanel.add(exitPanel, BorderLayout.NORTH);
-
 		JPanel topPanel = new JPanel(new GridBagLayout());
 		topPanel.setBackground(FileExplorer.topBackgroundColor);
 
@@ -2914,8 +2738,9 @@ public class FileExplorer {
 		buttonBack = new JButton(ImageHandler.getImageFast(
 			FileExplorer.getIconPath() + 
 				"other/grayedback.png", navHeight, navHeight, true));
-		buttonBack.setBorder(BorderFactory.createEmptyBorder());
+		buttonBack.setBorderPainted(false);
 		buttonBack.setPreferredSize(new Dimension(navHeight, navHeight));
+		buttonBack.setContentAreaFilled(false);
 		buttonBack.setFocusPainted(false);
 
 		buttonBack.addActionListener(new ActionListener(){  
@@ -2934,9 +2759,10 @@ public class FileExplorer {
 		buttonForward = new JButton(ImageHandler.getImageFast(
 			FileExplorer.getIconPath() + 
 				"other/grayedforward.png", navHeight, navHeight, true));
-		buttonForward.setBorder(BorderFactory.createEmptyBorder());
+		buttonForward.setBorderPainted(false);
 		buttonForward.setPreferredSize(new Dimension(navHeight, navHeight));
 		buttonForward.setFocusPainted(false);
+		buttonForward.setContentAreaFilled(false);
 
 		buttonForward.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -3205,10 +3031,8 @@ public class FileExplorer {
 		c.gridy = 0;
 
 		topPanel.add(searchField, c);
-		
-		newPanel.add(topPanel, BorderLayout.CENTER);
 
-		return newPanel;
+		return topPanel;
 	}
 
 	static void search(JTree tree, DefaultMutableTreeNode top, String searchQuery, DefaultTableModel model) {
