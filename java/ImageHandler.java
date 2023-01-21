@@ -40,7 +40,7 @@ public class ImageHandler {
 
 		ImageIcon icon;
 		if(explorer) {
-			java.net.URL imgURL = FileExplorer.class.getResource(path);
+			java.net.URL imgURL = ImageHandler.class.getResource(path);
 			if(imgURL==null)
 				return null;
 			icon = new ImageIcon(imgURL);
