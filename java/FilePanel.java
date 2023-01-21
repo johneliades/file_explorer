@@ -411,6 +411,9 @@ public class FilePanel {
 			}
 		}
 
+		JLabel selectedItemCount = (JLabel) FileExplorer.infoPanel.getComponent(1);
+		selectedItemCount.setText(Integer.toString(selectedList.size()) + " selected");
+
 		this.panel.requestFocusInWindow();
 	}
 
@@ -422,6 +425,9 @@ public class FilePanel {
 			element.getPanel().setBackground(folderBackgroundColor);
 		}
 		selectedList.clear();
+
+		JLabel selectedItemCount = (JLabel) FileExplorer.infoPanel.getComponent(1);
+		selectedItemCount.setText("");
 	}
 
 	public static JPanel getLastSelectedPanel() {

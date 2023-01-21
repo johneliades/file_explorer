@@ -35,8 +35,6 @@ public class FileExplorer {
 	public static final Color textSelectionColor = new Color(0, 255, 255);
 	public static final Color propertiesColor = new Color(35, 35, 35);
 
-	public static final int frameRoundness = 25;
-
 	private static final String windowsTopName="This PC";
 
 	private static JFrame frame;
@@ -74,6 +72,7 @@ public class FileExplorer {
 	private static DefaultMutableTreeNode top;
 	private static JPanel folder;
 	private static JTree tree;
+	public static JPanel infoPanel;
 
 	/*
 	
@@ -402,10 +401,18 @@ public class FileExplorer {
 		//Add the split pane to this panel.
 		newPanel.add(splitPane, BorderLayout.CENTER);
 
-		JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-		infoPanel.setPreferredSize(new Dimension(0, 20));
+		infoPanel.setPreferredSize(new Dimension(0, 25));
 		
+		JLabel itemCount = new JLabel("");
+		itemCount.setForeground(Color.WHITE);
+		infoPanel.add(itemCount);
+
+		JLabel selectedItemCount = new JLabel("");
+		selectedItemCount.setForeground(Color.WHITE);
+		infoPanel.add(selectedItemCount);
+
 		newPanel.add(infoPanel, BorderLayout.SOUTH);
 
 		return newPanel;
@@ -2121,11 +2128,14 @@ public class FileExplorer {
 
 				Arrays.sort(children);
 
-				for(File element : children) {
-		  
-					if(!element.isFile())
-						continue;
+				children = Arrays.stream(children)
+					.filter(element -> element.isFile())
+					.toArray(File[]::new);
 
+				JLabel itemCount = (JLabel) infoPanel.getComponent(0);
+				itemCount.setText(Integer.toString(numChild + children.length) + " items");
+
+				for(File element : children) {
 					if(showHiddenFiles ? true : !element.isHidden() || 
 										!element.getName().startsWith(".")) {
 
@@ -2308,7 +2318,7 @@ public class FileExplorer {
 				@Override
 				public void valueChanged(TreeSelectionEvent e) {
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-												newPanel.getLastSelectedPathComponent();
+						newPanel.getLastSelectedPathComponent();
 					File current;
 				
 					if (node == null) 
@@ -2332,7 +2342,7 @@ public class FileExplorer {
 			
 				TreePath path = treeExpansionEvent.getPath();
 				DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
-										path.getLastPathComponent();
+					path.getLastPathComponent();
 
 				File current;
 				current = (File) node.getUserObject();
