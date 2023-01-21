@@ -38,7 +38,7 @@ public class FilePanel {
 
 	private File file;
 	private DefaultMutableTreeNode node;
-	private RoundPanel panel;
+	private JPanel panel;
 
 	public FilePanel(File file, DefaultMutableTreeNode node) {
 		this.file = file;
@@ -71,7 +71,7 @@ public class FilePanel {
 			}
 		}
 
-		this.panel = new RoundPanel(new BorderLayout(), 15, 15, 0, 0, folderBackgroundColor);
+		this.panel = new JPanel(new BorderLayout());
 		
 		this.panel.setPreferredSize(new Dimension(150, 120));
 
@@ -178,7 +178,7 @@ public class FilePanel {
 				int position = WrapLayout.getIndex(getLastSelectedPanel());
 
 				for (FilePanel fPanel : filePanelList) {
-					if (fPanel.getPanel() == (RoundPanel) WrapLayout.getComponent(position - 1)) {
+					if (fPanel.getPanel() == (JPanel) WrapLayout.getComponent(position - 1)) {
 						fPanel.selectPanel(true);
 						break;
 					}
@@ -190,7 +190,7 @@ public class FilePanel {
 			public void actionPerformed(ActionEvent e) {
 				int position = WrapLayout.getIndex(getLastSelectedPanel());
 				for (FilePanel fPanel : filePanelList) {
-					if (fPanel.getPanel() == (RoundPanel) WrapLayout.getComponent(position + 1)) {
+					if (fPanel.getPanel() == (JPanel) WrapLayout.getComponent(position + 1)) {
 						fPanel.selectPanel(true);
 						break;
 					}
@@ -203,7 +203,7 @@ public class FilePanel {
 				int position = WrapLayout.getIndex(getLastSelectedPanel());
 
 				for (FilePanel fPanel : filePanelList) {
-					if (fPanel.getPanel() == (RoundPanel) WrapLayout.
+					if (fPanel.getPanel() == (JPanel) WrapLayout.
 						getComponent(position + WrapLayout.getRowLength())) {
 						
 						fPanel.selectPanel(true);
@@ -218,7 +218,7 @@ public class FilePanel {
 				int position = WrapLayout.getIndex(getLastSelectedPanel());
 
 				for (FilePanel fPanel : filePanelList) {
-					if (fPanel.getPanel() == (RoundPanel) WrapLayout.
+					if (fPanel.getPanel() == (JPanel) WrapLayout.
 						getComponent(position - WrapLayout.getRowLength())) {
 						
 						fPanel.selectPanel(true);
@@ -281,14 +281,13 @@ public class FilePanel {
 		this.panel.add(bottomPanel, BorderLayout.SOUTH);
 
 		this.panel.setName(name);
-		this.panel.setCornerColor(folderBackgroundColor);
 		this.panel.setBackground(folderBackgroundColor);
 
 		this.panel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent event) {
-				java.util.List<RoundPanel> selectedListPanels = 
-					new java.util.ArrayList<RoundPanel>();
+				java.util.List<JPanel> selectedListPanels = 
+					new java.util.ArrayList<JPanel>();
 
 				for (FilePanel fPanel : selectedList) {
 					selectedListPanels.add(fPanel.getPanel());
@@ -303,8 +302,8 @@ public class FilePanel {
 			}
 			@Override
 			public void mouseExited(MouseEvent event) {
-				java.util.List<RoundPanel> selectedListPanels = 
-					new java.util.ArrayList<RoundPanel>();
+				java.util.List<JPanel> selectedListPanels = 
+					new java.util.ArrayList<JPanel>();
 
 				for (FilePanel fPanel : selectedList) {
 					selectedListPanels.add(fPanel.getPanel());
@@ -319,8 +318,8 @@ public class FilePanel {
 			}
 			@Override
 			public void mousePressed(MouseEvent event) {
-				java.util.List<RoundPanel> selectedListPanels = 
-					new java.util.ArrayList<RoundPanel>();
+				java.util.List<JPanel> selectedListPanels = 
+					new java.util.ArrayList<JPanel>();
 
 				for (FilePanel fPanel : selectedList) {
 					selectedListPanels.add(fPanel.getPanel());
@@ -375,7 +374,7 @@ public class FilePanel {
 		});
 	}
 
-	public RoundPanel getPanel() {
+	public JPanel getPanel() {
 		return this.panel;
 	}
 
@@ -390,9 +389,6 @@ public class FilePanel {
 				this.panel.getComponent(i).setBackground(panelSelectionColor);
 			}
 			this.panel.setBackground(panelSelectionColor);
-			this.panel.setRoundTopLeft(40);
-			this.panel.setRoundTopRight(40);
-			this.panel.setCornerColor(Color.RED);
 			selectedList.add(this);
 		}
 		else {
@@ -401,9 +397,6 @@ public class FilePanel {
 					this.panel.getComponent(i).setBackground(folderBackgroundColor);
 				}
 				this.panel.setBackground(folderBackgroundColor);
-				this.panel.setRoundTopLeft(15);
-				this.panel.setRoundTopRight(15);
-				this.panel.setCornerColor(folderBackgroundColor);
 
 				selectedList.remove(this);
 			}
@@ -415,9 +408,6 @@ public class FilePanel {
 					element.getPanel().getComponent(i).setBackground(panelSelectionColor);
 				}
 				element.getPanel().setBackground(panelSelectionColor);
-				element.getPanel().setRoundTopLeft(40);
-				element.getPanel().setRoundTopRight(40);
-				element.getPanel().setCornerColor(Color.RED);
 			}
 		}
 
@@ -430,21 +420,18 @@ public class FilePanel {
 				element.getPanel().getComponent(i).setBackground(folderBackgroundColor);
 			}
 			element.getPanel().setBackground(folderBackgroundColor);
-			element.getPanel().setRoundTopLeft(15);
-			element.getPanel().setRoundTopRight(15);
-			element.getPanel().setCornerColor(folderBackgroundColor);
 		}
 		selectedList.clear();
 	}
 
-	public static RoundPanel getLastSelectedPanel() {
+	public static JPanel getLastSelectedPanel() {
 		if(selectedList.size()>0)
 			return selectedList.get(selectedList.size()-1).getPanel();
 		else
 			return null;
 	}
 
-	public static FilePanel findFilePanel(RoundPanel panel) {
+	public static FilePanel findFilePanel(JPanel panel) {
 		for (FilePanel fPanel : filePanelList) {
 			if (fPanel.getPanel() == panel) {
 				return fPanel;

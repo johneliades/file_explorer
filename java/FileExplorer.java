@@ -402,8 +402,7 @@ public class FileExplorer {
 		//Add the split pane to this panel.
 		newPanel.add(splitPane, BorderLayout.CENTER);
 
-		RoundPanel infoPanel = new RoundPanel(new FlowLayout(FlowLayout.RIGHT), 
-			0, 0, 25, 25, topBackgroundColor);
+		JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
 		infoPanel.setPreferredSize(new Dimension(0, 20));
 		
@@ -531,7 +530,7 @@ public class FileExplorer {
 		// if(current!=null)
 		// 	for(Component comp : folder.getComponents()) {
 		// 		if(current.getName().equals(comp.getName())) {
-		// 			FilePanel.selectPanel((RoundPanel) comp, true);
+		// 			FilePanel.selectPanel((JPanel) comp, true);
 		// 			break;
 		// 		}
 		// 	}
@@ -1403,7 +1402,7 @@ public class FileExplorer {
 						Rectangle rect2 = new Rectangle(px, py, pw, ph);
 
 						if(overlaps(rect1, rect2)) {
-							FilePanel.findFilePanel((RoundPanel) current).selectPanel(false);
+							FilePanel.findFilePanel((JPanel) current).selectPanel(false);
 						}
 					}
 					x = y = x2 = y2 = -1; 
@@ -1443,7 +1442,7 @@ public class FileExplorer {
 						Rectangle rect2 = new Rectangle(px, py, pw, ph);
 
 						if(overlaps(rect1, rect2)) {
-							FilePanel.findFilePanel((RoundPanel) current).selectPanel(false);
+							FilePanel.findFilePanel((JPanel) current).selectPanel(false);
 						}
 					}
 				}
@@ -1498,7 +1497,7 @@ public class FileExplorer {
 
 		newPanel.getActionMap().put("select first", new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				RoundPanel panel = (RoundPanel) WrapLayout.getComponent(0);
+				JPanel panel = (JPanel) WrapLayout.getComponent(0);
 
 				FilePanel.findFilePanel(panel).selectPanel(true);
 			}
@@ -2105,7 +2104,7 @@ public class FileExplorer {
 						FilePanel panel = new FilePanel(currentFile, currentNode);
 						FilePanel.filePanelList.add(panel);
 
-						RoundPanel newPanel = panel.getPanel();
+						JPanel newPanel = panel.getPanel();
 
 						folder.add(newPanel);
 					}
@@ -2133,7 +2132,7 @@ public class FileExplorer {
 						FilePanel panel = new FilePanel(element, new DefaultMutableTreeNode(element));
 						FilePanel.filePanelList.add(panel);
 						
-						RoundPanel newPanel = panel.getPanel();
+						JPanel newPanel = panel.getPanel();
 		
 						folder.add(newPanel);
 					}
