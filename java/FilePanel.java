@@ -180,6 +180,15 @@ public class FilePanel {
 				for (FilePanel fPanel : filePanelList) {
 					if (fPanel.getPanel() == (JPanel) WrapLayout.getComponent(position - 1)) {
 						fPanel.selectPanel(true);
+
+						// Get the bounds of the selected panel
+						Rectangle bounds = panel.getBounds();
+						bounds.y -= 400; // Adjust the y-coordinate for the up arrow key
+
+						// Convert the bounds to the coordinate system of the container
+						SwingUtilities.convertRectangle(panel.getParent(), bounds, panel);
+						panel.scrollRectToVisible(bounds);
+
 						break;
 					}
 				}
@@ -192,6 +201,14 @@ public class FilePanel {
 				for (FilePanel fPanel : filePanelList) {
 					if (fPanel.getPanel() == (JPanel) WrapLayout.getComponent(position + 1)) {
 						fPanel.selectPanel(true);
+
+						// Get the bounds of the selected panel
+						Rectangle bounds = panel.getBounds();
+						bounds.y -= 400; // Adjust the y-coordinate for the up arrow key
+						// Convert the bounds to the coordinate system of the container
+						SwingUtilities.convertRectangle(panel.getParent(), bounds, panel);
+						panel.scrollRectToVisible(bounds);
+
 						break;
 					}
 				}
@@ -207,6 +224,15 @@ public class FilePanel {
 						getComponent(position + WrapLayout.getRowLength())) {
 						
 						fPanel.selectPanel(true);
+
+						// Get the bounds of the selected panel
+						Rectangle bounds = panel.getBounds();
+						bounds.y -= 300; // Adjust the y-coordinate for the up arrow key
+
+						// Convert the bounds to the coordinate system of the container
+						SwingUtilities.convertRectangle(panel.getParent(), bounds, panel);
+						panel.scrollRectToVisible(bounds);
+						
 						break;
 					}
 				}
@@ -222,6 +248,15 @@ public class FilePanel {
 						getComponent(position - WrapLayout.getRowLength())) {
 						
 						fPanel.selectPanel(true);
+
+						// Get the bounds of the selected panel
+						Rectangle bounds = panel.getBounds();
+						bounds.y -= 500; // Adjust the y-coordinate for the up arrow key
+
+						// Convert the bounds to the coordinate system of the container
+						SwingUtilities.convertRectangle(panel.getParent(), bounds, panel);
+						panel.scrollRectToVisible(bounds);
+
 						break;
 					}
 				}
