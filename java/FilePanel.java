@@ -53,6 +53,9 @@ public class FilePanel {
 
 			String description = fsv.getSystemTypeDescription(file);
 			name = fsv.getSystemDisplayName(this.file);
+			if(name=="") {
+				name = this.file.getPath();
+			}
 
 			path = ICONPATH + "other/harddiskfolder.png";
 

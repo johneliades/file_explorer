@@ -52,6 +52,7 @@ public class Utility {
 			}
 
 			img = ImageHandler.getImageFast(path, size, size, true);
+			return img;
 		}
 
 		// Bad check for images
@@ -63,14 +64,14 @@ public class Utility {
 			img = ImageHandler.getImageFast(file.getPath(), size, size, false);
 		}
 		else if(file.isDirectory()) {
-				if(file.list()!=null && file.list().length==0) {
-					img = ImageHandler.getImageFast(ICONPATH 
-						+ "other/folderempty.png", size, size, true);
-				}
-				else {
-					img = ImageHandler.getImageFast(ICONPATH 
-						+ "other/folder.png", size, size, true);
-				}
+			if(file.list()!=null && file.list().length==0) {
+				img = ImageHandler.getImageFast(ICONPATH 
+					+ "other/folderempty.png", size, size, true);
+			}
+			else {
+				img = ImageHandler.getImageFast(ICONPATH 
+					+ "other/folder.png", size, size, true);
+			}
 		}
 		else if(file.isFile()) {
 			img = ImageHandler.getImageFast(ICONPATH + "extensions/" + 

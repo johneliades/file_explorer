@@ -2264,9 +2264,6 @@ public class FileExplorer {
 				else if(name.trim().length() == 0 && nodo.getParent()==root) {
 					FileSystemView fsv = FileSystemView.getFileSystemView();
 
-					setIcon(ImageHandler.getImageFast(
-						ICONPATH + "other/harddisk.png", 25, 25, true));
-
 					/* Dear john-from-the-future, this is john-from-the-past. You
 					almost certainly think I messed up here and that the code could be
 					cleaned up. Well don't! It’s like this for a reason! */
@@ -2283,20 +2280,24 @@ public class FileExplorer {
 					else {
 						description = fsv.getSystemTypeDescription(file);
 						name = fsv.getSystemDisplayName(file);
+						if(name=="") {
+							name = file.getPath();
+						}
 						descriptions.put(file, new FsvCache(description, name));
 					}
 
 					if(description!=null) {
-						if(description.equals("CD Drive") || description.equals("DVD Drive")) {
+						if(description.equals("CD Drive") || description.equals("DVD Drive")
+							||	description.equals("USB Drive")) {
+							
 							name = description + " (" + file.getPath().replace("\\", "") + ")";
 						}
 					}
-
+					
 					setText(name);
 				}
-				else {
-					setIcon(Utility.chooseIcon(file, 25));
-				}
+
+				setIcon(Utility.chooseIcon(file, 25));
 
 				return label;
 			}
