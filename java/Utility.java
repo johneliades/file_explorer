@@ -39,14 +39,16 @@ public class Utility {
 			
 			path = ICONPATH + "other/harddiskfolder.png";
 
-			if(description.equals("CD Drive")) {
-				path = ICONPATH + "other/cdfolder.png";
-			}
-			else if(description.equals("DVD Drive")) {
-				path = ICONPATH + "other/dvd.png";
-			}
-			else if(description.equals("USB Drive")) {
-				path = ICONPATH + "other/usbfolder.png";			
+			if(description!=null) {
+				if(description.equals("CD Drive")) {
+					path = ICONPATH + "other/cdfolder.png";
+				}
+				else if(description.equals("DVD Drive")) {
+					path = ICONPATH + "other/dvd.png";
+				}
+				else if(description.equals("USB Drive")) {
+					path = ICONPATH + "other/usbfolder.png";			
+				}
 			}
 
 			img = ImageHandler.getImageFast(path, size, size, true);

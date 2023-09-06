@@ -56,19 +56,21 @@ public class FilePanel {
 
 			path = ICONPATH + "other/harddiskfolder.png";
 
-			img = ImageHandler.getImageFast(path, 60, 60, true);
+			if(description!=null) {
+				if(description.equals("CD Drive")) {
+					path = ICONPATH + "other/cdfolder.png";
+					name = description + " (" + this.file.getPath().replace("\\", "") + ")";
+				}
+				else if(description.equals("DVD Drive")) {
+					path = ICONPATH + "other/dvd.png";
+					name = description + " (" + this.file.getPath().replace("\\", "") + ")";
+				}
+				else if(description.equals("USB Drive")) {
+					path = ICONPATH + "other/usbfolder.png";			
+				}
+			}
 
-			if(description.equals("CD Drive")) {
-				path = ICONPATH + "other/cdfolder.png";
-				name = description + " (" + this.file.getPath().replace("\\", "") + ")";
-			}
-			else if(description.equals("DVD Drive")) {
-				path = ICONPATH + "other/dvd.png";
-				name = description + " (" + this.file.getPath().replace("\\", "") + ")";
-			}
-			else if(description.equals("USB Drive")) {
-				path = ICONPATH + "other/usbfolder.png";			
-			}
+			img = ImageHandler.getImageFast(path, 60, 60, true);
 		}
 
 		this.panel = new JPanel(new BorderLayout());
@@ -94,7 +96,9 @@ public class FilePanel {
 
 			long free = this.file.getFreeSpace();
 			long total = this.file.getTotalSpace();
-			int used = (int) (((total-free)*100)/total);
+			int used = 0;
+			if(total!=0)
+				used = (int) (((total-free)*100)/total);
 
 			JProgressBar bar = new JProgressBar(0, 100);
 

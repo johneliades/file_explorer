@@ -2286,8 +2286,10 @@ public class FileExplorer {
 						descriptions.put(file, new FsvCache(description, name));
 					}
 
-					if(description.equals("CD Drive") || description.equals("DVD Drive")) {
-						name = description + " (" + file.getPath().replace("\\", "") + ")";
+					if(description!=null) {
+						if(description.equals("CD Drive") || description.equals("DVD Drive")) {
+							name = description + " (" + file.getPath().replace("\\", "") + ")";
+						}
 					}
 
 					setText(name);
