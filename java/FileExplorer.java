@@ -1764,7 +1764,12 @@ public class FileExplorer {
 
 				try {		
 					if(curFile.getName().equals(windowsTopName) && !curFile.exists()) {
-						Runtime.getRuntime().exec("cmd /c start explorer");
+						String[] cmdArray = new String[4];
+						cmdArray[0] = "cmd";
+						cmdArray[1] = "/c";
+						cmdArray[2] = "start";
+						cmdArray[3] = "explorer";
+						Runtime.getRuntime().exec(cmdArray);
 						return;
 					}
 					Desktop.getDesktop().open(curFile);
@@ -1821,19 +1826,19 @@ public class FileExplorer {
 					}
 				}
 				else {
-					StringBuilder cmd = new StringBuilder();
-
-					cmd.append(javaBin);
-					cmd.append(" -cp ").append(
-						ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
-					cmd.append(FileExplorer.class.getName()).append(" ");
+					// Build the command as an array of strings
+					String[] cmdArray = new String[5];
+					cmdArray[0] = javaBin;
+					cmdArray[1] = "-cp";
+					cmdArray[2] = ManagementFactory.getRuntimeMXBean().getClassPath();
+					cmdArray[3] = FileExplorer.class.getName();
 					
 					if(!((File) lastTreeNodeOpened.getUserObject()).
 								getPath().equals(windowsTopName)) {
-						cmd.append(((File) lastTreeNodeOpened.getUserObject()).getPath());
+						cmdArray[4] = ((File) lastTreeNodeOpened.getUserObject()).getPath();
 					}
 					try {
-						Runtime.getRuntime().exec(cmd.toString());
+						Runtime.getRuntime().exec(cmdArray);
 					}
 					catch(Exception e) {
 					}
@@ -1919,16 +1924,16 @@ public class FileExplorer {
 					}
 				}
 				else {
-					StringBuilder cmd = new StringBuilder();
+					// Build the command as an array of strings
+					String[] cmdArray = new String[5];
+					cmdArray[0] = javaBin;
+					cmdArray[1] = "-cp";
+					cmdArray[2] = ManagementFactory.getRuntimeMXBean().getClassPath();
+					cmdArray[3] = FileExplorer.class.getName();
+					cmdArray[4] = ((File) panelNode.getUserObject()).getPath();
 
-					cmd.append(javaBin);
-					cmd.append(" -cp ").append(
-						ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
-					cmd.append(FileExplorer.class.getName()).append(" ");
-
-					cmd.append(((File) panelNode.getUserObject()).getPath());
 					try {
-						Runtime.getRuntime().exec(cmd.toString());
+						Runtime.getRuntime().exec(cmdArray);
 					}
 					catch(Exception e) {
 					}
@@ -2481,16 +2486,16 @@ public class FileExplorer {
 					}
 				}
 				else {
-					StringBuilder cmd = new StringBuilder();
+					// Build the command as an array of strings
+					String[] cmdArray = new String[5];
+					cmdArray[0] = javaBin;
+					cmdArray[1] = "-cp";
+					cmdArray[2] = ManagementFactory.getRuntimeMXBean().getClassPath();
+					cmdArray[3] = FileExplorer.class.getName();
+					cmdArray[4] = ((File) node.getUserObject()).getPath();
 
-					cmd.append(javaBin);
-					cmd.append(" -cp ").append(
-						ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
-					cmd.append(FileExplorer.class.getName()).append(" ");
-
-					cmd.append(((File) node.getUserObject()).getPath());
 					try {
-						Runtime.getRuntime().exec(cmd.toString());
+						Runtime.getRuntime().exec(cmdArray);
 					}
 					catch(Exception e) {
 					}
